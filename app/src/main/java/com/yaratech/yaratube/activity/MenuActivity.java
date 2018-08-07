@@ -31,6 +31,7 @@ public class MenuActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        setFragment(HomeFragment.newInstance());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -48,12 +49,10 @@ public class MenuActivity extends AppCompatActivity
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         item.setChecked(true);
-                        toolbar.setTitle(R.string.home_screen);
                         setFragment(HomeFragment.newInstance());
                         break;
                     case R.id.navigation_category:
                         item.setChecked(true);
-                        toolbar.setTitle(R.string.categorys);
                         setFragment(CategoryFragment.newInstance());
                         break;
                 }
