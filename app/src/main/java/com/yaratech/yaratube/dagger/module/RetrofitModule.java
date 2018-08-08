@@ -1,7 +1,7 @@
 package com.yaratech.yaratube.dagger.module;
 
-import com.yaratech.yaratube.Services;
-import com.yaratech.yaratube.Utils;
+import com.yaratech.yaratube.data.sourse.remote.Service;
+import com.yaratech.yaratube.utils.Util;
 import com.yaratech.yaratube.dagger.scope.MainScope;
 
 import dagger.Module;
@@ -18,15 +18,15 @@ public class RetrofitModule {
 
     @Provides
     @MainScope
-    public Services getService(Retrofit retrofit){
-        return retrofit.create(Services.class);
+    public Service getService(Retrofit retrofit){
+        return retrofit.create(Service.class);
     }
 
     @Provides
     @MainScope
     public Retrofit getRetrofit(){
         return new Retrofit.Builder()
-                .baseUrl(Utils.BASE_URL)
+                .baseUrl(Util.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

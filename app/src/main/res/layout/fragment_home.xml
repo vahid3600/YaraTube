@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yaratech.yaratube.fragment.HomeFragment">
+    tools:context="com.yaratech.yaratube.ui.home.HomeFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

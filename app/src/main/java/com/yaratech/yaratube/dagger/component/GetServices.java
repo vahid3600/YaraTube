@@ -1,6 +1,6 @@
 package com.yaratech.yaratube.dagger.component;
 
-import com.yaratech.yaratube.Services;
+import com.yaratech.yaratube.data.sourse.remote.Service;
 import com.yaratech.yaratube.dagger.module.RetrofitModule;
 import com.yaratech.yaratube.dagger.scope.MainScope;
 
@@ -13,7 +13,7 @@ import dagger.Component;
 @MainScope
 @Component(modules = RetrofitModule.class)
 public interface GetServices {
-    Services getStoreService();
+    Service getStoreService();
 }
 
 
