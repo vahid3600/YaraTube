@@ -20,14 +20,17 @@ import java.util.List;
  * Created by Vah on 8/4/2018.
  */
 
-public class CategoryItemsRecyclerViewAdapter extends RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder> {
+public class CategoryItemsRecyclerViewAdapter extends
+        RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder> {
 
     private List<Category_list> category_lists = new ArrayList<>();
+    private ItemClickListener itemClickListener;
     private Context context;
 
     // data is passed into the constructor
-    public CategoryItemsRecyclerViewAdapter(Context context) {
+    public CategoryItemsRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
         this.context = context;
+        this.itemClickListener = itemClickListener;
     }
 
     public void setData(List<Category_list> category_lists){
@@ -38,7 +41,8 @@ public class CategoryItemsRecyclerViewAdapter extends RecyclerView.Adapter<Categ
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -57,9 +61,8 @@ public class CategoryItemsRecyclerViewAdapter extends RecyclerView.Adapter<Categ
         return category_lists.size();
     }
 
-
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView category_avatar;
         TextView category_title;
 
@@ -67,7 +70,18 @@ public class CategoryItemsRecyclerViewAdapter extends RecyclerView.Adapter<Categ
             super(itemView);
             category_avatar = itemView.findViewById(R.id.category_avatar);
             category_title = itemView.findViewById(R.id.category_title);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onItemClick(category_lists.get(getAdapterPosition()));
+        }
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(Category_list category_list);
     }
 
 }

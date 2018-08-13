@@ -1,7 +1,7 @@
-package com.yaratech.yaratube.ui.category;
+package com.yaratech.yaratube.ui.product_list;
 
 import com.yaratech.yaratube.data.model.Category_list;
-import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import java.util.List;
  * Created by Vah on 8/8/2018.
  */
 
-public interface CategoryContract {
+public interface ProductListContract {
     interface View {
 
-        void showListCategory(List<Category_list> category_list);
+        void showListProducts(List<ProductList> productLists);
 
         void showMessage(String msg);
 
@@ -23,6 +23,6 @@ public interface CategoryContract {
 
     interface Presenter {
 
-        void fetchCategoryFromRemote();
+        void fetchProductListFromRemote(int id);
     }
 }

@@ -2,6 +2,7 @@ package com.yaratech.yaratube.data.sourse.remote;
 
 import com.yaratech.yaratube.data.model.Category;
 import com.yaratech.yaratube.data.model.Category_list;
+import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
 
 import java.util.List;
@@ -24,6 +25,12 @@ public interface DataSource {
         void onError(String msg);
     }
 
+    interface LoadProductListCallback {
+        void onProductListLoaded(List<ProductList> productLists);
+
+        void onError(String msg);
+    }
+
     interface LoadImageGaleryCallback {
         void onImageLoaded(List<Category_list> categoryList);
 
@@ -40,4 +47,6 @@ public interface DataSource {
     void getHome(LoadStoreCallback callback);
 
     void getCategory(LoadCatetoryCallback callback);
+
+    void getProductList(int id, LoadProductListCallback callback);
 }

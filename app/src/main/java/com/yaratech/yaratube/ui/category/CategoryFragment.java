@@ -17,7 +17,8 @@ import com.yaratech.yaratube.data.model.Category_list;
 
 import java.util.List;
 
-public class CategoryFragment extends Fragment implements CategoryContract.View{
+public class CategoryFragment extends Fragment implements CategoryContract.View,
+        CategoryItemsRecyclerViewAdapter.ItemClickListener{
 
     CategoryPresenter categoryPresenter;
     private ProgressBar progressBar;
@@ -37,16 +38,6 @@ public class CategoryFragment extends Fragment implements CategoryContract.View{
         fragment.setArguments(args);
         return fragment;
     }
-    
-    // TODO: Rename and change types and number of parameters
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-      
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +55,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
-        categoryItemsRecyclerViewAdapter = new CategoryItemsRecyclerViewAdapter(getContext());
+        categoryItemsRecyclerViewAdapter = new CategoryItemsRecyclerViewAdapter(getContext(), this);
         recyclerView.setAdapter(categoryItemsRecyclerViewAdapter);
 
     }
@@ -95,4 +86,12 @@ public class CategoryFragment extends Fragment implements CategoryContract.View{
         progressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onItemClick(Category_list category_list) {
+        ((CategoryFragment.OnCategoryFragmentActionListener) getContext()).onCategorylistItemClicked(category_list);
+    }
+
+    public interface OnCategoryFragmentActionListener{
+        void onCategorylistItemClicked(Category_list category);
+    }
 }

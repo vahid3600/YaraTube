@@ -50,6 +50,11 @@ public class Repository implements DataSource {
         remoteDataSource.getCategory(callback);
     }
 
+    @Override
+    public void getProductList(int id, LoadProductListCallback callback) {
+        remoteDataSource.getProductList(id, callback);
+    }
+
     public void getImageFromGalery(Activity activity, DataSource.LoadImageGaleryCallback callback) {
 //        if (ActivityCompat.shouldShowRequestPermissionRationale(context.ac, Manifest.permission.CAMERA))
         Intent intent = new Intent();
@@ -63,7 +68,7 @@ public class Repository implements DataSource {
 
 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         Uri imageUri = Uri.fromFile(photo);

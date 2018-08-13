@@ -16,12 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.HomeFragment;
+import com.yaratech.yaratube.ui.product_list.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CategoryFragment.OnCategoryFragmentActionListener {
 
     Toolbar toolbar;
     FragmentTransaction fragmentTransaction;
@@ -49,21 +51,21 @@ public class MenuActivity extends AppCompatActivity
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        item.setChecked(true);
-                        setFragment(HomeFragment.newInstance());
-                        break;
-                    case R.id.navigation_category:
-                        item.setChecked(true);
-                        setFragment(CategoryFragment.newInstance());
-                        break;
-                }
-                return false;
-            }
-        });
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.navigation_home:
+                                item.setChecked(true);
+                                setFragment(HomeFragment.newInstance());
+                                break;
+                            case R.id.navigation_category:
+                                item.setChecked(true);
+                                setFragment(CategoryFragment.newInstance());
+                                break;
+                        }
+                        return false;
+                    }
+                });
     }
 
     private void setFragment(Fragment fragment) {
@@ -82,6 +84,7 @@ public class MenuActivity extends AppCompatActivity
             super.onBackPressed();
             toolbar.getMenu().clear();
             bottomNavigationView.setVisibility(View.VISIBLE);
+            toggle.setDrawerIndicatorEnabled(true);
         }
     }
 
@@ -89,7 +92,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_back:
                 onBackPressed();
                 break;
@@ -119,5 +122,14 @@ public class MenuActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onCategorylistItemClicked(Category_list category) {
+        setFragment(ProductListFragment.newInstance(category.getId()));
+        fragmentTransaction.addToBackStack("product_list");
+        bottomNavigationView.setVisibility(View.GONE);
+        toggle.setDrawerIndicatorEnabled(false);
+        toolbar.inflateMenu(R.menu.menu_back_button);
     }
 }

@@ -3,6 +3,7 @@ package com.yaratech.yaratube.data.sourse.remote;
 import android.content.Context;
 import android.util.Log;
 
+import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.utils.Util;
@@ -25,10 +26,8 @@ import retrofit2.Response;
 public class RemoteDataSource implements DataSource {
 
     private Context context;
-    private Store store;
-    private List<Collection> collections;
-    private List<Category_list> category_list;
-    public RemoteDataSource (Context context){
+
+    public RemoteDataSource(Context context) {
         this.context = context;
     }
 
@@ -45,9 +44,7 @@ public class RemoteDataSource implements DataSource {
                 public void onResponse(Call<Store> call, Response<Store> response) {
 
                     if (response.isSuccessful()) {
-                        store = response.body();
-                        Log.e("Tag", store.getName());
-                        callback.onStoreLoaded(store);
+                        callback.onStoreLoaded(response.body());
                     } else
                         callback.onError("عملیات با خطا مواجه شد!");
                 }
@@ -74,18 +71,46 @@ public class RemoteDataSource implements DataSource {
                 public void onResponse(Call<List<Category_list>> call, Response<List<Category_list>> response) {
 
                     if (response.isSuccessful()) {
-                        category_list = response.body();
-                        callback.onCategoryLoaded(category_list);
+                        callback.onCategoryLoaded(response.body());
                     } else
                         callback.onError("عملیات با خطا مواجه شد!");
                 }
 
                 @Override
                 public void onFailure(Call<List<Category_list>> call, Throwable t) {
+                    callback.onError("عملیات با خطا مواجه شد!");
+                }
+            });
+        } else
+            callback.onError("ارتباط اینترنت شما قطع است");
+    }
 
+    @Override
+    public void getProductList(int id, final LoadProductListCallback callback) {
+        if (Util.isOnline(context)) {
+            GetServices getServices = DaggerGetServices
+                    .builder()
+                    .retrofitModule(new RetrofitModule())
+                    .build();
+            final Call<List<ProductList>> productListCall = getServices.getStoreService().getProductList(id);
+            productListCall.enqueue(new Callback<List<ProductList>>() {
+                @Override
+                public void onResponse(Call<List<ProductList>> call, Response<List<ProductList>> response) {
+
+                    if (response.isSuccessful()) {
+                        List<ProductList> productLists = response.body();
+                        callback.onProductListLoaded(response.body());
+                    } else
+                        callback.onError("عملیات با خطا مواجه شد!");
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductList>> call, Throwable t) {
+                    callback.onError("عملیات با خطا مواجه شد!");
                 }
             });
         } else
             callback.onError("ارتباط اینترنت شما قطع است");
     }
 }
+
