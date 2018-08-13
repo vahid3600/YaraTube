@@ -21,7 +21,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
 
-//    private GetData getData = new GetData(HomeFragment.this, HomeFragment.this);
+    //    private GetData getData = new GetData(HomeFragment.this, HomeFragment.this);
     private StoreRecyclerViewAdapter storeRecyclerViewAdapter;
 
     public HomeFragment() {
@@ -56,7 +56,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         progressBar = view.findViewById(R.id.loading);
         progressBar.setVisibility(View.GONE);
         presenter = new HomePresenter(getContext(), this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.VERTICAL,
+                false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
         storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext());

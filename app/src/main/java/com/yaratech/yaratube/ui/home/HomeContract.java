@@ -18,10 +18,9 @@ public interface HomeContract {
 
         void hideLoading();
     }
+
     interface Presenter{
 
         void fetchHomeFromRemote();
     }
-
-    void adaptRecyclerview(Store store);
 }

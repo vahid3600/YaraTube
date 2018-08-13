@@ -18,11 +18,15 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.HomeFragment;
+import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
+    FragmentTransaction fragmentTransaction;
+    BottomNavigationView bottomNavigationView;
+    ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,8 @@ public class MenuActivity extends AppCompatActivity
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setFragment(HomeFragment.newInstance());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -41,7 +46,7 @@ public class MenuActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
+        bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -63,9 +68,9 @@ public class MenuActivity extends AppCompatActivity
 
     private void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("fragment");
     }
 
     @Override
@@ -75,9 +80,22 @@ public class MenuActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            toolbar.getMenu().clear();
+            bottomNavigationView.setVisibility(View.VISIBLE);
         }
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_back:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -87,7 +105,11 @@ public class MenuActivity extends AppCompatActivity
 
 
         if (id == R.id.nav_profile) {
-
+            setFragment(ProfileFragment.newInstance());
+            fragmentTransaction.addToBackStack("profile");
+            bottomNavigationView.setVisibility(View.GONE);
+            toggle.setDrawerIndicatorEnabled(false);
+            toolbar.inflateMenu(R.menu.menu_back_button);
         } else if (id == R.id.nav_about_us) {
 
         } else if (id == R.id.nav_connect_with_us) {

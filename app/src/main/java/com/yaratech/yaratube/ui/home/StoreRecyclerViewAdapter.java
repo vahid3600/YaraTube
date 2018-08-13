@@ -32,7 +32,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
         this.context = context;
     }
 
-    public void setData(Store store){
+    public void setData(Store store) {
         headeritems = store.getHeaderitem();
         homeitems = store.getHomeitem();
         notifyDataSetChanged();
@@ -94,12 +94,9 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item_row, parent, false);
                 return new HeaderListItemViewHolder(v);
 
-            case HOME_ITEM_LIST_ITEM_VIEW:
+            default:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_row, parent, false);
                 return new HomeListItemViewHolder(v);
-
-            default:
-                return null;
         }
     }
 
@@ -113,7 +110,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
                 vh.bindViewHeaderList(position);
             } else if (holder instanceof HomeListItemViewHolder) {
                 HomeListItemViewHolder vh = (HomeListItemViewHolder) holder;
-                vh.bindViewHomeList(position, homeitems.get(position-1));
+                vh.bindViewHomeList(position, homeitems.get(position - 1));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,19 +119,16 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
 
     @Override
     public int getItemCount() {
-        return 1+homeitems.size();
+        return 1 + homeitems.size();
 
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 return HEADER_LIST_ITEM_VIEW;
-
-            case 1:
-                return HOME_ITEM_LIST_ITEM_VIEW;
 
             default:
                 return HOME_ITEM_LIST_ITEM_VIEW;

@@ -24,8 +24,20 @@ public interface DataSource {
         void onError(String msg);
     }
 
+    interface LoadImageGaleryCallback {
+        void onImageLoaded(List<Category_list> categoryList);
+
+        void onError(String msg);
+    }
+
+
+    interface LoadImageCameraCallback {
+        void onCategoryLoaded(List<Category_list> categoryList);
+
+        void onError(String msg);
+    }
+
     void getHome(LoadStoreCallback callback);
 
     void getCategory(LoadCatetoryCallback callback);
-
 }
