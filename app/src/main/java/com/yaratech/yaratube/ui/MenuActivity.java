@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
-import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.product_list.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
@@ -27,7 +26,6 @@ public class MenuActivity extends AppCompatActivity
 
     Toolbar toolbar;
     FragmentTransaction fragmentTransaction;
-    BottomNavigationView bottomNavigationView;
     ActionBarDrawerToggle toggle;
 
     @Override
@@ -37,7 +35,7 @@ public class MenuActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setFragment(HomeFragment.newInstance());
+        setFragment(BaseFragment.newInstance());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         toggle = new ActionBarDrawerToggle(
@@ -47,25 +45,6 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        bottomNavigationView = findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                item.setChecked(true);
-                                setFragment(HomeFragment.newInstance());
-                                break;
-                            case R.id.navigation_category:
-                                item.setChecked(true);
-                                setFragment(CategoryFragment.newInstance());
-                                break;
-                        }
-                        return false;
-                    }
-                });
     }
 
     private void setFragment(Fragment fragment) {
@@ -83,7 +62,6 @@ public class MenuActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
             toolbar.getMenu().clear();
-            bottomNavigationView.setVisibility(View.VISIBLE);
             toggle.setDrawerIndicatorEnabled(true);
         }
     }
@@ -110,7 +88,6 @@ public class MenuActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
             setFragment(ProfileFragment.newInstance());
             fragmentTransaction.addToBackStack("profile");
-            bottomNavigationView.setVisibility(View.GONE);
             toggle.setDrawerIndicatorEnabled(false);
             toolbar.inflateMenu(R.menu.menu_back_button);
         } else if (id == R.id.nav_about_us) {
@@ -128,7 +105,6 @@ public class MenuActivity extends AppCompatActivity
     public void onCategorylistItemClicked(Category_list category) {
         setFragment(ProductListFragment.newInstance(category.getId()));
         fragmentTransaction.addToBackStack("product_list");
-        bottomNavigationView.setVisibility(View.GONE);
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.inflateMenu(R.menu.menu_back_button);
     }
