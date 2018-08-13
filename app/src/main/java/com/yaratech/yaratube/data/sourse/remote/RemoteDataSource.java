@@ -34,11 +34,7 @@ public class RemoteDataSource implements DataSource {
     @Override
     public void getHome(final LoadStoreCallback callback) {
         if (Util.isOnline(context)) {
-            GetServices getServices = DaggerGetServices
-                    .builder()
-                    .retrofitModule(new RetrofitModule())
-                    .build();
-            Call<Store> storeCall = getServices.getStoreService().getStore();
+            Call<Store> storeCall = Util.getServices().getStoreService().getStore();
             storeCall.enqueue(new Callback<Store>() {
                 @Override
                 public void onResponse(Call<Store> call, Response<Store> response) {
@@ -61,14 +57,13 @@ public class RemoteDataSource implements DataSource {
     @Override
     public void getCategory(final LoadCatetoryCallback callback) {
         if (Util.isOnline(context)) {
-            GetServices getServices = DaggerGetServices
-                    .builder()
-                    .retrofitModule(new RetrofitModule())
-                    .build();
-            final Call<List<Category_list>> categoryListCall = getServices.getStoreService().getCategory();
+
+            final Call<List<Category_list>> categoryListCall = Util.getServices().getStoreService()
+                    .getCategory();
             categoryListCall.enqueue(new Callback<List<Category_list>>() {
                 @Override
-                public void onResponse(Call<List<Category_list>> call, Response<List<Category_list>> response) {
+                public void onResponse(Call<List<Category_list>> call,
+                                       Response<List<Category_list>> response) {
 
                     if (response.isSuccessful()) {
                         callback.onCategoryLoaded(response.body());
@@ -88,14 +83,12 @@ public class RemoteDataSource implements DataSource {
     @Override
     public void getProductList(int id, final LoadProductListCallback callback) {
         if (Util.isOnline(context)) {
-            GetServices getServices = DaggerGetServices
-                    .builder()
-                    .retrofitModule(new RetrofitModule())
-                    .build();
-            final Call<List<ProductList>> productListCall = getServices.getStoreService().getProductList(id);
+            final Call<List<ProductList>> productListCall = Util.getServices().getStoreService()
+                    .getProductList(id);
             productListCall.enqueue(new Callback<List<ProductList>>() {
                 @Override
-                public void onResponse(Call<List<ProductList>> call, Response<List<ProductList>> response) {
+                public void onResponse(Call<List<ProductList>> call,
+                                       Response<List<ProductList>> response) {
 
                     if (response.isSuccessful()) {
                         List<ProductList> productLists = response.body();
