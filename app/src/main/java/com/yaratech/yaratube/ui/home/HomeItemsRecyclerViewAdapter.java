@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.utils.Util;
 import com.yaratech.yaratube.data.model.Product;
 
@@ -21,13 +22,15 @@ import java.util.List;
 
 public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder> {
 
+    OnHomeItemClickListener onHomeItemClickListener;
     private List<Product> products;
     private Context context;
 
     // data is passed into the constructor
-    HomeItemsRecyclerViewAdapter(Context context, List<Product> products) {
+    HomeItemsRecyclerViewAdapter(Context context, List<Product> products, OnHomeItemClickListener onHomeItemClickListener) {
         this.context = context;
         this.products = products;
+        this.onHomeItemClickListener = onHomeItemClickListener;
     }
 
     // inflates the row layout from xml when needed
@@ -54,7 +57,7 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView product_avatar;
         TextView product_title;
 
@@ -62,7 +65,18 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
             super(itemView);
             product_avatar = itemView.findViewById(R.id.product_image);
             product_title = itemView.findViewById(R.id.product_title);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onHomeItemClickListener.getHomeProductItem(products.get(getAdapterPosition()).getId());
+        }
+    }
+
+    public interface OnHomeItemClickListener{
+        void getHomeProductItem(int productId);
     }
 
 }

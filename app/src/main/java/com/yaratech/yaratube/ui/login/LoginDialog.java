@@ -45,7 +45,7 @@ public class LoginDialog extends DialogFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.phonenumber:
-
+                MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
                 break;
             case R.id.google:
 

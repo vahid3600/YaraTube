@@ -13,9 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
 
-public class HomeFragment extends Fragment implements HomeContract.View {
+public class HomeFragment extends Fragment implements HomeContract.View,
+        HomeItemsRecyclerViewAdapter.OnHomeItemClickListener,
+        HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener {
 
     private HomeContract.Presenter presenter;
     private ProgressBar progressBar;
@@ -62,7 +65,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
-        storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext());
+        storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext(),
+                this, this);
         recyclerView.setAdapter(storeRecyclerViewAdapter);
     }
 
@@ -90,5 +94,23 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getHeaderProductItem(int productId) {
+        ((HomeFragment.OnProductHeaderClickListener) getContext()).onItemClicked(productId);
+    }
+
+    @Override
+    public void getHomeProductItem(int productId) {
+        ((HomeFragment.OnProductHomeClickListener) getContext()).onItemClicked(productId);
+    }
+
+    public interface OnProductHeaderClickListener {
+        void onItemClicked(int productId);
+    }
+
+    public interface OnProductHomeClickListener {
+        void onItemClicked(int productId);
     }
 }

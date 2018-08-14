@@ -55,6 +55,11 @@ public class Repository implements DataSource {
         remoteDataSource.getProductList(id, callback);
     }
 
+    @Override
+    public void getProductDetail(int id, LoadProductDetailCallback callback) {
+        remoteDataSource.getProductDetail(id, callback);
+    }
+
     public void getImageFromGalery() {
 
     }

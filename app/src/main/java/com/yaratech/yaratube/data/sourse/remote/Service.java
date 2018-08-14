@@ -1,6 +1,7 @@
 package com.yaratech.yaratube.data.sourse.remote;
 
 import com.yaratech.yaratube.data.model.Category_list;
+import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.utils.Util;
@@ -29,7 +30,7 @@ public interface Service {
     Call<List<ProductList>> getProductList(@Path("category_id") int categoryId);
 
     @GET("product/{product_id}")
-    Call<List<ProductList>> getProductDetail(@Path("product_id") int productId);
+    Call<ProductDetail> getProductDetail(@Path("product_id") int productId);
 
     @FormUrlEncoded
     @POST("profile")

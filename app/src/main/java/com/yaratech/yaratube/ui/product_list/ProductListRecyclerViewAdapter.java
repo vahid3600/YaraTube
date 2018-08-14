@@ -77,12 +77,12 @@ public class ProductListRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.getProductItem(productLists.get(getAdapterPosition()));
+            onItemClickListener.getProductItem(productLists.get(getAdapterPosition()).getId());
         }
     }
 
     public interface OnItemClickListener{
-        void getProductItem(ProductList product);
+        void getProductItem(int productId);
     }
 }
 

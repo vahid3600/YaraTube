@@ -20,13 +20,18 @@ import java.util.List;
 
 public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderItemsRecyclerViewAdapter.ViewHolder> {
 
+    HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;
     private List<Headeritem> headeritems;
     private Context context;
 
     // data is passed into the constructor
-    HeaderItemsRecyclerViewAdapter(Context context, List<Headeritem> headeritems) {
+    HeaderItemsRecyclerViewAdapter(
+            Context context,
+            List<Headeritem> headeritems,
+            HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener) {
         this.context = context;
         this.headeritems = headeritems;
+        this.onHeaderItemClickListener = onHeaderItemClickListener;
     }
 
     // inflates the row layout from xml when needed
@@ -51,13 +56,24 @@ public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderI
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView header_image;
 
         ViewHolder(View itemView) {
             super(itemView);
             header_image = itemView.findViewById(R.id.image_header);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onHeaderItemClickListener.getHeaderProductItem(headeritems.get(getAdapterPosition()).getId());
+        }
+    }
+
+    public interface OnHeaderItemClickListener {
+        void getHeaderProductItem(int productId);
     }
 
 }

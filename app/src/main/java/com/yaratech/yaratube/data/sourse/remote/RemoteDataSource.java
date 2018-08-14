@@ -3,6 +3,7 @@ package com.yaratech.yaratube.data.sourse.remote;
 import android.content.Context;
 import android.util.Log;
 
+import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.model.Category_list;
@@ -105,5 +106,36 @@ public class RemoteDataSource implements DataSource {
         } else
             callback.onError("ارتباط اینترنت شما قطع است");
     }
+
+    @Override
+    public void getProductDetail(int id, final LoadProductDetailCallback callback) {
+        if (Util.isOnline(context)) {
+            Log.e("tag",id+"");
+
+            final Call<ProductDetail> productDetailCall = Util.getServices().getStoreService()
+                    .getProductDetail(id);
+            productDetailCall.enqueue(new Callback<ProductDetail>() {
+                @Override
+                public void onResponse(Call<ProductDetail> call,
+                                       Response<ProductDetail> response) {
+
+                    if (response.isSuccessful()) {
+                        Log.e("tag",response.body().getDescription());
+                        callback.onProductDetailLoaded(response.body());
+                    } else{
+                        Log.e("tag",response.errorBody().toString());
+
+                        callback.onError("عملیات با خطا مواجه شد!");}
+                }
+
+                @Override
+                public void onFailure(Call<ProductDetail> call, Throwable t) {
+                    callback.onError("عملیات با خطا مواجه شد!");
+                }
+            });
+        } else
+            callback.onError("ارتباط اینترنت شما قطع است");
+    }
+
 }
 

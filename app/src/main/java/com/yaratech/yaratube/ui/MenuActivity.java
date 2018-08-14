@@ -2,6 +2,7 @@ package com.yaratech.yaratube.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -26,18 +27,24 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.data.sourse.product_detail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
+import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
 import com.yaratech.yaratube.ui.login.LoginDialog;
+import com.yaratech.yaratube.ui.product_detail.ProductDetailActivity;
 import com.yaratech.yaratube.ui.product_list.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnCategoryFragmentActionListener,
-        ProductListFragment.OnProductClickListener{
+        ProductListFragment.OnProductClickListener,
+        HomeFragment.OnProductHeaderClickListener,
+        HomeFragment.OnProductHomeClickListener {
 
     Toolbar toolbar;
+    public static SharedPreferences USER_LOGIN;
     FragmentTransaction fragmentTransaction;
     ActionBarDrawerToggle toggle;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -51,7 +58,7 @@ public class MenuActivity extends AppCompatActivity
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setFragment(BaseFragment.newInstance());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        USER_LOGIN = getSharedPreferences("USER_LOGIN", MODE_PRIVATE);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -115,6 +122,18 @@ public class MenuActivity extends AppCompatActivity
         return true;
     }
 
+    public boolean checkPermissions(String permission){
+
+        int permissionRequest = ActivityCompat.checkSelfPermission(MenuActivity.this, permission);
+
+        if(permissionRequest != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     @Override
     public void onCategorylistItemClicked(Category_list category) {
         setFragment(ProductListFragment.newInstance(category.getId()));
@@ -124,10 +143,17 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemClicked(ProductList product) {
-        Log.e("tag",product.getId()+"");
-        LoginDialog loginDialog = new LoginDialog();
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        loginDialog.show(fragmentManager, "login dialog");
+    public void onItemClicked(int productId) {
+        boolean userLogin = USER_LOGIN.getBoolean("USER_LOGIN", false);
+        Log.e("tag", productId + " " + userLogin);
+        if (userLogin) {
+            Intent intent = new Intent(MenuActivity.this, ProductDetailActivity.class);
+            intent.putExtra("PRODUCT_ID", productId);
+            startActivity(intent);
+        } else {
+            LoginDialog loginDialog = new LoginDialog();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            loginDialog.show(fragmentManager, "login dialog");
+        }
     }
 }

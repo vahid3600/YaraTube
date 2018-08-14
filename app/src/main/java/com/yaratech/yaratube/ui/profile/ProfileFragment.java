@@ -1,7 +1,10 @@
 package com.yaratech.yaratube.ui.profile;
 
+import android.Manifest;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -16,12 +19,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
+import com.yaratech.yaratube.utils.Util;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
 
     ProfileContract.Presenter presenter;
-    private static final int IMAGE_PICKER_SELECT = 999;
+    private static final int  CAMERA_REQUEST_CODE = 5;
     ImageView profile_picture;
     Button cancel_button, send_button;
     EditText name_family, birth_date;
@@ -79,10 +84,18 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     public void getFromCamera() {
+        if (((MenuActivity) getActivity()) != null && ((MenuActivity) getActivity()).checkPermissions(Util.CAMERA_PERMISSION[0])) {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        }
         presenter = new ProfilePresenter(getContext(), this);
         presenter.fetchProfileCamera();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public void updateImage(Uri uri) {
@@ -103,4 +116,5 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     public void hideLoading() {
 
     }
+
 }

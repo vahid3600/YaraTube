@@ -93,11 +93,11 @@ public class ProductListFragment extends Fragment implements ProductListContract
     }
 
     @Override
-    public void getProductItem(ProductList product) {
-        ((ProductListFragment.OnProductClickListener)getContext()).onItemClicked(product);
+    public void getProductItem(int productId) {
+        ((ProductListFragment.OnProductClickListener)getContext()).onItemClicked(productId);
     }
 
     public interface OnProductClickListener{
-        void onItemClicked(ProductList product);
+        void onItemClicked(int productId);
     }
 }

@@ -1,6 +1,8 @@
 package com.yaratech.yaratube.utils;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -30,4 +32,12 @@ public class Util {
 
         return getServices;
     }
+
+    public static final String[] CAMERA_PERMISSION = {
+            Manifest.permission.CAMERA
+    };
+
+    public static final String[] WRITE_STORAGE_PERMISSION = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 }

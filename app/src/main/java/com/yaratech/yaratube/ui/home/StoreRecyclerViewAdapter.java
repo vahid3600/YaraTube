@@ -23,11 +23,18 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private Store store;
     List<Headeritem> headeritems = new ArrayList<>();
     List<Homeitem> homeitems = new ArrayList<>();
+    HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener;
+    HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;
     private Context context;
     private static final int HEADER_LIST_ITEM_VIEW = 1;
     private static final int HOME_ITEM_LIST_ITEM_VIEW = 2;
 
-    public StoreRecyclerViewAdapter(Context context) {
+    public StoreRecyclerViewAdapter(
+            Context context,
+            HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener,
+            HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener) {
+        this.onHomeItemClickListener = onHomeItemClickListener;
+        this.onHeaderItemClickListener = onHeaderItemClickListener;
         this.context = context;
     }
 
@@ -50,7 +57,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     false);
             headerRecyclerView.setLayoutManager(linearLayoutManager);
             HeaderItemsRecyclerViewAdapter headerItemsRecyclerViewAdapter =
-                    new HeaderItemsRecyclerViewAdapter(context, headeritems);
+                    new HeaderItemsRecyclerViewAdapter(context, headeritems, onHeaderItemClickListener);
             headerRecyclerView.setAdapter(headerItemsRecyclerViewAdapter);
         }
     }
@@ -70,7 +77,8 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     false);
             homeRecyclerView.setLayoutManager(linearLayoutManager);
             HomeItemsRecyclerViewAdapter homeItemsRecyclerViewAdapter =
-                    new HomeItemsRecyclerViewAdapter(context, homeitem.getProducts());
+                    new HomeItemsRecyclerViewAdapter(context, homeitem.getProducts(),
+                            onHomeItemClickListener);
             homeRecyclerView.setAdapter(homeItemsRecyclerViewAdapter);
             titleName.setText(homeitem.getTitle());
         }
