@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.imagePicker;
+package com.yaratech.yaratube.ui.image_picker;
 
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 /**
@@ -20,6 +21,7 @@ public class ImagePickerDialog extends DialogFragment implements View.OnClickLis
 
     Button camera, galery;
     ProfileFragment profileFragment;
+    MenuActivity menuActivity = new MenuActivity();
 
     @Nullable
     @Override

@@ -4,6 +4,7 @@ package com.yaratech.yaratube.data.model;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yaratech.yaratube.utils.Util;
 
 public class Category_list {
 
@@ -64,7 +65,7 @@ public class Category_list {
     }
 
     public void setAvatar(Object avatar) {
-        this.avatar = avatar;
+        this.avatar = Util.BASE_URL+avatar;
     }
 
     public int getPosition() {

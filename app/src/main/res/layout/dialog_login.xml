@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textview"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:text="@string/login" />
+
+    <LinearLayout
+        android:id="@+id/phonenumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@color/button_background_1"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/button_padding_bottom"
+        android:paddingLeft="@dimen/buttom_padding_left"
+        android:paddingRight="@dimen/buttom_padding_right"
+        android:paddingTop="@dimen/button_padding_top">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="21dp"
+            android:text="@string/login_by_phone_number"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/icon_padding_right"
+            android:gravity="right"
+            android:src="@drawable/ic_phone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_marginBottom="@dimen/button_margin_bottom"
+        android:background="@color/button_background_2"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/button_padding_bottom"
+        android:paddingLeft="@dimen/buttom_padding_left"
+        android:paddingRight="@dimen/buttom_padding_right"
+        android:paddingTop="@dimen/button_padding_top">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="21dp"
+            android:text="@string/login_by_google"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/icon_padding_right"
+            android:gravity="right"
+            android:src="@drawable/ic_google_plus" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

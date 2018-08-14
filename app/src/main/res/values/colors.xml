@@ -8,4 +8,7 @@
     <color name="gray">#9c9c9c</color>
     <color name="item_text_color">#FFFFFF</color>
     <color name="light_gray">#E0E0E0</color>
+    <color name="button_background_1">#ff3b89d2</color>
+    <color name="button_background2">#DD4B39</color>
+    <color name="button_background_2">#DD4B39</color>
 </resources>

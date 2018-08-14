@@ -21,6 +21,7 @@ import java.io.File;
 
 public class Repository implements DataSource {
 
+    GetImage getImage;
     private static Repository INSTANCE = null;
     private RemoteDataSource remoteDataSource;
 
@@ -28,9 +29,8 @@ public class Repository implements DataSource {
         //no instance
         if (remoteDataSource instanceof RemoteDataSource) {
             this.remoteDataSource = (RemoteDataSource) remoteDataSource;
-        } else {
         }
-
+        this.getImage = getImage;
     }
 
     public static Repository getINSTANCE(DataSource remoteDataSource) {
@@ -55,35 +55,17 @@ public class Repository implements DataSource {
         remoteDataSource.getProductList(id, callback);
     }
 
-    public void getImageFromGalery(Activity activity, DataSource.LoadImageGaleryCallback callback) {
-//        if (ActivityCompat.shouldShowRequestPermissionRationale(context.ac, Manifest.permission.CAMERA))
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        activity.startActivityForResult(Intent.createChooser(intent, "Select File"));
+    public void getImageFromGalery() {
 
     }
 
-    public void getImageFromCamera(MenuActivity menuActivity) {
+    public void getImageFromCamera() {
 
+    }
 
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        Uri imageUri = Uri.fromFile(photo);
-        menuActivity.startActivityForResult(intent, 100);
-//        if (ContextCompat.checkSelfPermission(activity,
-//                Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA},
-//                    1);
-//        }
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        File file = new File(Environment.getExternalStorageDirectory(),
-//                "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-//        Uri uri = Uri.fromFile(file);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//        intent.putExtra("return-data", true);
-//        activity.startActivityForResult(intent, 0);
+    public interface GetImage{
+        void onCamera();
+
+        void onGalery();
     }
 }

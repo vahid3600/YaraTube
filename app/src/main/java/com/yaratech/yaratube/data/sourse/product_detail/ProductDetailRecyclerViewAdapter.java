@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.data.sourse.product_detail;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
-import com.yaratech.yaratube.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +19,15 @@ import java.util.List;
  * Created by Vah on 8/4/2018.
  */
 
-public class ProductListRecyclerViewAdapter extends
-        RecyclerView.Adapter<ProductListRecyclerViewAdapter.ViewHolder> {
+public class ProductDetailRecyclerViewAdapter extends
+        RecyclerView.Adapter<ProductDetailRecyclerViewAdapter.ViewHolder> {
 
     OnItemClickListener onItemClickListener;
     private List<ProductList> productLists = new ArrayList<>();
     private Context context;
 
     // data is passed into the constructor
-    public ProductListRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+    public ProductDetailRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.onItemClickListener = onItemClickListener;
     }

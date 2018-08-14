@@ -1,20 +1,10 @@
 package com.yaratech.yaratube.ui.profile;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -26,12 +16,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.imagePicker.ImagePickerDialog;
-
-import java.io.IOException;
-
-import static android.app.Activity.RESULT_OK;
+import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
 

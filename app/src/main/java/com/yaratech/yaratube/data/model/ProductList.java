@@ -30,10 +30,10 @@ public class ProductList {
     private int price;
     @SerializedName("avatar")
     @Expose
-    private Avatar__ avatar;
+    private Avatar avatar;
     @SerializedName("feature_avatar")
     @Expose
-    private FeatureAvatar__ featureAvatar;
+    private FeatureAvatar featureAvatar;
     @SerializedName("rank")
     @Expose
     private double rank;
@@ -157,19 +157,19 @@ public class ProductList {
         this.price = price;
     }
 
-    public Avatar__ getAvatar() {
+    public Avatar getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Avatar__ avatar) {
+    public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
     }
 
-    public FeatureAvatar__ getFeatureAvatar() {
+    public FeatureAvatar getFeatureAvatar() {
         return featureAvatar;
     }
 
-    public void setFeatureAvatar(FeatureAvatar__ featureAvatar) {
+    public void setFeatureAvatar(FeatureAvatar featureAvatar) {
         this.featureAvatar = featureAvatar;
     }
 

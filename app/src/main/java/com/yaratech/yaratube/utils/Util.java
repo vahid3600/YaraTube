@@ -14,6 +14,7 @@ import com.yaratech.yaratube.dagger.module.RetrofitModule;
 
 public class Util {
     public static final String BASE_URL = "https://api.vasapi.click/";
+    public static final int STORE_ID = 16;
 
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

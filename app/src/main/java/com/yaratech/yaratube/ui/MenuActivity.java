@@ -1,11 +1,19 @@
 package com.yaratech.yaratube.ui;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,16 +25,22 @@ import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Category_list;
+import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
+import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
+import com.yaratech.yaratube.ui.login.LoginDialog;
 import com.yaratech.yaratube.ui.product_list.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CategoryFragment.OnCategoryFragmentActionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        CategoryFragment.OnCategoryFragmentActionListener,
+        ProductListFragment.OnProductClickListener{
 
     Toolbar toolbar;
     FragmentTransaction fragmentTransaction;
     ActionBarDrawerToggle toggle;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,5 +121,13 @@ public class MenuActivity extends AppCompatActivity
         fragmentTransaction.addToBackStack("product_list");
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.inflateMenu(R.menu.menu_back_button);
+    }
+
+    @Override
+    public void onItemClicked(ProductList product) {
+        Log.e("tag",product.getId()+"");
+        LoginDialog loginDialog = new LoginDialog();
+        FragmentManager fragmentManager= getSupportFragmentManager();
+        loginDialog.show(fragmentManager, "login dialog");
     }
 }

@@ -23,6 +23,9 @@
     <string name="back">back</string>
     <string name="camera">دوربین</string>
     <string name="galery">گالری</string>
+    <string name="login">ورود</string>
+    <string name="login_by_phone_number">از طریق شماره موبایل</string>
+    <string name="login_by_google">از طریق حساب google</string>
 
     <string-array name="array_sex">
         <item>مرد</item>

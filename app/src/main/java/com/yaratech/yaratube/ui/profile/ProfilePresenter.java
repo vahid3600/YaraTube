@@ -27,26 +27,6 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         this.view = view;
     }
 
-//    @Override
-//    public void fetchCategoryFromRemote() {
-//        view.showLoading();
-//
-//        categoryRepository.getCategory(new DataSource.LoadCatetoryCallback() {
-//            @Override
-//            public void onCategoryLoaded(List<Category_list> categoryList) {
-//                view.hideLoading();
-//                view.showListCategory(categoryList);
-//            }
-//
-//            @Override
-//            public void onError(String msg) {
-//                view.hideLoading();
-//                view.showMessage(msg);
-//            }
-//        });
-//
-//    }
-
     @Override
     public void fetchProfileGalery() {
 //        profileRepository.getImageFromGalery(context, new DataSource.LoadImageGaleryCallback() {
@@ -65,7 +45,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     @Override
     public void fetchProfileCamera() {
         MenuActivity menuActivity = new MenuActivity();
-        profileRepository.getImageFromCamera(menuActivity);
+        profileRepository.getImageFromCamera();
     }
 
     @Override

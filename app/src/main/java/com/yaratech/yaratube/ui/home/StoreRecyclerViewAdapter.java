@@ -18,7 +18,7 @@ import java.util.List;
 
 import static android.support.v7.widget.LinearLayoutManager.*;
 
-public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecyclerViewAdapter.ViewHolder> {
+public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Store store;
     List<Headeritem> headeritems = new ArrayList<>();
@@ -27,7 +27,6 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
     private static final int HEADER_LIST_ITEM_VIEW = 1;
     private static final int HOME_ITEM_LIST_ITEM_VIEW = 2;
 
-    // data is passed into the constructor
     public StoreRecyclerViewAdapter(Context context) {
         this.context = context;
     }
@@ -38,79 +37,72 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<StoreRecycler
         notifyDataSetChanged();
     }
 
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private class HeaderListItemViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView headerRecyclerView;
 
-        //list items of header list
-        RecyclerView header_recyclerView;
-        //list items of footer list
-        RecyclerView home_recyclerView;
-        TextView title_name;
-
-        ViewHolder(View itemView) {
+        HeaderListItemViewHolder(View itemView) {
             super(itemView);
-            header_recyclerView = itemView.findViewById(R.id.header_item_recycler);
-            home_recyclerView = itemView.findViewById(R.id.home_item_recycler);
-            title_name = itemView.findViewById(R.id.items_name);
+            headerRecyclerView = itemView.findViewById(R.id.header_item_recycler);
         }
 
-        public void bindViewHeaderList(int pos) {
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, HORIZONTAL, false);
-            header_recyclerView.setLayoutManager(linearLayoutManager);
-            HeaderItemsRecyclerViewAdapter headerItemsRecyclerViewAdapter = new HeaderItemsRecyclerViewAdapter(context, headeritems);
-            header_recyclerView.setAdapter(headerItemsRecyclerViewAdapter);
-        }
-
-        public void bindViewHomeList(int pos, Homeitem homeitem) {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, HORIZONTAL, false);
-            home_recyclerView.setLayoutManager(linearLayoutManager);
-            HomeItemsRecyclerViewAdapter homeItemsRecyclerViewAdapter = new HomeItemsRecyclerViewAdapter(context, homeitem.getProducts());
-            home_recyclerView.setAdapter(homeItemsRecyclerViewAdapter);
-            title_name.setText(homeitem.getTitle());
-        }
-
-    }
-
-    private class HeaderListItemViewHolder extends ViewHolder {
-        public HeaderListItemViewHolder(View itemView) {
-            super(itemView);
+        void bindViewHeaderList() {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, HORIZONTAL,
+                    false);
+            headerRecyclerView.setLayoutManager(linearLayoutManager);
+            HeaderItemsRecyclerViewAdapter headerItemsRecyclerViewAdapter =
+                    new HeaderItemsRecyclerViewAdapter(context, headeritems);
+            headerRecyclerView.setAdapter(headerItemsRecyclerViewAdapter);
         }
     }
 
-    private class HomeListItemViewHolder extends ViewHolder {
-        public HomeListItemViewHolder(View itemView) {
+    private class HomeListItemViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView homeRecyclerView;
+        TextView titleName;
+
+        HomeListItemViewHolder(View itemView) {
             super(itemView);
+            homeRecyclerView = itemView.findViewById(R.id.home_item_recycler);
+            titleName = itemView.findViewById(R.id.items_name);
+        }
+
+        void bindViewHomeList(Homeitem homeitem) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, HORIZONTAL,
+                    false);
+            homeRecyclerView.setLayoutManager(linearLayoutManager);
+            HomeItemsRecyclerViewAdapter homeItemsRecyclerViewAdapter =
+                    new HomeItemsRecyclerViewAdapter(context, homeitem.getProducts());
+            homeRecyclerView.setAdapter(homeItemsRecyclerViewAdapter);
+            titleName.setText(homeitem.getTitle());
         }
     }
 
-    // inflates the row layout from xml when needed
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
 
         switch (viewType) {
             case HEADER_LIST_ITEM_VIEW:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item_row, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item_row,
+                        parent, false);
                 return new HeaderListItemViewHolder(v);
 
             default:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_row, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item_row, parent,
+                        false);
                 return new HomeListItemViewHolder(v);
         }
     }
 
-    // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         try {
             if (holder instanceof HeaderListItemViewHolder) {
                 HeaderListItemViewHolder vh = (HeaderListItemViewHolder) holder;
-                vh.bindViewHeaderList(position);
+                vh.bindViewHeaderList();
             } else if (holder instanceof HomeListItemViewHolder) {
                 HomeListItemViewHolder vh = (HomeListItemViewHolder) holder;
-                vh.bindViewHomeList(position, homeitems.get(position - 1));
+                vh.bindViewHomeList(homeitems.get(position - 1));
             }
         } catch (Exception e) {
             e.printStackTrace();

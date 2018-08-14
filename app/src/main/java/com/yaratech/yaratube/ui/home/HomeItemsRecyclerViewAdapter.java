@@ -40,7 +40,7 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = Util.BASE_URL+products.get(position).getAvatar().getXxxdpi();
+        String image_url = products.get(position).getAvatar().getXxxdpi();
         String title = products.get(position).getName();
         Glide.with(context).load(image_url).into(holder.product_avatar);
         holder.product_title.setText(title);

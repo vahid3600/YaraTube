@@ -1,7 +1,5 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.data.sourse.product_detail;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,30 +14,27 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
-import com.yaratech.yaratube.ui.category.CategoryItemsRecyclerViewAdapter;
-import com.yaratech.yaratube.ui.category.CategoryPresenter;
 
 import java.util.List;
 
-public class ProductListFragment extends Fragment implements ProductListContract.View,
-        ProductListRecyclerViewAdapter.OnItemClickListener {
+public class ProductDetailFragment extends Fragment implements ProductDetailContract.View,
+        ProductDetailRecyclerViewAdapter.OnItemClickListener {
 
-    ProductListPresenter productListPresenter;
+    ProductDetailPresenter productListPresenter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-    private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
+    private ProductDetailRecyclerViewAdapter productListRecyclerViewAdapter;
 
-    public ProductListFragment() {
+    public ProductDetailFragment() {
         // Required empty public constructor
     }
 
-    public static ProductListFragment newInstance(int id) {
+    public static ProductDetailFragment newInstance(int id) {
 
         Bundle args = new Bundle();
         args.putInt("category_id", id);
-        ProductListFragment fragment = new ProductListFragment();
+        ProductDetailFragment fragment = new ProductDetailFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,11 +51,11 @@ public class ProductListFragment extends Fragment implements ProductListContract
         super.onViewCreated(view, savedInstanceState);
         progressBar = view.findViewById(R.id.loading);
         progressBar.setVisibility(View.GONE);
-        productListPresenter = new ProductListPresenter(getContext(), this);
+        productListPresenter = new ProductDetailPresenter(getContext(), this);
         recyclerView = view.findViewById(R.id.product_list_recycleview);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2,
                 LinearLayoutManager.VERTICAL, false));
-        productListRecyclerViewAdapter = new ProductListRecyclerViewAdapter(getContext()
+        productListRecyclerViewAdapter = new ProductDetailRecyclerViewAdapter(getContext()
                 , this);
         recyclerView.setAdapter(productListRecyclerViewAdapter);
     }
@@ -94,7 +89,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
 
     @Override
     public void getProductItem(ProductList product) {
-        ((ProductListFragment.OnProductClickListener)getContext()).onItemClicked(product);
+        ((ProductDetailFragment.OnProductClickListener)getContext()).onItemClicked(product);
     }
 
     public interface OnProductClickListener{
