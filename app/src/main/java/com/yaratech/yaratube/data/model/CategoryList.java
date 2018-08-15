@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.yaratech.yaratube.utils.Util;
 
-public class Category_list {
+public class CategoryList {
 
     @SerializedName("id")
     @Expose

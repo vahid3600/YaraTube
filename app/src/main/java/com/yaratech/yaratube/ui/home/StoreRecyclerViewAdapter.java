@@ -1,6 +1,8 @@
 package com.yaratech.yaratube.ui.home;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,21 +22,25 @@ import static android.support.v7.widget.LinearLayoutManager.*;
 
 public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private Context context;
+    FragmentManager fragmentManager;
+    HeaderItemAdapter headerItemAdapter;
     private Store store;
     List<Headeritem> headeritems = new ArrayList<>();
     List<Homeitem> homeitems = new ArrayList<>();
     HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener;
     HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;
-    private Context context;
     private static final int HEADER_LIST_ITEM_VIEW = 1;
     private static final int HOME_ITEM_LIST_ITEM_VIEW = 2;
 
     public StoreRecyclerViewAdapter(
             Context context,
+            FragmentManager fragmentManager,
             HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener,
             HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener) {
         this.onHomeItemClickListener = onHomeItemClickListener;
         this.onHeaderItemClickListener = onHeaderItemClickListener;
+        this.fragmentManager = fragmentManager;
         this.context = context;
     }
 
@@ -45,20 +51,18 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     private class HeaderListItemViewHolder extends RecyclerView.ViewHolder {
-        RecyclerView headerRecyclerView;
+        ViewPager headerViewPager;
 
         HeaderListItemViewHolder(View itemView) {
             super(itemView);
-            headerRecyclerView = itemView.findViewById(R.id.header_item_recycler);
+            headerViewPager = itemView.findViewById(R.id.header_item_viewpager);
         }
 
         void bindViewHeaderList() {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, HORIZONTAL,
-                    false);
-            headerRecyclerView.setLayoutManager(linearLayoutManager);
-            HeaderItemsRecyclerViewAdapter headerItemsRecyclerViewAdapter =
-                    new HeaderItemsRecyclerViewAdapter(context, headeritems, onHeaderItemClickListener);
-            headerRecyclerView.setAdapter(headerItemsRecyclerViewAdapter);
+
+            headerItemAdapter = new HeaderItemAdapter(fragmentManager);
+            headerViewPager.setAdapter(headerItemAdapter);
+            headerItemAdapter.setData(headeritems);
         }
     }
 

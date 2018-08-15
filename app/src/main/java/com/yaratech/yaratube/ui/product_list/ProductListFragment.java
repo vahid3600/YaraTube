@@ -1,7 +1,5 @@
 package com.yaratech.yaratube.ui.product_list;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,10 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
-import com.yaratech.yaratube.ui.category.CategoryItemsRecyclerViewAdapter;
-import com.yaratech.yaratube.ui.category.CategoryPresenter;
 
 import java.util.List;
 

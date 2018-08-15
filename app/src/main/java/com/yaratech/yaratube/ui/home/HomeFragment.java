@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
                 false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
-        storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext(),
+        storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext(), getFragmentManager(),
                 this, this);
         recyclerView.setAdapter(storeRecyclerViewAdapter);
     }

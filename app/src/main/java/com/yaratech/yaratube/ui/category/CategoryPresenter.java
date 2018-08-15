@@ -2,12 +2,10 @@ package com.yaratech.yaratube.ui.category;
 
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.Category_list;
-import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
-import com.yaratech.yaratube.ui.home.HomeContract;
 
 import java.util.List;
 
@@ -29,11 +27,12 @@ public class CategoryPresenter implements CategoryContract.Presenter {
     public void fetchCategoryFromRemote() {
         view.showLoading();
 
-        categoryRepository.getCategory(new DataSource.LoadCatetoryCallback() {
+        categoryRepository.getCategory(new DataSource.LoadDataCallback() {
+
             @Override
-            public void onCategoryLoaded(List<Category_list> categoryList) {
+            public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.showListCategory(categoryList);
+                view.showListCategory((List<CategoryList>) result);
             }
 
             @Override

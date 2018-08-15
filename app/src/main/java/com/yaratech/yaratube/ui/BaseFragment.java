@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,10 @@ import com.yaratech.yaratube.ui.home.HomeFragment;
 
 public class BaseFragment extends Fragment {
 
+    private HomeFragment homeFragment;
+    private CategoryFragment categoryFragment;
     private BottomNavigationView bottomNavigationView;
+    private FragmentManager fragmentManager;
     public BaseFragment() {
         // Required empty public constructor
     }
@@ -50,7 +54,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setFragment(HomeFragment.newInstance());
+        setHomeFragment();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -58,11 +62,11 @@ public class BaseFragment extends Fragment {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
                                 item.setChecked(true);
-                                setFragment(HomeFragment.newInstance());
+                                setHomeFragment();
                                 break;
                             case R.id.navigation_category:
                                 item.setChecked(true);
-                                setFragment(CategoryFragment.newInstance());
+                                setCategoryFragment();
                                 break;
                         }
                         return false;
@@ -70,9 +74,36 @@ public class BaseFragment extends Fragment {
                 });
     }
 
-    private void setFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+    private void setHomeFragment() {
+        if (homeFragment == null) {
+            if (categoryFragment != null && categoryFragment.isVisible()){
+                fragmentManager.beginTransaction().hide(categoryFragment).commit();
+            }
+            homeFragment = HomeFragment.newInstance();
+            fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frameLayout, homeFragment).commit();
+
+        }else if (!homeFragment.isVisible()){
+            Log.e("home ",homeFragment.isVisible()+" "+categoryFragment.isVisible());
+            fragmentManager.beginTransaction().hide(categoryFragment).commit();
+            fragmentManager.beginTransaction().show(homeFragment).commit();
+        }
+    }
+
+    private void setCategoryFragment() {
+        if (categoryFragment == null) {
+            if (homeFragment !=null && homeFragment.isVisible()){
+                fragmentManager.beginTransaction().hide(homeFragment).commit();
+            }
+            categoryFragment = CategoryFragment.newInstance();
+            fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frameLayout, categoryFragment).commit();
+        }else if (!categoryFragment.isVisible()){
+            Log.e("category ",homeFragment.isVisible()+" "+categoryFragment.isVisible());
+            fragmentManager.beginTransaction().hide(homeFragment).commit();
+            fragmentManager.beginTransaction().show(categoryFragment).commit();
+        }
     }
 }

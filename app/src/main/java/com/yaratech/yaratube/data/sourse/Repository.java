@@ -41,22 +41,22 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public void getHome(LoadStoreCallback callback) {
+    public void getHome(LoadDataCallback callback) {
         remoteDataSource.getHome(callback);
     }
 
     @Override
-    public void getCategory(LoadCatetoryCallback callback) {
+    public void getCategory(LoadDataCallback callback) {
         remoteDataSource.getCategory(callback);
     }
 
     @Override
-    public void getProductList(int id, LoadProductListCallback callback) {
+    public void getProductList(int id, LoadDataCallback callback) {
         remoteDataSource.getProductList(id, callback);
     }
 
     @Override
-    public void getProductDetail(int id, LoadProductDetailCallback callback) {
+    public void getProductDetail(int id, LoadDataCallback callback) {
         remoteDataSource.getProductDetail(id, callback);
     }
 

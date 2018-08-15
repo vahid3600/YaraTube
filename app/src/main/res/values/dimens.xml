@@ -27,5 +27,8 @@
     <dimen name="button_padding_bottom">8dp</dimen>
     <dimen name="default_text_size">22sp</dimen>
     <dimen name="title_text_size">16sp</dimen>
+    <dimen name="stroke_width_edittext">1dp</dimen>
+    <dimen name="corner_radius_edittext">10dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 
 </resources>

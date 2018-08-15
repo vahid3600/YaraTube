@@ -2,14 +2,9 @@ package com.yaratech.yaratube.ui.profile;
 
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.category.CategoryContract;
-
-import java.util.List;
 
 /**
  * Created by Vah on 8/8/2018.
@@ -31,7 +26,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     public void fetchProfileGalery() {
 //        profileRepository.getImageFromGalery(context, new DataSource.LoadImageGaleryCallback() {
 //            @Override
-//            public void onImageLoaded(List<Category_list> categoryList) {
+//            public void onImageLoaded(List<CategoryList> categoryList) {
 //
 //            }
 //

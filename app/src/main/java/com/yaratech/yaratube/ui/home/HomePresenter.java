@@ -24,11 +24,12 @@ public class HomePresenter implements HomeContract.Presenter {
     public void fetchHomeFromRemote() {
         view.showLoading();
 
-        homeRepository.getHome(new DataSource.LoadStoreCallback() {
+        homeRepository.getHome(new DataSource.LoadDataCallback() {
+
             @Override
-            public void onStoreLoaded(Store store) {
+            public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.showListHome(store);
+                view.showListHome((Store) result);
             }
 
             @Override

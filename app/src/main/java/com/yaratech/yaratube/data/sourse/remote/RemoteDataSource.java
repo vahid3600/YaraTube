@@ -3,17 +3,12 @@ package com.yaratech.yaratube.data.sourse.remote;
 import android.content.Context;
 import android.util.Log;
 
+import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.utils.Util;
-import com.yaratech.yaratube.dagger.component.DaggerGetServices;
-import com.yaratech.yaratube.dagger.component.GetServices;
-import com.yaratech.yaratube.dagger.module.RetrofitModule;
 import com.yaratech.yaratube.data.model.Store;
 
-import java.util.Collection;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,7 +28,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getHome(final LoadStoreCallback callback) {
+    public void getHome(final LoadDataCallback callback) {
         if (Util.isOnline(context)) {
             Call<Store> storeCall = Util.getServices().getStoreService().getStore();
             storeCall.enqueue(new Callback<Store>() {
@@ -41,7 +36,7 @@ public class RemoteDataSource implements DataSource {
                 public void onResponse(Call<Store> call, Response<Store> response) {
 
                     if (response.isSuccessful()) {
-                        callback.onStoreLoaded(response.body());
+                        callback.onDataLoaded(response.body());
                     } else
                         callback.onError("عملیات با خطا مواجه شد!");
                 }
@@ -56,24 +51,24 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getCategory(final LoadCatetoryCallback callback) {
+    public void getCategory(final LoadDataCallback callback) {
         if (Util.isOnline(context)) {
 
-            final Call<List<Category_list>> categoryListCall = Util.getServices().getStoreService()
+            final Call<List<CategoryList>> categoryListCall = Util.getServices().getStoreService()
                     .getCategory();
-            categoryListCall.enqueue(new Callback<List<Category_list>>() {
+            categoryListCall.enqueue(new Callback<List<CategoryList>>() {
                 @Override
-                public void onResponse(Call<List<Category_list>> call,
-                                       Response<List<Category_list>> response) {
+                public void onResponse(Call<List<CategoryList>> call,
+                                       Response<List<CategoryList>> response) {
 
                     if (response.isSuccessful()) {
-                        callback.onCategoryLoaded(response.body());
+                        callback.onDataLoaded(response.body());
                     } else
                         callback.onError("عملیات با خطا مواجه شد!");
                 }
 
                 @Override
-                public void onFailure(Call<List<Category_list>> call, Throwable t) {
+                public void onFailure(Call<List<CategoryList>> call, Throwable t) {
                     callback.onError("عملیات با خطا مواجه شد!");
                 }
             });
@@ -82,7 +77,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getProductList(int id, final LoadProductListCallback callback) {
+    public void getProductList(int id, final LoadDataCallback callback) {
         if (Util.isOnline(context)) {
             final Call<List<ProductList>> productListCall = Util.getServices().getStoreService()
                     .getProductList(id);
@@ -93,7 +88,7 @@ public class RemoteDataSource implements DataSource {
 
                     if (response.isSuccessful()) {
                         List<ProductList> productLists = response.body();
-                        callback.onProductListLoaded(response.body());
+                        callback.onDataLoaded(response.body());
                     } else
                         callback.onError("عملیات با خطا مواجه شد!");
                 }
@@ -108,7 +103,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getProductDetail(int id, final LoadProductDetailCallback callback) {
+    public void getProductDetail(int id, final LoadDataCallback callback) {
         if (Util.isOnline(context)) {
             Log.e("tag",id+"");
 
@@ -121,7 +116,7 @@ public class RemoteDataSource implements DataSource {
 
                     if (response.isSuccessful()) {
                         Log.e("tag",response.body().getDescription());
-                        callback.onProductDetailLoaded(response.body());
+                        callback.onDataLoaded(response.body());
                     } else{
                         Log.e("tag",response.errorBody().toString());
 

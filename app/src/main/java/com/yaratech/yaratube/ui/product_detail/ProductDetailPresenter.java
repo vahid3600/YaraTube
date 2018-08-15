@@ -28,11 +28,12 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     public void fetchProductDetailFromRemote(int id) {
         view.showLoading();
 
-        productDetailRepository.getProductDetail(id, new DataSource.LoadProductDetailCallback() {
+        productDetailRepository.getProductDetail(id, new DataSource.LoadDataCallback() {
+
             @Override
-            public void onProductDetailLoaded(ProductDetail productDetail) {
+            public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.showProductDetail(productDetail);
+                view.showProductDetail((ProductDetail) result);
             }
 
             @Override

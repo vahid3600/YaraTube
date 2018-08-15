@@ -1,7 +1,6 @@
 package com.yaratech.yaratube.ui.category;
 
-import com.yaratech.yaratube.data.model.Category_list;
-import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.data.model.CategoryList;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public interface CategoryContract {
     interface View {
 
-        void showListCategory(List<Category_list> category_list);
+        void showListCategory(List<CategoryList> category_list);
 
         void showMessage(String msg);
 

@@ -2,12 +2,10 @@ package com.yaratech.yaratube.ui.product_list;
 
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
-import com.yaratech.yaratube.ui.category.CategoryContract;
 
 import java.util.List;
 
@@ -29,11 +27,12 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     public void fetchProductListFromRemote(int id) {
         view.showLoading();
 
-        productListRepository.getProductList(id, new DataSource.LoadProductListCallback() {
+        productListRepository.getProductList(id, new DataSource.LoadDataCallback() {
+
             @Override
-            public void onProductListLoaded(List<ProductList> productLists) {
+            public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.showListProducts(productLists);
+                view.showListProducts((List<ProductList>) result);
             }
 
             @Override

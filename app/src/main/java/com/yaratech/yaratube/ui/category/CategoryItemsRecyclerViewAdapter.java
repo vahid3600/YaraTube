@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.utils.Util;
-import com.yaratech.yaratube.data.model.Category_list;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
 public class CategoryItemsRecyclerViewAdapter extends
         RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder> {
 
-    private List<Category_list> category_lists = new ArrayList<>();
+    private List<CategoryList> category_lists = new ArrayList<>();
     private ItemClickListener itemClickListener;
     private Context context;
 
@@ -33,7 +33,7 @@ public class CategoryItemsRecyclerViewAdapter extends
         this.itemClickListener = itemClickListener;
     }
 
-    public void setData(List<Category_list> category_lists){
+    public void setData(List<CategoryList> category_lists){
         this.category_lists = category_lists;
         notifyDataSetChanged();
     }
@@ -81,7 +81,7 @@ public class CategoryItemsRecyclerViewAdapter extends
     }
 
     public interface ItemClickListener {
-        void onItemClick(Category_list category_list);
+        void onItemClick(CategoryList category_list);
     }
 
 }

@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category_list;
+import com.yaratech.yaratube.data.model.CategoryList;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     }
 
     @Override
-    public void showListCategory(List<Category_list> category_list) {
+    public void showListCategory(List<CategoryList> category_list) {
         categoryItemsRecyclerViewAdapter.setData(category_list);
     }
 
@@ -87,11 +87,11 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     }
 
     @Override
-    public void onItemClick(Category_list category_list) {
+    public void onItemClick(CategoryList category_list) {
         ((CategoryFragment.OnCategoryFragmentActionListener) getContext()).onCategorylistItemClicked(category_list);
     }
 
     public interface OnCategoryFragmentActionListener{
-        void onCategorylistItemClicked(Category_list category);
+        void onCategorylistItemClicked(CategoryList category);
     }
 }

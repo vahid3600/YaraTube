@@ -1,15 +1,9 @@
 package com.yaratech.yaratube.ui;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,12 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category_list;
-import com.yaratech.yaratube.data.model.ProductList;
-import com.yaratech.yaratube.data.sourse.product_detail.ProductDetailFragment;
+import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.ui.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.HomeFragment;
-import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
 import com.yaratech.yaratube.ui.login.LoginDialog;
 import com.yaratech.yaratube.ui.product_detail.ProductDetailActivity;
 import com.yaratech.yaratube.ui.product_list.ProductListFragment;
@@ -72,7 +63,6 @@ public class MenuActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
-        fragmentTransaction.addToBackStack("fragment");
     }
 
     @Override
@@ -135,7 +125,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCategorylistItemClicked(Category_list category) {
+    public void onCategorylistItemClicked(CategoryList category) {
         setFragment(ProductListFragment.newInstance(category.getId()));
         fragmentTransaction.addToBackStack("product_list");
         toggle.setDrawerIndicatorEnabled(false);

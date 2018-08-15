@@ -28,9 +28,14 @@
     <string name="login_by_google">از طریق حساب google</string>
     <string name="details">توضیحات</string>
     <string name="comments">نظرات کاربران</string>
+    <string name="comment">نظر</string>
+    <string name="send">ثبت</string>
+    <string name="send_comment">نظر دهید</string>
 
     <string-array name="array_sex">
         <item>مرد</item>
         <item>زن</item>
     </string-array>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.yaratech.yaratube.ui.product_list;
 
-import com.yaratech.yaratube.data.model.Category_list;
 import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.List;
