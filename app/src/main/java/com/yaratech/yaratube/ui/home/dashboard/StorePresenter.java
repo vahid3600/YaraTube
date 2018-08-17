@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.home;
+package com.yaratech.yaratube.ui.home.dashboard;
 
 import android.content.Context;
 
@@ -11,12 +11,12 @@ import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
  * Created by Vah on 8/8/2018.
  */
 
-public class HomePresenter implements HomeContract.Presenter {
+public class StorePresenter implements StoreContract.Presenter {
 
-    private HomeContract.View view;
+    private StoreContract.View view;
     private Repository homeRepository;
 
-    public HomePresenter(Context context, HomeContract.View view){
+    public StorePresenter(Context context, StoreContract.View view){
         this.homeRepository = Repository.getINSTANCE(new RemoteDataSource(context));
         this.view = view;
     }
@@ -33,7 +33,7 @@ public class HomePresenter implements HomeContract.Presenter {
             }
 
             @Override
-            public void onError(String msg) {
+            public void onMessage(String msg) {
                 view.hideLoading();
                 view.showMessage(msg);
             }

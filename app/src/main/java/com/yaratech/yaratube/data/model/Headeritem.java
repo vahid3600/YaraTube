@@ -2,10 +2,14 @@
 package com.yaratech.yaratube.data.model;
 
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Headeritem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Headeritem implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -83,204 +87,164 @@ public class Headeritem {
     @Expose
     private Object customjson;
 
-    public int getId() {
-        return id;
+    protected Headeritem(Parcel source) {
+        id = source.readInt();
+        name = source.readString();
+        nameEnglish = source.readString();
+        productType = source.readInt();
+        producerName = source.readString();
+        price = source.readInt();
+        rank = source.readInt();
+        shortDescription = source.readString();
+        isPurchased = source.readByte() != 0;
+        comments = source.readInt();
+        isBookmarked = source.readByte() != 0;
+        sku = source.readString();
+        priceUnit = source.readString();
+        totalView = source.readInt();
+        dateAdded = source.readString();
+        isSpecial = source.readByte() != 0;
+        datePublished = source.readString();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public static final Creator<Headeritem> CREATOR = new Creator<Headeritem>() {
+
+        @Override
+        public Headeritem createFromParcel(Parcel source) {
+            return new Headeritem(source);
+
+        }
+
+        @Override
+        public Headeritem[] newArray(int size) {
+            return new Headeritem[size];
+        }
+    };
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getNameEnglish() {
         return nameEnglish;
-    }
-
-    public void setNameEnglish(String nameEnglish) {
-        this.nameEnglish = nameEnglish;
     }
 
     public int getProductType() {
         return productType;
     }
 
-    public void setProductType(int productType) {
-        this.productType = productType;
-    }
-
     public String getProducerName() {
         return producerName;
-    }
-
-    public void setProducerName(String producerName) {
-        this.producerName = producerName;
     }
 
     public List<Object> getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(List<Object> paymentType) {
-        this.paymentType = paymentType;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public Avatar getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
-    }
-
     public FeatureAvatar getFeatureAvatar() {
         return featureAvatar;
-    }
-
-    public void setFeatureAvatar(FeatureAvatar featureAvatar) {
-        this.featureAvatar = featureAvatar;
     }
 
     public double getRank() {
         return rank;
     }
 
-    public void setRank(double rank) {
-        this.rank = rank;
-    }
-
     public String getShortDescription() {
         return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
     }
 
     public boolean isIsPurchased() {
         return isPurchased;
     }
 
-    public void setIsPurchased(boolean isPurchased) {
-        this.isPurchased = isPurchased;
-    }
-
     public int getComments() {
         return comments;
-    }
-
-    public void setComments(int comments) {
-        this.comments = comments;
     }
 
     public boolean isIsBookmarked() {
         return isBookmarked;
     }
 
-    public void setIsBookmarked(boolean isBookmarked) {
-        this.isBookmarked = isBookmarked;
-    }
-
     public String getSku() {
         return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getPriceUnit() {
         return priceUnit;
     }
 
-    public void setPriceUnit(String priceUnit) {
-        this.priceUnit = priceUnit;
-    }
-
     public int getTotalView() {
         return totalView;
-    }
-
-    public void setTotalView(int totalView) {
-        this.totalView = totalView;
     }
 
     public String getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(String dateAdded) {
-        this.dateAdded = dateAdded;
-    }
-
     public Object getInvestGoal() {
         return investGoal;
-    }
-
-    public void setInvestGoal(Object investGoal) {
-        this.investGoal = investGoal;
     }
 
     public List<Object> getProductStaff() {
         return productStaff;
     }
 
-    public void setProductStaff(List<Object> productStaff) {
-        this.productStaff = productStaff;
-    }
-
     public Support getSupport() {
         return support;
-    }
-
-    public void setSupport(Support support) {
-        this.support = support;
     }
 
     public boolean isIsSpecial() {
         return isSpecial;
     }
 
-    public void setIsSpecial(boolean isSpecial) {
-        this.isSpecial = isSpecial;
-    }
-
     public List<Object> getAdditionalAttributes() {
         return additionalAttributes;
-    }
-
-    public void setAdditionalAttributes(List<Object> additionalAttributes) {
-        this.additionalAttributes = additionalAttributes;
     }
 
     public String getDatePublished() {
         return datePublished;
     }
 
-    public void setDatePublished(String datePublished) {
-        this.datePublished = datePublished;
-    }
-
     public Object getCustomjson() {
         return customjson;
     }
 
-    public void setCustomjson(Object customjson) {
-        this.customjson = customjson;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(nameEnglish);
+        dest.writeInt(productType);
+        dest.writeString(producerName);
+        dest.writeInt(price);
+        dest.writeDouble(rank);
+        dest.writeString(shortDescription);
+        dest.writeByte((byte) (isPurchased ? 1 : 0));
+        dest.writeInt(comments);
+        dest.writeByte((byte) (isBookmarked ? 1 : 0));
+        dest.writeString(sku);
+        dest.writeString(priceUnit);
+        dest.writeInt(totalView);
+        dest.writeString(dateAdded);
+        dest.writeByte((byte) (isSpecial ? 1 : 0));
+        dest.writeString(datePublished);
+    }
 }

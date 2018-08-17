@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,25 +19,41 @@ import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
-import com.yaratech.yaratube.ui.category.CategoryFragment;
-import com.yaratech.yaratube.ui.home.HomeFragment;
-import com.yaratech.yaratube.ui.login.LoginDialog;
+import com.yaratech.yaratube.ui.dialog.enter_phone_number.EnterPhoneNumberDialog;
+import com.yaratech.yaratube.ui.home.BaseFragment;
+import com.yaratech.yaratube.ui.home.category.CategoryFragment;
+import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
+import com.yaratech.yaratube.ui.dialog.login.LoginDialog;
 import com.yaratech.yaratube.ui.product_detail.ProductDetailActivity;
 import com.yaratech.yaratube.ui.product_list.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnCategoryFragmentActionListener,
         ProductListFragment.OnProductClickListener,
-        HomeFragment.OnProductHeaderClickListener,
-        HomeFragment.OnProductHomeClickListener {
+        StoreFragment.OnProductHeaderClickListener,
+        StoreFragment.OnProductHomeClickListener,
+        LoginDialog.DismissDialog,
+        EnterPhoneNumberDialog.DismissDialog {
 
     Toolbar toolbar;
+    public EnterPhoneNumberDialog enterPhoneNumberDialog = new EnterPhoneNumberDialog();
+    public LoginDialog loginDialog = new LoginDialog();
+    public List<String> addedFragmentsNames = new ArrayList<>();
+    public FragmentManager fragmentManager;
+    public BaseFragment baseFragment;
+    public ProductListFragment productListFragment;
+    public ProfileFragment profileFragment;
+    public final String PROFILE_FRAGMENT_TAG = "ProfileFragment";
+    public final String BASE_FRAGMENT_TAG = "BaseFragment";
+    public final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
     public static SharedPreferences USER_LOGIN;
-    FragmentTransaction fragmentTransaction;
-    ActionBarDrawerToggle toggle;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private FragmentTransaction fragmentTransaction;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +62,8 @@ public class MenuActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setFragment(BaseFragment.newInstance());
+        baseFragment = BaseFragment.newInstance();
+        setFragment(baseFragment, BASE_FRAGMENT_TAG);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         USER_LOGIN = getSharedPreferences("USER_LOGIN", MODE_PRIVATE);
         toggle = new ActionBarDrawerToggle(
@@ -57,12 +73,6 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void setFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
     }
 
     @Override
@@ -95,10 +105,10 @@ public class MenuActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-
         if (id == R.id.nav_profile) {
-            setFragment(ProfileFragment.newInstance());
-            fragmentTransaction.addToBackStack("profile");
+            profileFragment = ProfileFragment.newInstance();
+            setFragment(profileFragment, PROFILE_FRAGMENT_TAG);
+            fragmentTransaction.addToBackStack(PROFILE_FRAGMENT_TAG);
             toggle.setDrawerIndicatorEnabled(false);
             toolbar.inflateMenu(R.menu.menu_back_button);
         } else if (id == R.id.nav_about_us) {
@@ -112,22 +122,22 @@ public class MenuActivity extends AppCompatActivity
         return true;
     }
 
-    public boolean checkPermissions(String permission){
+    public boolean checkPermissions(String permission) {
 
         int permissionRequest = ActivityCompat.checkSelfPermission(MenuActivity.this, permission);
 
-        if(permissionRequest != PackageManager.PERMISSION_GRANTED){
+        if (permissionRequest != PackageManager.PERMISSION_GRANTED) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
-        setFragment(ProductListFragment.newInstance(category.getId()));
-        fragmentTransaction.addToBackStack("product_list");
+        productListFragment = ProductListFragment.newInstance(category.getId());
+        setFragment(productListFragment, PRODUCT_LIST_FRAGMENT_TAG);
+        fragmentTransaction.addToBackStack(PRODUCT_LIST_FRAGMENT_TAG);
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.inflateMenu(R.menu.menu_back_button);
     }
@@ -135,15 +145,37 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onItemClicked(int productId) {
         boolean userLogin = USER_LOGIN.getBoolean("USER_LOGIN", false);
-        Log.e("tag", productId + " " + userLogin);
-        if (userLogin) {
-            Intent intent = new Intent(MenuActivity.this, ProductDetailActivity.class);
-            intent.putExtra("PRODUCT_ID", productId);
-            startActivity(intent);
-        } else {
-            LoginDialog loginDialog = new LoginDialog();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            loginDialog.show(fragmentManager, "login dialog");
-        }
+
+//        if (userLogin) {
+//            Intent intent = new Intent(MenuActivity.this, ProductDetailActivity.class);
+//            intent.putExtra("PRODUCT_ID", productId);
+//            startActivity(intent);
+//        } else {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        loginDialog.show(fragmentManager, "login dialog");
+//        }
+    }
+
+    private void setFragment(Fragment fragment, String fragmentName) {
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container, fragment).commit();
+        addedFragmentsNames.add(fragmentName);
+        if (fragmentName != "Base")
+            fragmentTransaction.addToBackStack(fragmentName);
+    }
+
+    @Override
+    public void dismissLoginDialog() {
+        loginDialog.dismiss();
+        enterPhoneNumberDialog.show(fragmentManager, "enter phone");
+    }
+
+    @Override
+    public void dismissPhoneNumberDialog() {
+        enterPhoneNumberDialog.dismiss();
+        MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
     }
 }
+

@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.image_picker;
+package com.yaratech.yaratube.ui.dialog.image_picker;
 
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;

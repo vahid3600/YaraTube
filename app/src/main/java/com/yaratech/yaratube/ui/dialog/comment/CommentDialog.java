@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.comment;
+package com.yaratech.yaratube.ui.dialog.comment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,10 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.MenuActivity;
 
 /**
  * Created by Vah on 8/12/2018.

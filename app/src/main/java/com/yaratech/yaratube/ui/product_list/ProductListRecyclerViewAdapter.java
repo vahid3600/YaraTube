@@ -48,7 +48,7 @@ public class ProductListRecyclerViewAdapter extends
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = productLists.get(position).getAvatar().getXxxdpi();
+        String image_url = productLists.get(position).getFeatureAvatar().getXxxdpi();
         String title = productLists.get(position).getName();
         Glide.with(context).load(image_url).into(holder.product_avatar);
         holder.product_title.setText(title);

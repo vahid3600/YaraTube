@@ -1,7 +1,5 @@
-package com.yaratech.yaratube.ui;
+package com.yaratech.yaratube.ui.home;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,15 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.category.CategoryFragment;
-import com.yaratech.yaratube.ui.home.HomeFragment;
+import com.yaratech.yaratube.ui.home.category.CategoryFragment;
+import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
 
 public class BaseFragment extends Fragment {
 
-    private HomeFragment homeFragment;
+    private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager;
+
     public BaseFragment() {
         // Required empty public constructor
     }
@@ -76,16 +75,15 @@ public class BaseFragment extends Fragment {
 
     private void setHomeFragment() {
         if (homeFragment == null) {
-            if (categoryFragment != null && categoryFragment.isVisible()){
+            if (categoryFragment != null && categoryFragment.isVisible()) {
                 fragmentManager.beginTransaction().hide(categoryFragment).commit();
             }
-            homeFragment = HomeFragment.newInstance();
+            homeFragment = StoreFragment.newInstance();
             fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frameLayout, homeFragment).commit();
 
-        }else if (!homeFragment.isVisible()){
-            Log.e("home ",homeFragment.isVisible()+" "+categoryFragment.isVisible());
+        } else if (!homeFragment.isVisible()) {
             fragmentManager.beginTransaction().hide(categoryFragment).commit();
             fragmentManager.beginTransaction().show(homeFragment).commit();
         }
@@ -93,15 +91,14 @@ public class BaseFragment extends Fragment {
 
     private void setCategoryFragment() {
         if (categoryFragment == null) {
-            if (homeFragment !=null && homeFragment.isVisible()){
+            if (homeFragment != null && homeFragment.isVisible()) {
                 fragmentManager.beginTransaction().hide(homeFragment).commit();
             }
             categoryFragment = CategoryFragment.newInstance();
             fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frameLayout, categoryFragment).commit();
-        }else if (!categoryFragment.isVisible()){
-            Log.e("category ",homeFragment.isVisible()+" "+categoryFragment.isVisible());
+        } else if (!categoryFragment.isVisible()) {
             fragmentManager.beginTransaction().hide(homeFragment).commit();
             fragmentManager.beginTransaction().show(categoryFragment).commit();
         }

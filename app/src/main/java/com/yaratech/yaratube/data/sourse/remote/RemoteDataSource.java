@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.yaratech.yaratube.data.model.CategoryList;
+import com.yaratech.yaratube.data.model.LoginGoogle;
+import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.utils.Util;
@@ -38,7 +40,7 @@ public class RemoteDataSource implements DataSource {
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
                     } else
-                        callback.onError("عملیات با خطا مواجه شد!");
+                        callback.onMessage("عملیات با خطا مواجه شد!");
                 }
 
                 @Override
@@ -47,7 +49,7 @@ public class RemoteDataSource implements DataSource {
                 }
             });
         } else
-            callback.onError("ارتباط اینترنت شما قطع است");
+            callback.onMessage("ارتباط اینترنت شما قطع است");
     }
 
     @Override
@@ -64,16 +66,16 @@ public class RemoteDataSource implements DataSource {
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
                     } else
-                        callback.onError("عملیات با خطا مواجه شد!");
+                        callback.onMessage("عملیات با خطا مواجه شد!");
                 }
 
                 @Override
                 public void onFailure(Call<List<CategoryList>> call, Throwable t) {
-                    callback.onError("عملیات با خطا مواجه شد!");
+                    callback.onMessage("عملیات با خطا مواجه شد!");
                 }
             });
         } else
-            callback.onError("ارتباط اینترنت شما قطع است");
+            callback.onMessage("ارتباط اینترنت شما قطع است");
     }
 
     @Override
@@ -90,22 +92,22 @@ public class RemoteDataSource implements DataSource {
                         List<ProductList> productLists = response.body();
                         callback.onDataLoaded(response.body());
                     } else
-                        callback.onError("عملیات با خطا مواجه شد!");
+                        callback.onMessage("عملیات با خطا مواجه شد!");
                 }
 
                 @Override
                 public void onFailure(Call<List<ProductList>> call, Throwable t) {
-                    callback.onError("عملیات با خطا مواجه شد!");
+                    callback.onMessage("عملیات با خطا مواجه شد!");
                 }
             });
         } else
-            callback.onError("ارتباط اینترنت شما قطع است");
+            callback.onMessage("ارتباط اینترنت شما قطع است");
     }
 
     @Override
     public void getProductDetail(int id, final LoadDataCallback callback) {
         if (Util.isOnline(context)) {
-            Log.e("tag",id+"");
+            Log.e("tag", id + "");
 
             final Call<ProductDetail> productDetailCall = Util.getServices().getStoreService()
                     .getProductDetail(id);
@@ -115,21 +117,126 @@ public class RemoteDataSource implements DataSource {
                                        Response<ProductDetail> response) {
 
                     if (response.isSuccessful()) {
-                        Log.e("tag",response.body().getDescription());
+                        Log.e("tag", response.body().getDescription());
                         callback.onDataLoaded(response.body());
-                    } else{
-                        Log.e("tag",response.errorBody().toString());
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
 
-                        callback.onError("عملیات با خطا مواجه شد!");}
+                        callback.onMessage("عملیات با خطا مواجه شد!");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<ProductDetail> call, Throwable t) {
-                    callback.onError("عملیات با خطا مواجه شد!");
+                    callback.onMessage("عملیات با خطا مواجه شد!");
                 }
             });
         } else
-            callback.onError("ارتباط اینترنت شما قطع است");
+            callback.onMessage("ارتباط اینترنت شما قطع است");
+    }
+
+    @Override
+    public void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
+                                String deviceModel, final LoadDataCallback callback) {
+        if (Util.isOnline(context)) {
+
+            final Call<LoginGoogle> loginGoogleCall = Util.getServices().getStoreService()
+                    .sendGoogleLogin(
+                            tokenId,
+                            deviceId,
+                            deviceOs,
+                            deviceModel);
+            loginGoogleCall.enqueue(new Callback<LoginGoogle>() {
+                @Override
+                public void onResponse(Call<LoginGoogle> call,
+                                       Response<LoginGoogle> response) {
+
+                    if (response.isSuccessful()) {
+                        callback.onDataLoaded(response.body());
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
+
+                        callback.onMessage("عملیات با خطا مواجه شد!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginGoogle> call, Throwable t) {
+                    callback.onMessage("عملیات با خطا مواجه شد!");
+                }
+            });
+        } else
+            callback.onMessage("ارتباط اینترنت شما قطع است");
+    }
+
+    @Override
+    public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
+                                     String deviceOs, String gcm, final LoadDataCallback callback) {
+        if (Util.isOnline(context)) {
+
+            final Call<MobileLoginStep1> loginGoogleCall = Util.getServices().getStoreService()
+                    .sendMobileLoginStep1(
+                            mobile,
+                            deviceId,
+                            deviceModel,
+                            deviceOs,
+                            gcm);
+            loginGoogleCall.enqueue(new Callback<MobileLoginStep1>() {
+                @Override
+                public void onResponse(Call<MobileLoginStep1> call,
+                                       Response<MobileLoginStep1> response) {
+
+                    if (response.isSuccessful()) {
+                        callback.onDataLoaded(response.body());
+                        callback.onMessage(response.body().getMessage());
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
+
+                        callback.onMessage("عملیات با خطا مواجه شد!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MobileLoginStep1> call, Throwable t) {
+                    callback.onMessage("عملیات با خطا مواجه شد!");
+                }
+            });
+        } else
+            callback.onMessage("ارتباط اینترنت شما قطع است");
+    }
+
+    @Override
+    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
+                                     String nickname, final LoadDataCallback callback) {
+        if (Util.isOnline(context)) {
+
+            final Call<LoginGoogle> loginGoogleCall = Util.getServices().getStoreService()
+                    .sendMobileLoginStep2(
+                            mobile,
+                            deviceId,
+                            verificationCode,
+                            nickname);
+            loginGoogleCall.enqueue(new Callback<LoginGoogle>() {
+                @Override
+                public void onResponse(Call<LoginGoogle> call,
+                                       Response<LoginGoogle> response) {
+
+                    if (response.isSuccessful()) {
+                        callback.onDataLoaded(response.body());
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
+
+                        callback.onMessage("عملیات با خطا مواجه شد!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginGoogle> call, Throwable t) {
+                    callback.onMessage("عملیات با خطا مواجه شد!");
+                }
+            });
+        } else
+            callback.onMessage("ارتباط اینترنت شما قطع است");
     }
 
 }

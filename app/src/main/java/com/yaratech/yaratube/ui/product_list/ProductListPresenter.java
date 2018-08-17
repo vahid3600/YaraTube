@@ -36,7 +36,7 @@ public class ProductListPresenter implements ProductListContract.Presenter {
             }
 
             @Override
-            public void onError(String msg) {
+            public void onMessage(String msg) {
                 view.hideLoading();
                 view.showMessage(msg);
             }

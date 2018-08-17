@@ -24,8 +24,8 @@
         android:background="@color/button_background_1"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/button_padding_bottom"
-        android:paddingLeft="@dimen/buttom_padding_left"
-        android:paddingRight="@dimen/buttom_padding_right"
+        android:paddingLeft="@dimen/button_padding_left"
+        android:paddingRight="@dimen/button_padding_right"
         android:paddingTop="@dimen/button_padding_top">
 
         <TextView
@@ -54,8 +54,8 @@
         android:background="@color/button_background_2"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/button_padding_bottom"
-        android:paddingLeft="@dimen/buttom_padding_left"
-        android:paddingRight="@dimen/buttom_padding_right"
+        android:paddingLeft="@dimen/button_padding_left"
+        android:paddingRight="@dimen/button_padding_right"
         android:paddingTop="@dimen/button_padding_top">
 
         <TextView

@@ -1,27 +1,28 @@
-package com.yaratech.yaratube.ui.login;
+package com.yaratech.yaratube.ui.dialog.login;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.profile.ProfileFragment;
+import com.yaratech.yaratube.ui.dialog.enter_phone_number.EnterPhoneNumberDialog;
+import com.yaratech.yaratube.utils.Util;
 
 /**
  * Created by Vah on 8/12/2018.
  */
 
-public class LoginDialog extends DialogFragment implements View.OnClickListener {
+public class LoginDialog extends DialogFragment implements View.OnClickListener, LoginContract.View {
 
     LinearLayout loginByPhone, loginByGoogle;
+    LoginContract.Presenter presenter;
 
     @Nullable
     @Override
@@ -36,6 +37,7 @@ public class LoginDialog extends DialogFragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
         loginByPhone = view.findViewById(R.id.phonenumber);
         loginByGoogle = view.findViewById(R.id.google);
+        presenter = new LoginPresenter(getContext(), this);
 
         loginByPhone.setOnClickListener(this);
         loginByGoogle.setOnClickListener(this);
@@ -45,13 +47,31 @@ public class LoginDialog extends DialogFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.phonenumber:
-                MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
+                dismissDialog();
                 break;
             case R.id.google:
-
+                presenter.loginByGoogle(
+                        "",
+                        Util.getDeviceId(getContext()),
+                        Util.getDeviceOS(),
+                        Util.getDeviceModel());
                 break;
         }
 
 
+    }
+
+    @Override
+    public void dismissDialog() {
+        ((LoginDialog.DismissDialog) getContext()).dismissLoginDialog();
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    public interface DismissDialog {
+        void dismissLoginDialog();
     }
 }

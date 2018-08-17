@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.home;
+package com.yaratech.yaratube.ui.home.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,29 +13,28 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
 
-public class HomeFragment extends Fragment implements HomeContract.View,
+public class StoreFragment extends Fragment implements StoreContract.View,
         HomeItemsRecyclerViewAdapter.OnHomeItemClickListener,
         HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener {
 
-    private HomeContract.Presenter presenter;
+    private StoreContract.Presenter presenter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
 
-    //    private GetData getData = new GetData(HomeFragment.this, HomeFragment.this);
+    //    private GetData getData = new GetData(StoreFragment.this, StoreFragment.this);
     private StoreRecyclerViewAdapter storeRecyclerViewAdapter;
 
-    public HomeFragment() {
+    public StoreFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance() {
+    public static StoreFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        HomeFragment fragment = new HomeFragment();
+        StoreFragment fragment = new StoreFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +57,7 @@ public class HomeFragment extends Fragment implements HomeContract.View,
         super.onViewCreated(view, savedInstanceState);
         progressBar = view.findViewById(R.id.loading);
         progressBar.setVisibility(View.GONE);
-        presenter = new HomePresenter(getContext(), this);
+        presenter = new StorePresenter(getContext(), this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
@@ -98,12 +97,12 @@ public class HomeFragment extends Fragment implements HomeContract.View,
 
     @Override
     public void getHeaderProductItem(int productId) {
-        ((HomeFragment.OnProductHeaderClickListener) getContext()).onItemClicked(productId);
+        ((StoreFragment.OnProductHeaderClickListener) getContext()).onItemClicked(productId);
     }
 
     @Override
     public void getHomeProductItem(int productId) {
-        ((HomeFragment.OnProductHomeClickListener) getContext()).onItemClicked(productId);
+        ((StoreFragment.OnProductHomeClickListener) getContext()).onItemClicked(productId);
     }
 
     public interface OnProductHeaderClickListener {

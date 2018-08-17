@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.data.sourse.product_detail;
+package com.yaratech.yaratube.ui.home.dashboard;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,46 +10,39 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.data.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Vah on 8/4/2018.
  */
 
-public class ProductDetailRecyclerViewAdapter extends
-        RecyclerView.Adapter<ProductDetailRecyclerViewAdapter.ViewHolder> {
+public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder> {
 
-    OnItemClickListener onItemClickListener;
-    private List<ProductList> productLists = new ArrayList<>();
+    OnHomeItemClickListener onHomeItemClickListener;
+    private List<Product> products;
     private Context context;
 
     // data is passed into the constructor
-    public ProductDetailRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+    HomeItemsRecyclerViewAdapter(Context context, List<Product> products, OnHomeItemClickListener onHomeItemClickListener) {
         this.context = context;
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public void setData(List<ProductList> productLists){
-        this.productLists = productLists;
-        notifyDataSetChanged();
+        this.products = products;
+        this.onHomeItemClickListener = onHomeItemClickListener;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent,
-                false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = productLists.get(position).getAvatar().getXxxdpi();
-        String title = productLists.get(position).getName();
+        String image_url = products.get(position).getFeatureAvatar().getXxxdpi();
+        String title = products.get(position).getName();
         Glide.with(context).load(image_url).into(holder.product_avatar);
         holder.product_title.setText(title);
     }
@@ -57,11 +50,12 @@ public class ProductDetailRecyclerViewAdapter extends
     // total number of rows
     @Override
     public int getItemCount() {
-        return productLists.size();
+        return products.size();
     }
 
+
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView product_avatar;
         TextView product_title;
 
@@ -75,12 +69,13 @@ public class ProductDetailRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.getProductItem(productLists.get(getAdapterPosition()));
+            onHomeItemClickListener.getHomeProductItem(products.get(getAdapterPosition()).getId());
         }
     }
 
-    public interface OnItemClickListener{
-        void getProductItem(ProductList product);
+    public interface OnHomeItemClickListener{
+        void getHomeProductItem(int productId);
     }
+
 }
 

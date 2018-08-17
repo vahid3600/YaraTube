@@ -9,7 +9,7 @@ public interface DataSource {
     interface LoadDataCallback<T> {
         void onDataLoaded(T result);
 
-        void onError(String msg);
+        void onMessage(String msg);
     }
 
     void getHome(LoadDataCallback callback);
@@ -19,4 +19,13 @@ public interface DataSource {
     void getProductList(int id, LoadDataCallback callback);
 
     void getProductDetail(int id, LoadDataCallback callback);
+
+    void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
+                         String deviceModel, LoadDataCallback callback);
+
+    void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
+                              String deviceOs, String gcm, LoadDataCallback callback);
+
+    void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
+                         String nickname, LoadDataCallback callback);
 }

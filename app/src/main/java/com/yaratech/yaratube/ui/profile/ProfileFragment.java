@@ -1,6 +1,5 @@
 package com.yaratech.yaratube.ui.profile;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import android.widget.Spinner;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.image_picker.ImagePickerDialog;
+import com.yaratech.yaratube.ui.dialog.image_picker.ImagePickerDialog;
 import com.yaratech.yaratube.utils.Util;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {

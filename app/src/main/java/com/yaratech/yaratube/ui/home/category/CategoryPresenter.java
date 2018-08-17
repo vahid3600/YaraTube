@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.category;
+package com.yaratech.yaratube.ui.home.category;
 
 import android.content.Context;
 
@@ -36,7 +36,7 @@ public class CategoryPresenter implements CategoryContract.Presenter {
             }
 
             @Override
-            public void onError(String msg) {
+            public void onMessage(String msg) {
                 view.hideLoading();
                 view.showMessage(msg);
             }

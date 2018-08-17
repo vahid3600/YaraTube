@@ -60,6 +60,26 @@ public class Repository implements DataSource {
         remoteDataSource.getProductDetail(id, callback);
     }
 
+    @Override
+    public void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
+                                String deviceModel, LoadDataCallback callback) {
+        remoteDataSource.sendGoogleLogin(tokenId, deviceId, deviceOs, deviceModel, callback);
+    }
+
+    @Override
+    public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
+                                     String deviceOs, String gcm, LoadDataCallback callback) {
+        remoteDataSource.sendMobileLoginStep1(mobile, deviceId, deviceModel, deviceOs,
+                gcm, callback);
+    }
+
+    @Override
+    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
+                                     String nickname, LoadDataCallback callback) {
+        remoteDataSource.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
+                callback);
+    }
+
     public void getImageFromGalery() {
 
     }
@@ -68,7 +88,7 @@ public class Repository implements DataSource {
 
     }
 
-    public interface GetImage{
+    public interface GetImage {
         void onCamera();
 
         void onGalery();

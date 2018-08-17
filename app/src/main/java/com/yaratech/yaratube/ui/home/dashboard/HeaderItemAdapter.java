@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.home;
+package com.yaratech.yaratube.ui.home.dashboard;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,7 +27,7 @@ public class HeaderItemAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return HeaderFragmentViewHolder.newInstance(headeritems.get(position).getFeatureAvatar().getXxxdpi());
+        return HeaderViewHolderFragment.newInstance(headeritems.get(position));
     }
 
     @Override

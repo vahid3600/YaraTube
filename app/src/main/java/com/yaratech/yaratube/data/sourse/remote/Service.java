@@ -1,6 +1,8 @@
 package com.yaratech.yaratube.data.sourse.remote;
 
 import com.yaratech.yaratube.data.model.CategoryList;
+import com.yaratech.yaratube.data.model.LoginGoogle;
+import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
@@ -9,6 +11,7 @@ import com.yaratech.yaratube.utils.Util;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -19,10 +22,10 @@ import retrofit2.http.Path;
  */
 
 public interface Service {
-    @GET("store/"+ Util.STORE_ID)
+    @GET("store/" + Util.STORE_ID)
     Call<Store> getStore();
 
-    @GET("category/"+ Util.STORE_ID +"/463")
+    @GET("category/" + Util.STORE_ID + "/463")
     Call<List<CategoryList>> getCategory();
 
     @GET("listproducts/{category_id}")
@@ -34,4 +37,29 @@ public interface Service {
     @FormUrlEncoded
     @POST("profile")
     Call<List<CategoryList>> sendProfile();
+
+    @FormUrlEncoded
+    @POST("login_google/" + Util.STORE_ID)
+    Call<LoginGoogle> sendGoogleLogin(
+            @Field("token_id") String tokenId,
+            @Field("device_id") String deviceId,
+            @Field("device_os") String deviceOs,
+            @Field("device_model") String deviceModel);
+
+    @FormUrlEncoded
+    @POST("mobile_login_step1/" + Util.STORE_ID)
+    Call<MobileLoginStep1> sendMobileLoginStep1(
+            @Field("mobile") String mobile,
+            @Field("device_id") String deviceId,
+            @Field("device_model") String deviceModel,
+            @Field("device_os") String deviceOs,
+            @Field("gcm") String gcm);
+
+    @FormUrlEncoded
+    @POST("mobile_login_step1/" + Util.STORE_ID)
+    Call<LoginGoogle> sendMobileLoginStep2(
+            @Field("mobile") String mobile,
+            @Field("device_id") String deviceId,
+            @Field("verification_code") String verificationCode,
+            @Field("nickname") String nickname);
 }
