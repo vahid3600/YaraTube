@@ -18,6 +18,9 @@ import com.yaratech.yaratube.data.model.Store;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.support.v7.widget.LinearLayoutManager.*;
 
 public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -50,12 +53,13 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyDataSetChanged();
     }
 
-    private class HeaderListItemViewHolder extends RecyclerView.ViewHolder {
+    public class HeaderListItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.header_item_viewpager)
         ViewPager headerViewPager;
 
         HeaderListItemViewHolder(View itemView) {
             super(itemView);
-            headerViewPager = itemView.findViewById(R.id.header_item_viewpager);
+            ButterKnife.bind(this, itemView);
         }
 
         void bindViewHeaderList() {
@@ -66,14 +70,15 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private class HomeListItemViewHolder extends RecyclerView.ViewHolder {
+    public class HomeListItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.home_item_recycler)
         RecyclerView homeRecyclerView;
+        @BindView(R.id.items_name)
         TextView titleName;
 
         HomeListItemViewHolder(View itemView) {
             super(itemView);
-            homeRecyclerView = itemView.findViewById(R.id.home_item_recycler);
-            titleName = itemView.findViewById(R.id.items_name);
+            ButterKnife.bind(this, itemView);
         }
 
         void bindViewHomeList(Homeitem homeitem) {
@@ -110,11 +115,11 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         try {
             if (holder instanceof HeaderListItemViewHolder) {
-                HeaderListItemViewHolder vh = (HeaderListItemViewHolder) holder;
-                vh.bindViewHeaderList();
+                HeaderListItemViewHolder viewHolder = (HeaderListItemViewHolder) holder;
+                viewHolder.bindViewHeaderList();
             } else if (holder instanceof HomeListItemViewHolder) {
-                HomeListItemViewHolder vh = (HomeListItemViewHolder) holder;
-                vh.bindViewHomeList(homeitems.get(position - 1));
+                HomeListItemViewHolder viewHolder = (HomeListItemViewHolder) holder;
+                viewHolder.bindViewHomeList(homeitems.get(position - 1));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +129,6 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemCount() {
         return 1 + homeitems.size();
-
     }
 
     @Override

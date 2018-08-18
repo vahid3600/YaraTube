@@ -14,6 +14,9 @@ import com.yaratech.yaratube.data.model.Product;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vah on 8/4/2018.
  */
@@ -41,10 +44,7 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = products.get(position).getFeatureAvatar().getXxxdpi();
-        String title = products.get(position).getName();
-        Glide.with(context).load(image_url).into(holder.product_avatar);
-        holder.product_title.setText(title);
+        holder.onBind(products.get(position));
     }
 
     // total number of rows
@@ -56,15 +56,22 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.product_image)
         ImageView product_avatar;
+        @BindView(R.id.product_title)
         TextView product_title;
 
         ViewHolder(View itemView) {
             super(itemView);
-            product_avatar = itemView.findViewById(R.id.product_image);
-            product_title = itemView.findViewById(R.id.product_title);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+        }
+
+        public void onBind(Product product) {
+            String image_url = product.getFeatureAvatar().getXxxdpi();
+            String title = product.getName();
+            Glide.with(context).load(image_url).into(product_avatar);
+            product_title.setText(title);
         }
 
         @Override

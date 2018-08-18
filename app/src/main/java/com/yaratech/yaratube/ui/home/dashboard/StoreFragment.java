@@ -15,13 +15,19 @@ import android.widget.Toast;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Store;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class StoreFragment extends Fragment implements StoreContract.View,
         HomeItemsRecyclerViewAdapter.OnHomeItemClickListener,
         HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener {
 
     private StoreContract.Presenter presenter;
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
+
+    @BindView(R.id.loading)
+    ProgressBar progressBar;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerView;
 
     //    private GetData getData = new GetData(StoreFragment.this, StoreFragment.this);
     private StoreRecyclerViewAdapter storeRecyclerViewAdapter;
@@ -55,14 +61,13 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressBar = view.findViewById(R.id.loading);
+        ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         presenter = new StorePresenter(getContext(), this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
                 false);
-        recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
         storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext(), getFragmentManager(),
                 this, this);

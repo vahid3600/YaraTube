@@ -18,12 +18,18 @@ import com.yaratech.yaratube.data.model.CategoryList;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CategoryFragment extends Fragment implements CategoryContract.View,
         CategoryItemsRecyclerViewAdapter.ItemClickListener{
 
     CategoryPresenter categoryPresenter;
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
+
+    @BindView(R.id.loading)
+    ProgressBar progressBar;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerView;
 
     private CategoryItemsRecyclerViewAdapter categoryItemsRecyclerViewAdapter;
 
@@ -50,11 +56,10 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressBar = view.findViewById(R.id.loading);
+        ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         categoryPresenter = new CategoryPresenter(getContext(), this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(view.getContext(),
                 DividerItemDecoration.VERTICAL);

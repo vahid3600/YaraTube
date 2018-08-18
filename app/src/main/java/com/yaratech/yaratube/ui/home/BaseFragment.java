@@ -17,12 +17,17 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class BaseFragment extends Fragment {
 
     private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
-    private BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager;
+
+    @BindView(R.id.navigation)
+    BottomNavigationView bottomNavigationView;
 
     public BaseFragment() {
         // Required empty public constructor
@@ -47,7 +52,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bottomNavigationView = view.findViewById(R.id.navigation);
+        ButterKnife.bind(this, view);
     }
 
     @Override

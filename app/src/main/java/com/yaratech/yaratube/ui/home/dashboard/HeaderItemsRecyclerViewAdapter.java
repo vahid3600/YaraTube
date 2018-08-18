@@ -13,6 +13,9 @@ import com.yaratech.yaratube.data.model.Headeritem;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vah on 8/4/2018.
  */
@@ -43,8 +46,7 @@ public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderI
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = headeritems.get(position).getFeatureAvatar().getXxxdpi();
-        Glide.with(context).load(image_url).into(holder.header_image);
+        holder.onBind(headeritems.get(position));
     }
 
     // total number of rows
@@ -56,13 +58,19 @@ public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderI
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView header_image;
+        @BindView(R.id.image_header)
+                ImageView header_image;
 
         ViewHolder(View itemView) {
             super(itemView);
-            header_image = itemView.findViewById(R.id.image_header);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
+        }
+
+        public void onBind(Headeritem headeritem) {
+            String image_url = headeritem.getFeatureAvatar().getXxxdpi();
+            Glide.with(context).load(image_url).into(header_image);
         }
 
         @Override

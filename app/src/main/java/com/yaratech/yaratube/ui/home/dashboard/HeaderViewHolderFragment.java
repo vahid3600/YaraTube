@@ -13,6 +13,9 @@ import com.yaratech.yaratube.R;
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.data.model.Headeritem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vah on 8/15/2018.
  */
@@ -20,6 +23,8 @@ import com.yaratech.yaratube.data.model.Headeritem;
 public class HeaderViewHolderFragment extends Fragment {
 
     Headeritem headeritem;
+    @BindView(R.id.section_label)
+    ImageView headerImageView;
 
     public HeaderViewHolderFragment() {
     }
@@ -48,7 +53,12 @@ public class HeaderViewHolderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView headerImageView = view.findViewById(R.id.section_label);
+        ButterKnife.bind(this, view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         Glide.with(this).load(headeritem.getFeatureAvatar().getXxxdpi()).into(headerImageView);
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class CategoryItemsRecyclerViewAdapter extends
         RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder> {
 
-    private List<CategoryList> category_lists = new ArrayList<>();
+    private List<CategoryList> categoryList = new ArrayList<>();
     private ItemClickListener itemClickListener;
     private Context context;
 
@@ -34,7 +34,7 @@ public class CategoryItemsRecyclerViewAdapter extends
     }
 
     public void setData(List<CategoryList> category_lists){
-        this.category_lists = category_lists;
+        this.categoryList = category_lists;
         notifyDataSetChanged();
     }
 
@@ -49,34 +49,38 @@ public class CategoryItemsRecyclerViewAdapter extends
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String image_url = Util.BASE_URL+category_lists.get(position).getAvatar();
-        String title = category_lists.get(position).getTitle();
-        Glide.with(context).load(image_url).into(holder.category_avatar);
-        holder.category_title.setText(title);
+        holder.onBind(categoryList.get(position));
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return category_lists.size();
+        return categoryList.size();
     }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView category_avatar;
-        TextView category_title;
+        ImageView categoryAvatar;
+        TextView categoryTitle;
 
         ViewHolder(View itemView) {
             super(itemView);
-            category_avatar = itemView.findViewById(R.id.category_avatar);
-            category_title = itemView.findViewById(R.id.category_title);
+            categoryAvatar = itemView.findViewById(R.id.category_avatar);
+            categoryTitle = itemView.findViewById(R.id.category_title);
 
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            itemClickListener.onItemClick(category_lists.get(getAdapterPosition()));
+            itemClickListener.onItemClick(categoryList.get(getAdapterPosition()));
+        }
+
+        public void onBind(CategoryList category) {
+            String image_url = Util.BASE_URL+category.getAvatar();
+            String title = category.getTitle();
+            Glide.with(context).load(image_url).into(categoryAvatar);
+            categoryTitle.setText(title);
         }
     }
 
