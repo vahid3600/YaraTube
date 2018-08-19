@@ -27,6 +27,7 @@ public class Utils {
 
     public static final String BASE_URL = "https://api.vasapi.click/";
     public static final int STORE_ID = 16;
+    public static final String LOGIN_KEY = "USER_LOGIN";
 
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(

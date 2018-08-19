@@ -68,6 +68,10 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         presenter = new StorePresenter(getContext(), this);
+        initRecycleview();
+    }
+
+    private void initRecycleview() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,

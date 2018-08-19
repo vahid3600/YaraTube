@@ -41,7 +41,7 @@ public class StorePresenter implements StoreContract.Presenter {
     }
 
     @Override
-    public void cancelRequest() {
-
+    public void cancelHomeRequest() {
+        homeRepository.cancelGetHomeRequest();
     }
 }

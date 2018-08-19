@@ -27,6 +27,10 @@ public interface ProductDetailContract {
 
         void fetchProductDetailFromRemote(int id);
 
+        void cancelProductDetailRequest();
+
         void fetchCommentFromRemote(int id);
+
+        void cancelCommentRequest();
     }
 }

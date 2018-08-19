@@ -23,6 +23,6 @@ public interface StoreContract {
 
         void fetchHomeFromRemote();
 
-        void cancelRequest();
+        void cancelHomeRequest();
     }
 }

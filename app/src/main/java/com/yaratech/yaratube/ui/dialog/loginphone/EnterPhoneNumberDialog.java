@@ -1,5 +1,6 @@
 package com.yaratech.yaratube.ui.dialog.loginphone;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,15 +15,33 @@ import android.widget.Toast;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.utils.Utils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
 /**
  * Created by Vah on 8/12/2018.
  */
 
-public class EnterPhoneNumberDialog extends DialogFragment implements View.OnClickListener,
+public class EnterPhoneNumberDialog extends DialogFragment implements
         PhoneNumberContract.View {
 
-    LinearLayout save;
+    @OnClick(R.id.save)
+    public void sendPhoneNumberRequest() {
+        presenter.loginByMobile(
+                phoneNumber.getText().toString(),
+                Utils.getDeviceId(getContext()),
+                Utils.getDeviceModel(),
+                Utils.getDeviceOS(),
+                "");
+    }
+
+    @BindView(R.id.phonenumber)
     EditText phoneNumber;
+
+    Unbinder unbind;
+    DismissDialog dismissDialog;
     PhoneNumberContract.Presenter presenter;
     public static final String ENTER_PHONE_DIALOG_TAG = "EnterPhone";
 
@@ -30,46 +49,41 @@ public class EnterPhoneNumberDialog extends DialogFragment implements View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_enter_phone_number, container, false);
-        return view;
+        return inflater.inflate(R.layout.dialog_enter_phone_number, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        save = view.findViewById(R.id.save);
-        phoneNumber = view.findViewById(R.id.phonenumber);
+        unbind = ButterKnife.bind(this, view);
         presenter = new PhoneNumberPresenter(getContext(), this);
-
-
-        save.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.save:
-                presenter.loginByMobile(
-                        phoneNumber.getText().toString(),
-                        Utils.getDeviceId(getContext()),
-                        Utils.getDeviceModel(),
-                        Utils.getDeviceOS(),
-                        "");
-//                MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
-                break;
-        }
+    public void onAttach(Context context) {
+        if (context instanceof DismissDialog)
+            dismissDialog = (DismissDialog) context;
+        else
+            throw new ClassCastException("Not Instance OF DismissDialog");
+        super.onAttach(context);
     }
 
     @Override
     public void dismissDialog() {
-        ((EnterPhoneNumberDialog.DismissDialog)getContext()).dismissPhoneNumberDialog();
+        ((EnterPhoneNumberDialog.DismissDialog) getContext()).dismissPhoneNumberDialog();
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
         dismissDialog();
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbind.unbind();
+        super.onDestroyView();
     }
 
     public interface DismissDialog {

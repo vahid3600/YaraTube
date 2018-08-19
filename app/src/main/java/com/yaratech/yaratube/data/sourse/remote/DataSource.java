@@ -14,13 +14,23 @@ public interface DataSource {
 
     void getHome(LoadDataCallback callback);
 
+    void cancelGetHomeRequest();
+
     void getCategory(LoadDataCallback callback);
+
+    void cancelGetCategoryRequest();
 
     void getProductList(int id, LoadDataCallback callback);
 
+    void cancelGetProductListRequest();
+
     void getProductDetail(int id, LoadDataCallback callback);
 
+    void cancelGetProductDetailRequest();
+
     void getComment(int id, LoadDataCallback callback);
+
+    void cancelGetCommentRequest();
 
     void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
                          String deviceModel, LoadDataCallback callback);

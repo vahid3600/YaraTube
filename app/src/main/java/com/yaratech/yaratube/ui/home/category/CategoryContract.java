@@ -23,5 +23,7 @@ public interface CategoryContract {
     interface Presenter {
 
         void fetchCategoryFromRemote();
+
+        void cancelCategoryRequest();
     }
 }

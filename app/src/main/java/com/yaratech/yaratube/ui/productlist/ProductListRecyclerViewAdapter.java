@@ -16,6 +16,9 @@ import com.yaratech.yaratube.data.model.ProductList;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vah on 8/4/2018.
  */
@@ -60,13 +63,14 @@ public class ProductListRecyclerViewAdapter extends
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        @BindView(R.id.product_image)
         ImageView product_avatar;
+        @BindView(R.id.product_title)
         TextView product_title;
 
         ViewHolder(View itemView) {
             super(itemView);
-            product_avatar = itemView.findViewById(R.id.product_image);
-            product_title = itemView.findViewById(R.id.product_title);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
         }

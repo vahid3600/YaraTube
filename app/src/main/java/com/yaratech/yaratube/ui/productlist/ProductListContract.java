@@ -24,5 +24,7 @@ public interface ProductListContract {
     interface Presenter {
 
         void fetchProductListFromRemote(int id);
+
+        void cancelProductListRequest();
     }
 }

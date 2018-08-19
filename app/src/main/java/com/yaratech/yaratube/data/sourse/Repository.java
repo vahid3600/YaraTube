@@ -46,8 +46,18 @@ public class Repository implements DataSource {
     }
 
     @Override
+    public void cancelGetHomeRequest() {
+        remoteDataSource.cancelGetHomeRequest();
+    }
+
+    @Override
     public void getCategory(LoadDataCallback callback) {
         remoteDataSource.getCategory(callback);
+    }
+
+    @Override
+    public void cancelGetCategoryRequest() {
+        remoteDataSource.cancelGetCategoryRequest();
     }
 
     @Override
@@ -56,13 +66,28 @@ public class Repository implements DataSource {
     }
 
     @Override
+    public void cancelGetProductListRequest() {
+        remoteDataSource.cancelGetProductListRequest();
+    }
+
+    @Override
     public void getProductDetail(int id, LoadDataCallback callback) {
         remoteDataSource.getProductDetail(id, callback);
     }
 
     @Override
+    public void cancelGetProductDetailRequest() {
+        remoteDataSource.cancelGetProductDetailRequest();
+    }
+
+    @Override
     public void getComment(int id, LoadDataCallback callback) {
         remoteDataSource.getComment(id, callback);
+    }
+
+    @Override
+    public void cancelGetCommentRequest() {
+        remoteDataSource.cancelGetCommentRequest();
     }
 
     @Override

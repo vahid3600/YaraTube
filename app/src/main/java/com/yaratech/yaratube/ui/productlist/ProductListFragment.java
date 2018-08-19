@@ -22,14 +22,22 @@ import com.yaratech.yaratube.ui.OnProductItemClick;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ProductListFragment extends Fragment implements ProductListContract.View,
         ProductListRecyclerViewAdapter.OnItemClickListener {
 
     ProductListPresenter productListPresenter;
     OnProductItemClick onProductItemClick;
-    private ProgressBar progressBar;
+    Unbinder unbind;
+    @BindView(R.id.loading)
+    ProgressBar progressBar;
+    @BindView(R.id.product_list_recycleview)
+    RecyclerView recyclerView;
     public static final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
-    private RecyclerView recyclerView;
+    public static final String KEY_ID = "category_id";
     private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
 
     public ProductListFragment() {
@@ -39,7 +47,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     public static ProductListFragment newInstance(int id) {
 
         Bundle args = new Bundle();
-        args.putInt("category_id", id);
+        args.putInt(KEY_ID, id);
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -68,10 +76,13 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressBar = view.findViewById(R.id.loading);
+        unbind = ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         productListPresenter = new ProductListPresenter(getContext(), this);
-        recyclerView = view.findViewById(R.id.product_list_recycleview);
+        initRecycleView();
+    }
+
+    private void initRecycleView() {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2,
                 LinearLayoutManager.VERTICAL, false));
         productListRecyclerViewAdapter = new ProductListRecyclerViewAdapter(getContext()
@@ -82,8 +93,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int id = getArguments().getInt("category_id");
-        productListPresenter.fetchProductListFromRemote(id);
+        productListPresenter.fetchProductListFromRemote(getArguments().getInt(KEY_ID));
     }
 
     @Override
@@ -109,5 +119,12 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void getProductItem(Product product) {
         onProductItemClick.onClick(product);
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbind.unbind();
+        productListPresenter.cancelProductListRequest();
+        super.onDestroyView();
     }
 }

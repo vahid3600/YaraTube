@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CategoryFragment extends Fragment implements CategoryContract.View,
-        CategoryItemsRecyclerViewAdapter.ItemClickListener{
+        CategoryItemsRecyclerViewAdapter.ItemClickListener {
 
     CategoryPresenter categoryPresenter;
 
@@ -38,9 +39,9 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     }
 
     public static CategoryFragment newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         CategoryFragment fragment = new CategoryFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +61,16 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         categoryPresenter = new CategoryPresenter(getContext(), this);
+        initRecycleview(view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        categoryPresenter.fetchCategoryFromRemote();
+    }
+
+    private void initRecycleview(View view) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
@@ -72,13 +83,6 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         categoryItemsRecyclerViewAdapter = new CategoryItemsRecyclerViewAdapter(
                 this);
         recyclerView.setAdapter(categoryItemsRecyclerViewAdapter);
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        categoryPresenter.fetchCategoryFromRemote();
     }
 
     @Override
@@ -107,7 +111,14 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
                 .onCategorylistItemClicked(category_list);
     }
 
-    public interface OnCategoryFragmentActionListener{
+    @Override
+    public void onDestroyView() {
+        Log.e("dishab"," na parishab");
+        categoryPresenter.cancelCategoryRequest();
+        super.onDestroyView();
+    }
+
+    public interface OnCategoryFragmentActionListener {
         void onCategorylistItemClicked(CategoryList category);
     }
 }

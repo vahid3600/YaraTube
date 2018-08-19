@@ -19,7 +19,7 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     private ProductListContract.View view;
     private Repository productListRepository;
 
-    public ProductListPresenter(Context context, ProductListContract.View view){
+    public ProductListPresenter(Context context, ProductListContract.View view) {
         this.productListRepository = Repository.getINSTANCE(new RemoteDataSource(context));
         this.view = view;
     }
@@ -43,5 +43,10 @@ public class ProductListPresenter implements ProductListContract.Presenter {
             }
         });
 
+    }
+
+    @Override
+    public void cancelProductListRequest() {
+        productListRepository.cancelGetProductListRequest();
     }
 }

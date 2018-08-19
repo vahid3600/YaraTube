@@ -16,6 +16,9 @@ import com.yaratech.yaratube.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vah on 8/4/2018.
  */
@@ -58,14 +61,14 @@ public class CategoryItemsRecyclerViewAdapter extends
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        @BindView(R.id.category_avatar)
         ImageView categoryAvatar;
+        @BindView(R.id.category_title)
         TextView categoryTitle;
 
         ViewHolder(View itemView) {
             super(itemView);
-            categoryAvatar = itemView.findViewById(R.id.category_avatar);
-            categoryTitle = itemView.findViewById(R.id.category_title);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

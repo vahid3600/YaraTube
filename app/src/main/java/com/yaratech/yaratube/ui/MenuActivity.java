@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
+import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -49,7 +50,8 @@ public class MenuActivity extends AppCompatActivity
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    public EnterPhoneNumberDialog enterPhoneNumberDialog = new EnterPhoneNumberDialog();
+    public EnterPhoneNumberDialog enterPhoneNumberDialog =
+            new EnterPhoneNumberDialog();
     public LoginDialog loginDialog = new LoginDialog();
     public FragmentManager fragmentManager;
     public HomeFragment homeFragment;
@@ -67,8 +69,13 @@ public class MenuActivity extends AppCompatActivity
         ButterKnife.bind(this);
         initActivity();
         homeFragment = HomeFragment.newInstance();
-        Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), homeFragment, BASE_FRAGMENT_TAG, false);
-        USER_LOGIN = getSharedPreferences("USER_LOGIN", MODE_PRIVATE);
+        Utils.setFragment(
+                R.id.fragment_container,
+                getSupportFragmentManager(),
+                homeFragment,
+                BASE_FRAGMENT_TAG,
+                false);
+        USER_LOGIN = getSharedPreferences(LOGIN_KEY, MODE_PRIVATE);
     }
 
     private void initActivity() {
@@ -111,7 +118,12 @@ public class MenuActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
             profileFragment = ProfileFragment.newInstance();
-            Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), profileFragment, PROFILE_FRAGMENT_TAG, true);
+            Utils.setFragment(
+                    R.id.fragment_container,
+                    getSupportFragmentManager(),
+                    profileFragment,
+                    PROFILE_FRAGMENT_TAG,
+                    true);
             toggle.setDrawerIndicatorEnabled(false);
             toolbar.inflateMenu(R.menu.menu_back_button);
         } else if (id == R.id.nav_about_us) {
@@ -125,7 +137,9 @@ public class MenuActivity extends AppCompatActivity
 
     public boolean checkPermissions(String permission) {
 
-        int permissionRequest = ActivityCompat.checkSelfPermission(MenuActivity.this, permission);
+        int permissionRequest = ActivityCompat.checkSelfPermission(
+                MenuActivity.this,
+                permission);
 
         if (permissionRequest != PackageManager.PERMISSION_GRANTED) {
             return false;
@@ -137,7 +151,12 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
         productListFragment = ProductListFragment.newInstance(category.getId());
-        Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), productListFragment, PRODUCT_LIST_FRAGMENT_TAG, true);
+        Utils.setFragment(
+                R.id.fragment_container,
+                getSupportFragmentManager(),
+                productListFragment,
+                PRODUCT_LIST_FRAGMENT_TAG,
+                true);
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.inflateMenu(R.menu.menu_back_button);
     }
@@ -152,12 +171,12 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void dismissPhoneNumberDialog() {
         enterPhoneNumberDialog.dismiss();
-        MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
+        MenuActivity.USER_LOGIN.edit().putBoolean(LOGIN_KEY, true).apply();
     }
 
     @Override
     public void onClick(Object product) {
-        boolean userLogin = USER_LOGIN.getBoolean("USER_LOGIN", false);
+        boolean userLogin = USER_LOGIN.getBoolean(LOGIN_KEY, false);
         if (userLogin) {
             Utils.setFragment(
                     R.id.fragment_container,

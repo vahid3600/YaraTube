@@ -28,6 +28,11 @@ import retrofit2.Response;
 public class RemoteDataSource implements DataSource {
 
     private Context context;
+    private Call<Store> storeCall;
+    private Call<List<CategoryList>> categoryListCall;
+    private Call<List<Product>> productListCall;
+    private Call<ProductDetail> productDetailCall;
+    private Call<List<Comment>> productCommentCall;
 
     public RemoteDataSource(Context context) {
         this.context = context;
@@ -36,7 +41,7 @@ public class RemoteDataSource implements DataSource {
     @Override
     public void getHome(final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
-            Call<Store> storeCall = Utils.getServices().getStoreService().getStore();
+            storeCall = Utils.getServices().getStoreService().getStore();
             storeCall.enqueue(new Callback<Store>() {
                 @Override
                 public void onResponse(Call<Store> call, Response<Store> response) {
@@ -49,7 +54,7 @@ public class RemoteDataSource implements DataSource {
 
                 @Override
                 public void onFailure(Call<Store> call, Throwable t) {
-
+                    callback.onMessage(context.getString(R.string.fail_progress));
                 }
             });
         } else
@@ -57,10 +62,17 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void cancelGetHomeRequest() {
+        if (storeCall != null)
+            storeCall.cancel();
+
+    }
+
+    @Override
     public void getCategory(final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
 
-            final Call<List<CategoryList>> categoryListCall = Utils.getServices().getStoreService()
+            categoryListCall = Utils.getServices().getStoreService()
                     .getCategory();
             categoryListCall.enqueue(new Callback<List<CategoryList>>() {
                 @Override
@@ -83,9 +95,15 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void cancelGetCategoryRequest() {
+        if (categoryListCall != null)
+            categoryListCall.cancel();
+    }
+
+    @Override
     public void getProductList(int id, final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
-            final Call<List<Product>> productListCall = Utils.getServices().getStoreService()
+            productListCall = Utils.getServices().getStoreService()
                     .getProductList(id);
             productListCall.enqueue(new Callback<List<Product>>() {
                 @Override
@@ -109,11 +127,17 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void cancelGetProductListRequest() {
+        if (productListCall != null)
+            productListCall.cancel();
+    }
+
+    @Override
     public void getProductDetail(int id, final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             Log.e("tag", id + "");
 
-            final Call<ProductDetail> productDetailCall = Utils.getServices().getStoreService()
+            productDetailCall = Utils.getServices().getStoreService()
                     .getProductDetail(id);
             productDetailCall.enqueue(new Callback<ProductDetail>() {
                 @Override
@@ -140,13 +164,19 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void cancelGetProductDetailRequest() {
+        if (productDetailCall != null)
+            productDetailCall.cancel();
+    }
+
+    @Override
     public void getComment(int id, final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             Log.e("tag", id + "");
 
-            final Call<List<Comment>> productDetailCall = Utils.getServices().getStoreService()
+            productCommentCall = Utils.getServices().getStoreService()
                     .getComment(id);
-            productDetailCall.enqueue(new Callback<List<Comment>>() {
+            productCommentCall.enqueue(new Callback<List<Comment>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Comment>> call,
                                        @NonNull Response<List<Comment>> response) {
@@ -167,6 +197,12 @@ public class RemoteDataSource implements DataSource {
             });
         } else
             callback.onMessage(context.getString(R.string.no_internet));
+    }
+
+    @Override
+    public void cancelGetCommentRequest() {
+        if (productCommentCall != null)
+            productCommentCall.cancel();
     }
 
     @Override

@@ -122,6 +122,10 @@ public class ProductDetailFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         product = getArguments().getParcelable("product");
         presenter.fetchProductDetailFromRemote(product.getId());
+        initRecycleview();
+    }
+
+    private void initRecycleview() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 getContext(),
                 LinearLayoutManager.VERTICAL,
@@ -158,5 +162,12 @@ public class ProductDetailFragment extends Fragment implements
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        presenter.cancelProductDetailRequest();
+        presenter.cancelCommentRequest();
+        super.onDestroyView();
     }
 }

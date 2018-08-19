@@ -46,6 +46,11 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     }
 
     @Override
+    public void cancelProductDetailRequest() {
+        productDetailRepository.cancelGetProductDetailRequest();
+    }
+
+    @Override
     public void fetchCommentFromRemote(int id) {
         view.showLoading();
 
@@ -62,5 +67,10 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
                 view.showMessage(msg);
             }
         });
+    }
+
+    @Override
+    public void cancelCommentRequest() {
+        productDetailRepository.cancelGetCommentRequest();
     }
 }
