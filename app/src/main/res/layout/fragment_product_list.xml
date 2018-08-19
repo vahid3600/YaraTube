@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.yaratech.yaratube.ui.product_list.ProductListFragment">
+    tools:context="com.yaratech.yaratube.ui.productlist.ProductListFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
-import com.yaratech.yaratube.utils.Util;
+import com.yaratech.yaratube.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +25,9 @@ public class CategoryItemsRecyclerViewAdapter extends
 
     private List<CategoryList> categoryList = new ArrayList<>();
     private ItemClickListener itemClickListener;
-    private Context context;
 
     // data is passed into the constructor
-    public CategoryItemsRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
-        this.context = context;
+    public CategoryItemsRecyclerViewAdapter(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
@@ -77,9 +75,9 @@ public class CategoryItemsRecyclerViewAdapter extends
         }
 
         public void onBind(CategoryList category) {
-            String image_url = Util.BASE_URL+category.getAvatar();
+            String image_url = Utils.BASE_URL+category.getAvatar();
             String title = category.getTitle();
-            Glide.with(context).load(image_url).into(categoryAvatar);
+            Glide.with(itemView.getContext()).load(image_url).into(categoryAvatar);
             categoryTitle.setText(title);
         }
     }

@@ -1,7 +1,7 @@
-package com.yaratech.yaratube.ui.product_detail;
+package com.yaratech.yaratube.ui.productdetail;
 
+import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.ProductDetail;
-import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.List;
 
@@ -14,6 +14,8 @@ public interface ProductDetailContract {
 
         void showProductDetail(ProductDetail productDetail);
 
+        void showComment(List<Comment> comments);
+
         void showMessage(String msg);
 
         void showLoading();
@@ -24,5 +26,7 @@ public interface ProductDetailContract {
     interface Presenter {
 
         void fetchProductDetailFromRemote(int id);
+
+        void fetchCommentFromRemote(int id);
     }
 }

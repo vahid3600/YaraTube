@@ -22,5 +22,7 @@ public interface StoreContract {
     interface Presenter{
 
         void fetchHomeFromRemote();
+
+        void cancelRequest();
     }
 }

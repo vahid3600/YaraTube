@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.phone_confirm;
+package com.yaratech.yaratube.ui.dialog.loginphone;
 
 /**
  * Created by Vah on 8/17/2018.

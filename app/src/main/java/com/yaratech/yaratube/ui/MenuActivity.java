@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,27 +18,27 @@ import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
-import com.yaratech.yaratube.ui.dialog.enter_phone_number.EnterPhoneNumberDialog;
-import com.yaratech.yaratube.ui.home.BaseFragment;
+import com.yaratech.yaratube.data.model.Product;
+import com.yaratech.yaratube.ui.dialog.loginphone.EnterPhoneNumberDialog;
+import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
-import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
 import com.yaratech.yaratube.ui.dialog.login.LoginDialog;
-import com.yaratech.yaratube.ui.product_detail.ProductDetailActivity;
-import com.yaratech.yaratube.ui.product_list.ProductListFragment;
+import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
+import com.yaratech.yaratube.ui.productlist.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
+import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
+import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnCategoryFragmentActionListener,
-        ProductListFragment.OnProductClickListener,
-        StoreFragment.OnProductHeaderClickListener,
-        StoreFragment.OnProductHomeClickListener,
+        OnProductItemClick,
         LoginDialog.DismissDialog,
         EnterPhoneNumberDialog.DismissDialog {
 
@@ -53,14 +51,10 @@ public class MenuActivity extends AppCompatActivity
 
     public EnterPhoneNumberDialog enterPhoneNumberDialog = new EnterPhoneNumberDialog();
     public LoginDialog loginDialog = new LoginDialog();
-    public List<String> addedFragmentsNames = new ArrayList<>();
     public FragmentManager fragmentManager;
-    public BaseFragment baseFragment;
+    public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
     public ProfileFragment profileFragment;
-    public final String PROFILE_FRAGMENT_TAG = "ProfileFragment";
-    public final String BASE_FRAGMENT_TAG = "BaseFragment";
-    public final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
     public static SharedPreferences USER_LOGIN;
     private FragmentTransaction fragmentTransaction;
     private ActionBarDrawerToggle toggle;
@@ -69,17 +63,20 @@ public class MenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        baseFragment = BaseFragment.newInstance();
-        setFragment(baseFragment, BASE_FRAGMENT_TAG);
+        ButterKnife.bind(this);
+        initActivity();
+        homeFragment = HomeFragment.newInstance();
+        Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), homeFragment, BASE_FRAGMENT_TAG, false);
         USER_LOGIN = getSharedPreferences("USER_LOGIN", MODE_PRIVATE);
+    }
+
+    private void initActivity() {
+        setSupportActionBar(toolbar);
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -114,8 +111,7 @@ public class MenuActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
             profileFragment = ProfileFragment.newInstance();
-            setFragment(profileFragment, PROFILE_FRAGMENT_TAG);
-            fragmentTransaction.addToBackStack(PROFILE_FRAGMENT_TAG);
+            Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), profileFragment, PROFILE_FRAGMENT_TAG, true);
             toggle.setDrawerIndicatorEnabled(false);
             toolbar.inflateMenu(R.menu.menu_back_button);
         } else if (id == R.id.nav_about_us) {
@@ -123,7 +119,6 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_connect_with_us) {
 
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -142,47 +137,38 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
         productListFragment = ProductListFragment.newInstance(category.getId());
-        setFragment(productListFragment, PRODUCT_LIST_FRAGMENT_TAG);
-        fragmentTransaction.addToBackStack(PRODUCT_LIST_FRAGMENT_TAG);
+        Utils.setFragment(R.id.fragment_container, getSupportFragmentManager(), productListFragment, PRODUCT_LIST_FRAGMENT_TAG, true);
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.inflateMenu(R.menu.menu_back_button);
     }
 
     @Override
-    public void onItemClicked(int productId) {
-        boolean userLogin = USER_LOGIN.getBoolean("USER_LOGIN", false);
-
-        if (userLogin) {
-            Intent intent = new Intent(MenuActivity.this, ProductDetailActivity.class);
-            intent.putExtra("PRODUCT_ID", productId);
-            startActivity(intent);
-        } else {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            loginDialog.show(fragmentManager, "login dialog");
-        }
-    }
-
-    private void setFragment(Fragment fragment, String fragmentName) {
-        if (!fragment.isVisible()) {
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, fragment).commit();
-            addedFragmentsNames.add(fragmentName);
-            if (fragmentName != "Base")
-                fragmentTransaction.addToBackStack(fragmentName);
-        }
-    }
-
-    @Override
     public void dismissLoginDialog() {
         loginDialog.dismiss();
-        enterPhoneNumberDialog.show(fragmentManager, "enter phone");
+        enterPhoneNumberDialog
+                .show(fragmentManager, EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
     }
 
     @Override
     public void dismissPhoneNumberDialog() {
         enterPhoneNumberDialog.dismiss();
         MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
+    }
+
+    @Override
+    public void onClick(Object product) {
+        boolean userLogin = USER_LOGIN.getBoolean("USER_LOGIN", false);
+        if (userLogin) {
+            Utils.setFragment(
+                    R.id.fragment_container,
+                    getSupportFragmentManager(),
+                    ProductDetailFragment.newInstance((Product) product),
+                    BASE_FRAGMENT_TAG,
+                    true);
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            loginDialog.show(fragmentManager, LoginDialog.LOGIN_DIALOG_TAG);
+        }
     }
 }
 

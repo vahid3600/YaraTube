@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.enter_phone_number;
+package com.yaratech.yaratube.ui.dialog.confirmphone;
 
 import android.content.Context;
 

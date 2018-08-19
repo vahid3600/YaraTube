@@ -35,4 +35,8 @@
 
     <dimen name="videoview_height">280dp</dimen>
 
+    <dimen name="comment_margin">7dp</dimen>
+    <dimen name="comment_title_text_size">15sp</dimen>
+    <dimen name="comment_text_size">13sp</dimen>
+
 </resources>

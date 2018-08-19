@@ -50,7 +50,8 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        return inflater.inflate(R.layout.fragment_category, container,
+                false);
     }
 
     @Override
@@ -59,12 +60,17 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         categoryPresenter = new CategoryPresenter(getContext(), this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.VERTICAL,
+                false);
         recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(view.getContext(),
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(
+                view.getContext(),
                 DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        categoryItemsRecyclerViewAdapter = new CategoryItemsRecyclerViewAdapter(getContext(), this);
+        categoryItemsRecyclerViewAdapter = new CategoryItemsRecyclerViewAdapter(
+                this);
         recyclerView.setAdapter(categoryItemsRecyclerViewAdapter);
 
     }
@@ -97,7 +103,8 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
 
     @Override
     public void onItemClick(CategoryList category_list) {
-        ((CategoryFragment.OnCategoryFragmentActionListener) getContext()).onCategorylistItemClicked(category_list);
+        ((CategoryFragment.OnCategoryFragmentActionListener) getContext())
+                .onCategorylistItemClicked(category_list);
     }
 
     public interface OnCategoryFragmentActionListener{

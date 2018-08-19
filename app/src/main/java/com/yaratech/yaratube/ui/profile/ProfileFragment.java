@@ -19,12 +19,13 @@ import android.widget.Spinner;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.dialog.image_picker.ImagePickerDialog;
-import com.yaratech.yaratube.utils.Util;
+import com.yaratech.yaratube.ui.dialog.imagepicker.ImagePickerDialog;
+import com.yaratech.yaratube.utils.Utils;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
 
     ProfileContract.Presenter presenter;
+    public static final String PROFILE_FRAGMENT_TAG = "ProfileFragment";
     private static final int  CAMERA_REQUEST_CODE = 5;
     ImageView profile_picture;
     Button cancel_button, send_button;
@@ -83,7 +84,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     public void getFromCamera() {
-        if (((MenuActivity) getActivity()) != null && ((MenuActivity) getActivity()).checkPermissions(Util.CAMERA_PERMISSION[0])) {
+        if (((MenuActivity) getActivity()) != null && ((MenuActivity) getActivity()).checkPermissions(Utils.CAMERA_PERMISSION[0])) {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
         }

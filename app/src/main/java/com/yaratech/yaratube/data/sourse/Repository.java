@@ -61,6 +61,11 @@ public class Repository implements DataSource {
     }
 
     @Override
+    public void getComment(int id, LoadDataCallback callback) {
+        remoteDataSource.getComment(id, callback);
+    }
+
+    @Override
     public void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
                                 String deviceModel, LoadDataCallback callback) {
         remoteDataSource.sendGoogleLogin(tokenId, deviceId, deviceOs, deviceModel, callback);

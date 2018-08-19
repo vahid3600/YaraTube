@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.ui.productlist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ProductListRecyclerViewAdapter extends
         RecyclerView.Adapter<ProductListRecyclerViewAdapter.ViewHolder> {
 
     OnItemClickListener onItemClickListener;
-    private List<ProductList> productLists = new ArrayList<>();
+    private List<Product> productLists = new ArrayList<>();
     private Context context;
 
     // data is passed into the constructor
@@ -32,7 +33,7 @@ public class ProductListRecyclerViewAdapter extends
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(List<ProductList> productLists){
+    public void setData(List<Product> productLists){
         this.productLists = productLists;
         notifyDataSetChanged();
     }
@@ -70,7 +71,7 @@ public class ProductListRecyclerViewAdapter extends
             itemView.setOnClickListener(this);
         }
 
-        public void onBind(ProductList product) {
+        public void onBind(Product product) {
             String image_url = product.getFeatureAvatar().getXxxdpi();
             String title = product.getName();
             Glide.with(context).load(image_url).into(product_avatar);
@@ -79,12 +80,12 @@ public class ProductListRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.getProductItem(productLists.get(getAdapterPosition()).getId());
+            onItemClickListener.getProductItem(productLists.get(getAdapterPosition()));
         }
     }
 
     public interface OnItemClickListener{
-        void getProductItem(int productId);
+        void getProductItem(Product product);
     }
 }
 

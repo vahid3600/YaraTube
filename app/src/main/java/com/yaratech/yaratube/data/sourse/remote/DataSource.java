@@ -20,6 +20,8 @@ public interface DataSource {
 
     void getProductDetail(int id, LoadDataCallback callback);
 
+    void getComment(int id, LoadDataCallback callback);
+
     void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
                          String deviceModel, LoadDataCallback callback);
 

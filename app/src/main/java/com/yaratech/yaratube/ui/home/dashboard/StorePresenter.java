@@ -39,4 +39,9 @@ public class StorePresenter implements StoreContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void cancelRequest() {
+
+    }
 }

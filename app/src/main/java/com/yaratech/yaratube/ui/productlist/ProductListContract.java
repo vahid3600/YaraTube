@@ -1,5 +1,6 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.ui.productlist;
 
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface ProductListContract {
     interface View {
 
-        void showListProducts(List<ProductList> productLists);
+        void showListProducts(List<Product> productList);
 
         void showMessage(String msg);
 

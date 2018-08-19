@@ -1,7 +1,8 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.ui.productlist;
 
 import android.content.Context;
 
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
@@ -32,7 +33,7 @@ public class ProductListPresenter implements ProductListContract.Presenter {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.showListProducts((List<ProductList>) result);
+                view.showListProducts((List<Product>) result);
             }
 
             @Override

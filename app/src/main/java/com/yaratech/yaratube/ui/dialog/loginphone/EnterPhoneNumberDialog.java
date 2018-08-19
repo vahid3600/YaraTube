@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.enter_phone_number;
+package com.yaratech.yaratube.ui.dialog.loginphone;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.utils.Util;
+import com.yaratech.yaratube.utils.Utils;
 
 /**
  * Created by Vah on 8/12/2018.
@@ -26,6 +24,7 @@ public class EnterPhoneNumberDialog extends DialogFragment implements View.OnCli
     LinearLayout save;
     EditText phoneNumber;
     PhoneNumberContract.Presenter presenter;
+    public static final String ENTER_PHONE_DIALOG_TAG = "EnterPhone";
 
     @Nullable
     @Override
@@ -53,9 +52,9 @@ public class EnterPhoneNumberDialog extends DialogFragment implements View.OnCli
             case R.id.save:
                 presenter.loginByMobile(
                         phoneNumber.getText().toString(),
-                        Util.getDeviceId(getContext()),
-                        Util.getDeviceModel(),
-                        Util.getDeviceOS(),
+                        Utils.getDeviceId(getContext()),
+                        Utils.getDeviceModel(),
+                        Utils.getDeviceOS(),
                         "");
 //                MenuActivity.USER_LOGIN.edit().putBoolean("USER_LOGIN", true).apply();
                 break;

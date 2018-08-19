@@ -39,10 +39,8 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public StoreRecyclerViewAdapter(
             Context context,
             FragmentManager fragmentManager,
-            HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener,
-            HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener) {
+            HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener) {
         this.onHomeItemClickListener = onHomeItemClickListener;
-        this.onHeaderItemClickListener = onHeaderItemClickListener;
         this.fragmentManager = fragmentManager;
         this.context = context;
     }

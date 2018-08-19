@@ -11,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.dialog.enter_phone_number.EnterPhoneNumberDialog;
-import com.yaratech.yaratube.utils.Util;
+import com.yaratech.yaratube.utils.Utils;
 
 /**
  * Created by Vah on 8/12/2018.
@@ -23,6 +21,7 @@ public class LoginDialog extends DialogFragment implements View.OnClickListener,
 
     LinearLayout loginByPhone, loginByGoogle;
     LoginContract.Presenter presenter;
+    public static final String LOGIN_DIALOG_TAG = "LoginDialog";
 
     @Nullable
     @Override
@@ -52,9 +51,9 @@ public class LoginDialog extends DialogFragment implements View.OnClickListener,
             case R.id.google:
                 presenter.loginByGoogle(
                         "",
-                        Util.getDeviceId(getContext()),
-                        Util.getDeviceOS(),
-                        Util.getDeviceModel());
+                        Utils.getDeviceId(getContext()),
+                        Utils.getDeviceOS(),
+                        Utils.getDeviceModel());
                 break;
         }
 

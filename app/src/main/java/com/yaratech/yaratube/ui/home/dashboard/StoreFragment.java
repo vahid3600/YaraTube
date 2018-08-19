@@ -1,5 +1,6 @@
 package com.yaratech.yaratube.ui.home.dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,16 +14,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.ui.OnProductItemClick;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StoreFragment extends Fragment implements StoreContract.View,
-        HomeItemsRecyclerViewAdapter.OnHomeItemClickListener,
-        HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener {
+        HomeItemsRecyclerViewAdapter.OnHomeItemClickListener{
 
     private StoreContract.Presenter presenter;
+    OnProductItemClick onProductItemClick;
 
     @BindView(R.id.loading)
     ProgressBar progressBar;
@@ -70,7 +74,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
                 false);
         recyclerView.setLayoutManager(linearLayoutManager);
         storeRecyclerViewAdapter = new StoreRecyclerViewAdapter(getContext(), getFragmentManager(),
-                this, this);
+                this);
         recyclerView.setAdapter(storeRecyclerViewAdapter);
     }
 
@@ -78,6 +82,19 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         presenter.fetchHomeFromRemote();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (context instanceof MenuActivity)
+            onProductItemClick = (OnProductItemClick) context;
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        onProductItemClick = null;
+        super.onDetach();
     }
 
     @Override
@@ -101,20 +118,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     }
 
     @Override
-    public void getHeaderProductItem(int productId) {
-        ((StoreFragment.OnProductHeaderClickListener) getContext()).onItemClicked(productId);
-    }
-
-    @Override
-    public void getHomeProductItem(int productId) {
-        ((StoreFragment.OnProductHomeClickListener) getContext()).onItemClicked(productId);
-    }
-
-    public interface OnProductHeaderClickListener {
-        void onItemClicked(int productId);
-    }
-
-    public interface OnProductHomeClickListener {
-        void onItemClicked(int productId);
+    public void getHomeProductItem(Product product) {
+        onProductItemClick.onClick(product);
     }
 }

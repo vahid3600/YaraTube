@@ -1,11 +1,14 @@
 
 package com.yaratech.yaratube.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -82,6 +85,38 @@ public class Product {
     @SerializedName("customjson")
     @Expose
     private Object customjson;
+
+    protected Product(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        nameEnglish = in.readString();
+        productType = in.readInt();
+        producerName = in.readString();
+        price = in.readInt();
+        rank = in.readDouble();
+        shortDescription = in.readString();
+        isPurchased = in.readByte() != 0;
+        comments = in.readInt();
+        isBookmarked = in.readByte() != 0;
+        sku = in.readString();
+        priceUnit = in.readString();
+        totalView = in.readInt();
+        dateAdded = in.readString();
+        isSpecial = in.readByte() != 0;
+        datePublished = in.readString();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -283,4 +318,29 @@ public class Product {
         this.customjson = customjson;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(nameEnglish);
+        dest.writeInt(productType);
+        dest.writeString(producerName);
+        dest.writeInt(price);
+        dest.writeDouble(rank);
+        dest.writeString(shortDescription);
+        dest.writeByte((byte) (isPurchased ? 1 : 0));
+        dest.writeInt(comments);
+        dest.writeByte((byte) (isBookmarked ? 1 : 0));
+        dest.writeString(sku);
+        dest.writeString(priceUnit);
+        dest.writeInt(totalView);
+        dest.writeString(dateAdded);
+        dest.writeByte((byte) (isSpecial ? 1 : 0));
+        dest.writeString(datePublished);
+    }
 }

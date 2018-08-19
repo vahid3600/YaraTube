@@ -1,9 +1,9 @@
-package com.yaratech.yaratube.ui.product_detail;
+package com.yaratech.yaratube.ui.productdetail;
 
 import android.content.Context;
 
+import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.ProductDetail;
-import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.remote.DataSource;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
@@ -43,5 +43,24 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
             }
         });
 
+    }
+
+    @Override
+    public void fetchCommentFromRemote(int id) {
+        view.showLoading();
+
+        productDetailRepository.getComment(id, new DataSource.LoadDataCallback() {
+            @Override
+            public void onDataLoaded(Object result) {
+                view.hideLoading();
+                view.showComment((List<Comment>) result);
+            }
+
+            @Override
+            public void onMessage(String msg) {
+                view.hideLoading();
+                view.showMessage(msg);
+            }
+        });
     }
 }

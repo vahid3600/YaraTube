@@ -76,12 +76,12 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
         @Override
         public void onClick(View v) {
-            onHomeItemClickListener.getHomeProductItem(products.get(getAdapterPosition()).getId());
+            onHomeItemClickListener.getHomeProductItem(products.get(getAdapterPosition()));
         }
     }
 
     public interface OnHomeItemClickListener{
-        void getHomeProductItem(int productId);
+        void getHomeProductItem(Product product);
     }
 
 }

@@ -1,5 +1,6 @@
-package com.yaratech.yaratube.ui.product_list;
+package com.yaratech.yaratube.ui.productlist;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.ui.OnProductItemClick;
 
 import java.util.List;
 
@@ -22,7 +26,9 @@ public class ProductListFragment extends Fragment implements ProductListContract
         ProductListRecyclerViewAdapter.OnItemClickListener {
 
     ProductListPresenter productListPresenter;
+    OnProductItemClick onProductItemClick;
     private ProgressBar progressBar;
+    public static final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
     private RecyclerView recyclerView;
     private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
 
@@ -37,6 +43,19 @@ public class ProductListFragment extends Fragment implements ProductListContract
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (context instanceof MenuActivity)
+            onProductItemClick = (OnProductItemClick) context;
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        onProductItemClick = null;
+        super.onDetach();
     }
 
     @Override
@@ -68,8 +87,8 @@ public class ProductListFragment extends Fragment implements ProductListContract
     }
 
     @Override
-    public void showListProducts(List<ProductList> productLists) {
-        productListRecyclerViewAdapter.setData(productLists);
+    public void showListProducts(List<Product> productList) {
+        productListRecyclerViewAdapter.setData(productList);
     }
 
     @Override
@@ -88,11 +107,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     }
 
     @Override
-    public void getProductItem(int productId) {
-        ((ProductListFragment.OnProductClickListener)getContext()).onItemClicked(productId);
-    }
-
-    public interface OnProductClickListener{
-        void onItemClicked(int productId);
+    public void getProductItem(Product product) {
+        onProductItemClick.onClick(product);
     }
 }

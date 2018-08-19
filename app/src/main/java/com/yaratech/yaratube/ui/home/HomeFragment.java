@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +15,16 @@ import android.view.ViewGroup;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
+import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class BaseFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
+    public static final String BASE_FRAGMENT_TAG = "HomeFragment";
+    Unbinder unbind;
     private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
     private FragmentManager fragmentManager;
@@ -29,15 +32,15 @@ public class BaseFragment extends Fragment {
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
 
-    public BaseFragment() {
+    public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static BaseFragment newInstance() {
+    public static HomeFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        BaseFragment fragment = new BaseFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +55,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbind = ButterKnife.bind(this, view);
     }
 
     @Override
@@ -81,31 +84,54 @@ public class BaseFragment extends Fragment {
     private void setHomeFragment() {
         if (homeFragment == null) {
             if (categoryFragment != null && categoryFragment.isVisible()) {
-                fragmentManager.beginTransaction().hide(categoryFragment).commit();
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .hide(categoryFragment)
+                        .commit();
             }
             homeFragment = StoreFragment.newInstance();
-            fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frameLayout, homeFragment).commit();
+            Utils.setFragment(
+                    R.id.frameLayout,
+                    getChildFragmentManager(),
+                    homeFragment,
+                    null,
+                    false);
 
         } else if (!homeFragment.isVisible()) {
-            fragmentManager.beginTransaction().hide(categoryFragment).commit();
-            fragmentManager.beginTransaction().show(homeFragment).commit();
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .hide(categoryFragment)
+                    .show(homeFragment)
+                    .commit();
         }
     }
 
     private void setCategoryFragment() {
         if (categoryFragment == null) {
             if (homeFragment != null && homeFragment.isVisible()) {
-                fragmentManager.beginTransaction().hide(homeFragment).commit();
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .hide(homeFragment)
+                        .commit();
             }
             categoryFragment = CategoryFragment.newInstance();
-            fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frameLayout, categoryFragment).commit();
+            Utils.setFragment(
+                    R.id.frameLayout,
+                    getChildFragmentManager(),
+                    categoryFragment,
+                    null,
+                    false);
         } else if (!categoryFragment.isVisible()) {
-            fragmentManager.beginTransaction().hide(homeFragment).commit();
-            fragmentManager.beginTransaction().show(categoryFragment).commit();
+            getChildFragmentManager().beginTransaction()
+                    .hide(homeFragment)
+                    .show(categoryFragment)
+                    .commit();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbind.unbind();
     }
 }

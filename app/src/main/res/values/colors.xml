@@ -11,4 +11,6 @@
     <color name="button_background_1">#ff3b89d2</color>
     <color name="button_background2">#DD4B39</color>
     <color name="button_background_2">#DD4B39</color>
+    <color name="comment_text_color">#000000</color>
+    <color name="comment_title_text_color">#000000</color>
 </resources>
