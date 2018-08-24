@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.ui.dialog.loginphone.EnterPhoneNumberDialog;
+import com.yaratech.yaratube.ui.dialog.verification.VerificationDialog;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.dialog.login.LoginDialog;
@@ -39,9 +41,8 @@ import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnCategoryFragmentActionListener,
-        OnProductItemClick,
-        LoginDialog.DismissDialog,
-        EnterPhoneNumberDialog.DismissDialog {
+        Connects.OnProductItemClick,
+        Connects.DismissDialog {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,8 +52,11 @@ public class MenuActivity extends AppCompatActivity
     NavigationView navigationView;
 
     public EnterPhoneNumberDialog enterPhoneNumberDialog =
-            new EnterPhoneNumberDialog();
-    public LoginDialog loginDialog = new LoginDialog();
+            EnterPhoneNumberDialog.newInstance();
+    public LoginDialog loginDialog =
+            LoginDialog.newInstance();
+    public VerificationDialog verificationDialog =
+            VerificationDialog.newInstance();
     public FragmentManager fragmentManager;
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
@@ -162,32 +166,46 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void dismissLoginDialog() {
-        loginDialog.dismiss();
-        enterPhoneNumberDialog
-                .show(fragmentManager, EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
-    }
-
-    @Override
-    public void dismissPhoneNumberDialog() {
-        enterPhoneNumberDialog.dismiss();
-        MenuActivity.USER_LOGIN.edit().putBoolean(LOGIN_KEY, true).apply();
-    }
-
-    @Override
-    public void onClick(Object product) {
+    public void onClick(Product product) {
         boolean userLogin = USER_LOGIN.getBoolean(LOGIN_KEY, false);
-        if (userLogin) {
-            Utils.setFragment(
-                    R.id.fragment_container,
-                    getSupportFragmentManager(),
-                    ProductDetailFragment.newInstance((Product) product),
-                    BASE_FRAGMENT_TAG,
-                    true);
-        } else {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            loginDialog.show(fragmentManager, LoginDialog.LOGIN_DIALOG_TAG);
+//        if (userLogin) {
+//            Utils.setFragment(
+//                    R.id.fragment_container,
+//                    getSupportFragmentManager(),
+//                    ProductDetailFragment.newInstance(product),
+//                    BASE_FRAGMENT_TAG,
+//                    true);
+//        } else {
+            loginDialog.show(getSupportFragmentManager(), LoginDialog.LOGIN_DIALOG_TAG);
+//        }
+    }
+
+    @Override
+    public void dismiss(Fragment fragment) {
+        if (fragment instanceof EnterPhoneNumberDialog) {
+            enterPhoneNumberDialog.dismiss();
+            verificationDialog
+                    .show(getSupportFragmentManager(),
+                            VerificationDialog.VERIFICATION_DIALOG_TAG);
+        } else if (fragment instanceof LoginDialog) {
+            loginDialog.dismiss();
+            enterPhoneNumberDialog
+                    .show(getSupportFragmentManager(),
+                            EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
+            MenuActivity.USER_LOGIN.edit().putBoolean(LOGIN_KEY, true).apply();
+        } else if (fragment instanceof VerificationDialog) {
+            verificationDialog.dismiss();
         }
+
+    }
+
+    @Override
+    public void correction() {
+        verificationDialog.dismiss();
+        enterPhoneNumberDialog
+                .show(getSupportFragmentManager(),
+                        EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
     }
 }
+
 

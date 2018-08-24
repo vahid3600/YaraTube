@@ -33,7 +33,7 @@
     <dimen name="corner_radius_edittext">10dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
-    <dimen name="videoview_height">280dp</dimen>
+    <dimen name="imageview_height">208dp</dimen>
 
     <dimen name="comment_margin">7dp</dimen>
     <dimen name="comment_title_text_size">15sp</dimen>

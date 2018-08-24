@@ -7,11 +7,15 @@ import android.util.Log;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
+import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.model.LoginGoogle;
+import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
-import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.data.sourse.DataSource;
+import com.yaratech.yaratube.data.sourse.Repository;
+import com.yaratech.yaratube.data.sourse.database.AppDatabase;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
@@ -25,7 +29,7 @@ import retrofit2.Response;
  * Created by Vah on 8/8/2018.
  */
 
-public class RemoteDataSource implements DataSource {
+public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
     private Context context;
     private Call<Store> storeCall;
@@ -39,7 +43,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getHome(final LoadDataCallback callback) {
+    public void getHome(final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             storeCall = Utils.getServices().getStoreService().getStore();
             storeCall.enqueue(new Callback<Store>() {
@@ -69,7 +73,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getCategory(final LoadDataCallback callback) {
+    public void getCategory(final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
 
             categoryListCall = Utils.getServices().getStoreService()
@@ -101,7 +105,8 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getProductList(int id, final LoadDataCallback callback) {
+    public void getProductList(int id,
+                               final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             productListCall = Utils.getServices().getStoreService()
                     .getProductList(id);
@@ -133,7 +138,8 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getProductDetail(int id, final LoadDataCallback callback) {
+    public void getProductDetail(int id,
+                                 final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             Log.e("tag", id + "");
 
@@ -170,7 +176,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void getComment(int id, final LoadDataCallback callback) {
+    public void getComment(int id, final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             Log.e("tag", id + "");
 
@@ -207,7 +213,8 @@ public class RemoteDataSource implements DataSource {
 
     @Override
     public void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
-                                String deviceModel, final LoadDataCallback callback) {
+                                String deviceModel,
+                                final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
 
             final Call<LoginGoogle> loginGoogleCall = Utils.getServices().getStoreService()
@@ -241,8 +248,18 @@ public class RemoteDataSource implements DataSource {
 
     @Override
     public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
-                                     String deviceOs, String gcm, final LoadDataCallback callback) {
+                                     String deviceOs, String gcm,
+                                     final DataSource.RemoteDataSourse.LoadDataCallback callback,
+                                     final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
         if (Utils.isOnline(context)) {
+
+            if (mobile.length() < 11) {
+                callback.onMessage("لطفاً شماره همراه 11 رقمی خود را وارد کنید");
+                return;
+            }
+
+            final Profile profile = new Profile();
+            profile.setMobile(mobile.toString());
 
             final Call<MobileLoginStep1> loginGoogleCall = Utils.getServices().getStoreService()
                     .sendMobileLoginStep1(
@@ -257,11 +274,15 @@ public class RemoteDataSource implements DataSource {
                                        @NonNull Response<MobileLoginStep1> response) {
 
                     if (response.isSuccessful()) {
+                        addToDatabase.saveProfile(profile);
                         callback.onDataLoaded(response.body());
                         callback.onMessage(response.body().getMessage());
+                        Log.e("Tag",response.body().getMessage()+" "+response.body().getError());
                     } else {
-
-                        callback.onMessage(context.getString(R.string.fail_progress));
+                        if (response.code() == 400)
+                            callback.onMessage(context.getString(R.string.wrong_number));
+                        if (response.code() == 504)
+                            callback.onMessage(context.getString(R.string.fail_progress));
                     }
                 }
 
@@ -275,23 +296,31 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode, String nickname, LoadDataCallback callback) {
+        
+    }
+
+    @Override
     public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                     String nickname, final LoadDataCallback callback) {
+                                     String nickname,
+                                     final DataSource.RemoteDataSourse.LoadDataCallback callback,
+                                     final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
         if (Utils.isOnline(context)) {
 
-            final Call<LoginGoogle> loginGoogleCall = Utils.getServices().getStoreService()
+            final Call<LoginResponse> loginGoogleCall = Utils.getServices().getStoreService()
                     .sendMobileLoginStep2(
                             mobile,
                             deviceId,
                             verificationCode,
                             nickname);
-            loginGoogleCall.enqueue(new Callback<LoginGoogle>() {
+            loginGoogleCall.enqueue(new Callback<LoginResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<LoginGoogle> call,
-                                       @NonNull Response<LoginGoogle> response) {
+                public void onResponse(@NonNull Call<LoginResponse> call,
+                                       @NonNull Response<LoginResponse> response) {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
+                        Log.e("Tag",response.body().getMessage()+" "+response.body().getToken());
                     } else {
                         Log.e("tag", response.errorBody().toString());
 
@@ -300,7 +329,7 @@ public class RemoteDataSource implements DataSource {
                 }
 
                 @Override
-                public void onFailure(Call<LoginGoogle> call, Throwable t) {
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
                     callback.onMessage(context.getString(R.string.fail_progress));
                 }
             });

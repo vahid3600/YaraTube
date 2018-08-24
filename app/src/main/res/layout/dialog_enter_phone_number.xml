@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_background"
+        android:maxLength="11"
         android:padding="@dimen/default_padding"
-
         android:layout_margin="@dimen/button_margin"
         android:inputType="phone"
         android:hint="@string/enter_your_phone_number"/>

@@ -3,6 +3,7 @@ package com.yaratech.yaratube.data.sourse.remote;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.LoginGoogle;
+import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
@@ -62,7 +63,7 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("mobile_login_step2/" + Utils.STORE_ID)
-    Call<LoginGoogle> sendMobileLoginStep2(
+    Call<LoginResponse> sendMobileLoginStep2(
             @Field("mobile") String mobile,
             @Field("device_id") String deviceId,
             @Field("verification_code") String verificationCode,

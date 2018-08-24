@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.yaratech.yaratube.data.model.Headeritem;
+import com.yaratech.yaratube.data.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,12 @@ import java.util.List;
 
 public class HeaderItemAdapter extends FragmentPagerAdapter {
 
-    List<Headeritem> headeritems = new ArrayList<>();
+    List<Product> headeritems = new ArrayList<>();
     public HeaderItemAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void setData(List<Headeritem> headeritems) {
+    public void setData(List<Product> headeritems) {
         this.headeritems = headeritems;
         notifyDataSetChanged();
     }

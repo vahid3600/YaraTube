@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.ui.Connects;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.OnProductItemClick;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +26,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         HomeItemsRecyclerViewAdapter.OnHomeItemClickListener{
 
     private StoreContract.Presenter presenter;
-    OnProductItemClick onProductItemClick;
+    Connects.OnProductItemClick onProductItemClick;
 
     @BindView(R.id.loading)
     ProgressBar progressBar;
@@ -91,7 +91,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     @Override
     public void onAttach(Context context) {
         if (context instanceof MenuActivity)
-            onProductItemClick = (OnProductItemClick) context;
+            onProductItemClick = (Connects.OnProductItemClick) context;
         super.onAttach(context);
     }
 

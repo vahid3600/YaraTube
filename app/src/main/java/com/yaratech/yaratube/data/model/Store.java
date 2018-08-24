@@ -24,7 +24,7 @@ public class Store {
     private List<Object> tabStrip = null;
     @SerializedName("headeritem")
     @Expose
-    private List<Headeritem> headeritem = null;
+    private List<Product> headeritem = null;
     @SerializedName("homeitem")
     @Expose
     private List<Homeitem> homeitem = null;
@@ -69,11 +69,11 @@ public class Store {
         this.tabStrip = tabStrip;
     }
 
-    public List<Headeritem> getHeaderitem() {
+    public List<Product> getHeaderitem() {
         return headeritem;
     }
 
-    public void setHeaderitem(List<Headeritem> headeritem) {
+    public void setHeaderitem(List<Product> headeritem) {
         this.headeritem = headeritem;
     }
 

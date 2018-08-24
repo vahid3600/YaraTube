@@ -3,6 +3,7 @@ package com.yaratech.yaratube.ui.profile;
 import android.content.Context;
 
 import com.yaratech.yaratube.data.sourse.Repository;
+import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 import com.yaratech.yaratube.ui.MenuActivity;
 
@@ -18,7 +19,8 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     public
     ProfilePresenter(Context context, ProfileContract.View view){
-        this.profileRepository = Repository.getINSTANCE(new RemoteDataSource(context));
+        this.profileRepository = Repository.getINSTANCE(new RemoteDataSource(context),
+                new DatabaseSourse(context));
         this.view = view;
     }
 
@@ -40,7 +42,6 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     @Override
     public void fetchProfileCamera() {
         MenuActivity menuActivity = new MenuActivity();
-        profileRepository.getImageFromCamera();
     }
 
     @Override

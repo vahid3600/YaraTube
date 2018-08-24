@@ -16,9 +16,8 @@ import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.ui.Connects;
 import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.OnProductItemClick;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
         ProductListRecyclerViewAdapter.OnItemClickListener {
 
     ProductListPresenter productListPresenter;
-    OnProductItemClick onProductItemClick;
+    Connects.OnProductItemClick onProductItemClick;
     Unbinder unbind;
     @BindView(R.id.loading)
     ProgressBar progressBar;
@@ -56,7 +55,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void onAttach(Context context) {
         if (context instanceof MenuActivity)
-            onProductItemClick = (OnProductItemClick) context;
+            onProductItemClick = (Connects.OnProductItemClick) context;
         super.onAttach(context);
     }
 

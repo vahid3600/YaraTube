@@ -5,7 +5,8 @@ import android.content.Context;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
+import com.yaratech.yaratube.data.sourse.DataSource;
+import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     private Repository productDetailRepository;
 
     public ProductDetailPresenter(Context context, ProductDetailContract.View view){
-        this.productDetailRepository = Repository.getINSTANCE(new RemoteDataSource(context));
+        this.productDetailRepository = Repository.getINSTANCE(new RemoteDataSource(context),
+                new DatabaseSourse(context));
         this.view = view;
     }
 
@@ -28,7 +30,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     public void fetchProductDetailFromRemote(int id) {
         view.showLoading();
 
-        productDetailRepository.getProductDetail(id, new DataSource.LoadDataCallback() {
+        productDetailRepository.getProductDetail(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {
@@ -54,7 +56,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     public void fetchCommentFromRemote(int id) {
         view.showLoading();
 
-        productDetailRepository.getComment(id, new DataSource.LoadDataCallback() {
+        productDetailRepository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();

@@ -10,14 +10,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.Product;
@@ -33,8 +36,9 @@ import butterknife.OnClick;
 public class ProductDetailFragment extends Fragment implements
         ProductDetailContract.View {
 
-    Product product;
-    CommentRecyclerViewAdapter commentRecyclerViewAdapter;
+    private Product product;
+    private static final String PRODUCT_KEY = "product_id";
+    private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
     private String videoUri;
     private ProductDetailContract.Presenter presenter;
     private ProgressDialog progressDialog;
@@ -45,40 +49,40 @@ public class ProductDetailFragment extends Fragment implements
     TextView productTitle;
     @BindView(R.id.product_about)
     TextView productAbout;
-    @BindView(R.id.product_video)
-    VideoView videoView;
+    @BindView(R.id.product_image)
+    ImageView productImage;
     @BindView(R.id.product_comments)
     RecyclerView recyclerView;
 
     @OnClick(R.id.play)
     public void playVideo() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Please wait");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-        try {
-            if (videoView.isPlaying()) {
-                videoView.setVideoURI(Uri.parse(videoUri));
-                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                    }
-                });
-            } else
-                videoView.pause();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        videoView.requestFocus();
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                progressDialog.dismiss();
-                mp.setLooping(true);
-                videoView.start();
-            }
-        });
+//        progressDialog = new ProgressDialog(getContext());
+//        progressDialog.setMessage("Please wait");
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
+//
+//        try {
+//            if (videoView.isPlaying()) {
+//                videoView.setVideoURI(Uri.parse(videoUri));
+//                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                    @Override
+//                    public void onCompletion(MediaPlayer mp) {
+//                    }
+//                });
+//            } else
+//                videoView.pause();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        videoView.requestFocus();
+//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                progressDialog.dismiss();
+//                mp.setLooping(true);
+//                videoView.start();
+//            }
+//        });
     }
 
     @OnClick(R.id.send_comment)
@@ -95,7 +99,7 @@ public class ProductDetailFragment extends Fragment implements
     public static ProductDetailFragment newInstance(Product product) {
 
         Bundle args = new Bundle();
-        args.putParcelable("product", product);
+        args.putParcelable(PRODUCT_KEY, product);
         ProductDetailFragment fragment = new ProductDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -120,8 +124,10 @@ public class ProductDetailFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        product = getArguments().getParcelable("product");
+        product = getArguments().getParcelable(PRODUCT_KEY);
         presenter.fetchProductDetailFromRemote(product.getId());
+        Glide.with(getContext()).load(product.getFeatureAvatar().getXxxdpi()).into(productImage);
+        productTitle.setText(product.getName());
         initRecycleview();
     }
 
@@ -139,7 +145,6 @@ public class ProductDetailFragment extends Fragment implements
     @Override
     public void showProductDetail(ProductDetail productDetail) {
         videoUri = productDetail.getFiles().get(0).getFile();
-        productTitle.setText(productDetail.getName());
         productAbout.setText(productDetail.getDescription());
         presenter.fetchCommentFromRemote(product.getId());
     }

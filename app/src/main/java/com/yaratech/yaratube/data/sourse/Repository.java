@@ -1,41 +1,29 @@
 package com.yaratech.yaratube.data.sourse;
 
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
+import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
-import com.yaratech.yaratube.ui.MenuActivity;
-import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
-import java.io.File;
+public class Repository implements DataSource.RemoteDataSourse, DataSource.DatabaseSourse {
 
-public class Repository implements DataSource {
-
-    GetImage getImage;
     private static Repository INSTANCE = null;
     private RemoteDataSource remoteDataSource;
+    private DatabaseSourse databaseSourse;
 
-    private Repository(DataSource remoteDataSource) {
+    private Repository(DataSource.RemoteDataSourse remoteDataSource,
+                       DataSource.DatabaseSourse databaseSourse) {
         //no instance
-        if (remoteDataSource instanceof RemoteDataSource) {
+        if (remoteDataSource instanceof RemoteDataSource)
             this.remoteDataSource = (RemoteDataSource) remoteDataSource;
-        }
-        this.getImage = getImage;
+        if (databaseSourse instanceof DataSource.DatabaseSourse)
+            this.databaseSourse = (DatabaseSourse) databaseSourse;
     }
 
-    public static Repository getINSTANCE(DataSource remoteDataSource) {
+    public static Repository getINSTANCE(DataSource.RemoteDataSourse remoteDataSource,
+                                         DataSource.DatabaseSourse databaseSourse) {
         if (INSTANCE == null) {
-            INSTANCE = new Repository(remoteDataSource);
+            INSTANCE = new Repository(remoteDataSource, databaseSourse);
         }
         return INSTANCE;
     }
@@ -98,9 +86,10 @@ public class Repository implements DataSource {
 
     @Override
     public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
-                                     String deviceOs, String gcm, LoadDataCallback callback) {
+                                     String deviceOs, String gcm, LoadDataCallback callback,
+                                     AddToDatabase addToDatabase) {
         remoteDataSource.sendMobileLoginStep1(mobile, deviceId, deviceModel, deviceOs,
-                gcm, callback);
+                gcm, callback, addToDatabase);
     }
 
     @Override
@@ -110,17 +99,18 @@ public class Repository implements DataSource {
                 callback);
     }
 
-    public void getImageFromGalery() {
-
+    @Override
+    public String getMobile() {
+        return databaseSourse.getMobile();
     }
 
-    public void getImageFromCamera() {
-
+    @Override
+    public void setProfile(Profile profile) {
+        databaseSourse.setProfile(profile);
     }
 
-    public interface GetImage {
-        void onCamera();
-
-        void onGalery();
+    @Override
+    public void updateProfile(Profile profile) {
+        databaseSourse.updateProfile(profile);
     }
 }

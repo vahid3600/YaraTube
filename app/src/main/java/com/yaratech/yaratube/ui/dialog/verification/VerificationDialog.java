@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.loginphone;
+package com.yaratech.yaratube.ui.dialog.verification;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,12 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.Connects;
-import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.ui.dialog.loginphone.PhoneNumberContract;
+import com.yaratech.yaratube.ui.dialog.loginphone.PhoneNumberPresenter;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
@@ -26,32 +26,30 @@ import butterknife.Unbinder;
  * Created by Vah on 8/12/2018.
  */
 
-public class EnterPhoneNumberDialog extends DialogFragment implements
-        PhoneNumberContract.View {
-
-    @OnClick(R.id.save)
-    public void sendPhoneNumberRequest() {
-        presenter.loginByMobile(
-                phoneNumber.getText().toString(),
-                Utils.getDeviceId(getContext()),
-                Utils.getDeviceModel(),
-                Utils.getDeviceOS(),
-                "");
-    }
-
-    @BindView(R.id.phonenumber)
-    EditText phoneNumber;
+public class VerificationDialog extends DialogFragment implements
+        VerificationContract.View {
 
     Unbinder unbind;
     Connects.DismissDialog dismissDialog;
-    PhoneNumberContract.Presenter presenter;
-    public static final String ENTER_PHONE_DIALOG_TAG = "EnterPhone";
+    VerificationContract.Presenter presenter;
+    public static final String VERIFICATION_DIALOG_TAG = "Verification";
+
+    @BindView(R.id.verification_code)
+    EditText verificationCode;
+
+    @OnClick(R.id.enter)
+    public void sendVerificationCode() {
+        presenter.sendVerificationCode(
+                Utils.getDeviceId(getContext()),
+                verificationCode.getText().toString(),
+                "");
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_enter_phone_number, container, false);
+        return inflater.inflate(R.layout.dialog_verification, container, false);
 
     }
 
@@ -59,29 +57,23 @@ public class EnterPhoneNumberDialog extends DialogFragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbind = ButterKnife.bind(this, view);
-        presenter = new PhoneNumberPresenter(getContext(), this);
+        presenter = new VerificationNumberPresenter(getContext(), this);
     }
 
     @Override
     public void onAttach(Context context) {
-        if (context instanceof MenuActivity)
-            dismissDialog = (MenuActivity) context;
+        if (context instanceof Connects.DismissDialog)
+            dismissDialog = (Connects.DismissDialog) context;
         else
             throw new ClassCastException("Not Instance OF DismissDialog");
         super.onAttach(context);
     }
 
-    @Override
-    public void onDetach() {
-        dismissDialog = null;
-        super.onDetach();
-    }
+    public static VerificationDialog newInstance() {
 
-    public static EnterPhoneNumberDialog newInstance() {
-        
         Bundle args = new Bundle();
-        
-        EnterPhoneNumberDialog fragment = new EnterPhoneNumberDialog();
+
+        VerificationDialog fragment = new VerificationDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,6 +86,7 @@ public class EnterPhoneNumberDialog extends DialogFragment implements
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        dismissDialog();
     }
 
     @Override

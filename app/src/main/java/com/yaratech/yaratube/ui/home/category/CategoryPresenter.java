@@ -4,7 +4,8 @@ import android.content.Context;
 
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
+import com.yaratech.yaratube.data.sourse.DataSource;
+import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class CategoryPresenter implements CategoryContract.Presenter {
     private Repository categoryRepository;
 
     public CategoryPresenter(Context context, CategoryContract.View view){
-        this.categoryRepository = Repository.getINSTANCE(new RemoteDataSource(context));
+        this.categoryRepository = Repository.getINSTANCE(new RemoteDataSource(context),
+                new DatabaseSourse(context));
         this.view = view;
     }
 
@@ -27,7 +29,7 @@ public class CategoryPresenter implements CategoryContract.Presenter {
     public void fetchCategoryFromRemote() {
         view.showLoading();
 
-        categoryRepository.getCategory(new DataSource.LoadDataCallback() {
+        categoryRepository.getCategory(new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {

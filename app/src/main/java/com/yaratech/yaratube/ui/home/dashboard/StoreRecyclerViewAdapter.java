@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Headeritem;
 import com.yaratech.yaratube.data.model.Homeitem;
+import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.Store;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     FragmentManager fragmentManager;
     HeaderItemAdapter headerItemAdapter;
     private Store store;
-    List<Headeritem> headeritems = new ArrayList<>();
+    List<Product> headeritems = new ArrayList<>();
     List<Homeitem> homeitems = new ArrayList<>();
     HomeItemsRecyclerViewAdapter.OnHomeItemClickListener onHomeItemClickListener;
     HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;

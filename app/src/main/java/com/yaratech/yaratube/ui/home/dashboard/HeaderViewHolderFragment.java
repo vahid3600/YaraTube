@@ -1,5 +1,6 @@
 package com.yaratech.yaratube.ui.home.dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,9 @@ import android.widget.ImageView;
 import com.yaratech.yaratube.R;
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.data.model.Headeritem;
+import com.yaratech.yaratube.data.model.Product;
+import com.yaratech.yaratube.ui.Connects;
+import com.yaratech.yaratube.ui.MenuActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,19 +24,20 @@ import butterknife.ButterKnife;
  * Created by Vah on 8/15/2018.
  */
 
-public class HeaderViewHolderFragment extends Fragment {
+public class HeaderViewHolderFragment extends Fragment implements View.OnClickListener {
 
-    Headeritem headeritem;
+    Product headeritem;
     @BindView(R.id.section_label)
     ImageView headerImageView;
+    Connects.OnProductItemClick onProductItemClick;
 
     public HeaderViewHolderFragment() {
     }
 
-    public static HeaderViewHolderFragment newInstance(Headeritem headeritem) {
+    public static HeaderViewHolderFragment newInstance(Product product) {
 
         Bundle args = new Bundle();
-        args.putParcelable("HEADER_ITEM", headeritem);
+        args.putParcelable("HEADER_ITEM", product);
         HeaderViewHolderFragment fragment = new HeaderViewHolderFragment();
         fragment.setArguments(args);
         return fragment;
@@ -54,6 +59,7 @@ public class HeaderViewHolderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        view.setOnClickListener(this);
     }
 
     @Override
@@ -61,4 +67,23 @@ public class HeaderViewHolderFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Glide.with(this).load(headeritem.getFeatureAvatar().getXxxdpi()).into(headerImageView);
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MenuActivity)
+            onProductItemClick = (Connects.OnProductItemClick) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onProductItemClick = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        onProductItemClick.onClick(headeritem);
+    }
 }
+

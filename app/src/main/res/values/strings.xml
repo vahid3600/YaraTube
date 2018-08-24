@@ -42,4 +42,9 @@
     <string name="enter_your_phone_number">شماره موبایل خود را وارد کنید</string>
     <string name="fail_progress">عملیات با خطا مواجه شد!</string>
     <string name="no_internet">ارتباط اینترنت شما قطع است</string>
+    <string name="enter_verification_code">کد فعالسازی را وارد کنید</string>
+    <string name="verification_code">کد فعالسازی</string>
+    <string name="not_get_code">کد را دریافت نکردید؟</string>
+    <string name="re_enter">تصحیح شماره</string>
+    <string name="wrong_number">این شماره صحیح نیست!</string>
 </resources>

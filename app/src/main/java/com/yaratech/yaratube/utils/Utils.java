@@ -46,7 +46,7 @@ public class Utils {
     }
 
     public static void setFragment(int container, FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack) {
-        if (!fragment.isVisible()) {
+        if (!fragment.isAdded()) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(container, fragment, tag);
             if (addToBackStack)

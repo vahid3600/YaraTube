@@ -4,7 +4,8 @@ import android.content.Context;
 
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.remote.DataSource;
+import com.yaratech.yaratube.data.sourse.DataSource;
+import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
@@ -17,14 +18,15 @@ public class StorePresenter implements StoreContract.Presenter {
     private Repository homeRepository;
 
     public StorePresenter(Context context, StoreContract.View view){
-        this.homeRepository = Repository.getINSTANCE(new RemoteDataSource(context));
+        this.homeRepository = Repository.getINSTANCE(new RemoteDataSource(context),
+                new DatabaseSourse(context));
         this.view = view;
     }
     @Override
     public void fetchHomeFromRemote() {
         view.showLoading();
 
-        homeRepository.getHome(new DataSource.LoadDataCallback() {
+        homeRepository.getHome(new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {
