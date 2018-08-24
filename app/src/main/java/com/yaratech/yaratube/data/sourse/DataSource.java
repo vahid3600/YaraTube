@@ -44,7 +44,8 @@ public interface DataSource {
                                   DatabaseSourse.AddToDatabase addToDatabase);
 
         void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                  String nickname, LoadDataCallback callback);
+                                  String nickname, LoadDataCallback callback,
+                                  DatabaseSourse.AddToDatabase addToDatabase);
 
     }
 

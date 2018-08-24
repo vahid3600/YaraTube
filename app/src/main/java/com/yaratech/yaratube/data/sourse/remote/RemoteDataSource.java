@@ -296,30 +296,28 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode, String nickname, LoadDataCallback callback) {
-        
-    }
-
-    @Override
     public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
                                      String nickname,
                                      final DataSource.RemoteDataSourse.LoadDataCallback callback,
                                      final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
         if (Utils.isOnline(context)) {
 
-            final Call<LoginResponse> loginGoogleCall = Utils.getServices().getStoreService()
+            final Call<LoginResponse> loginVerification = Utils.getServices().getStoreService()
                     .sendMobileLoginStep2(
                             mobile,
                             deviceId,
                             verificationCode,
                             nickname);
-            loginGoogleCall.enqueue(new Callback<LoginResponse>() {
+            loginVerification.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call,
                                        @NonNull Response<LoginResponse> response) {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
+                        Profile profile = new Profile();
+                        profile.setUserToken(response.body().getToken());
+                        addToDatabase.updateProfile(profile);
                         Log.e("Tag",response.body().getMessage()+" "+response.body().getToken());
                     } else {
                         Log.e("tag", response.errorBody().toString());

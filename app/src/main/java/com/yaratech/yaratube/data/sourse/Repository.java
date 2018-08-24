@@ -94,9 +94,10 @@ public class Repository implements DataSource.RemoteDataSourse, DataSource.Datab
 
     @Override
     public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                     String nickname, LoadDataCallback callback) {
+                                     String nickname, LoadDataCallback callback,
+                                     AddToDatabase addToDatabase) {
         remoteDataSource.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
-                callback);
+                callback, addToDatabase);
     }
 
     @Override
