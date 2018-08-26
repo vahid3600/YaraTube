@@ -25,35 +25,46 @@ public class VerificationNumberPresenter implements VerificationContract.Present
     }
 
     @Override
-    public void sendVerificationCode(final String deviceId, final String verificationCode,
+    public void sendVerificationCode(String mobile, final String deviceId, final String verificationCode,
                                      final String nickname) {
 
-        repository.getMobile(new DataSource.DatabaseSourse.GetMobileCallback() {
-            @Override
-            public void loadMobileCallback(String mobile) {
-                repository.sendMobileLoginStep2(mobile , deviceId, verificationCode, nickname,
-                        new DataSource.RemoteDataSourse.LoadDataCallback() {
-                            @Override
-                            public void onDataLoaded(Object result) {
-                                view.closeDialog();
-                            }
+        repository.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
+                new DataSource.RemoteDataSourse.LoadDataCallback() {
+                    @Override
+                    public void onDataLoaded(Object result) {
+                        view.closeDialog();
+                    }
 
-                            @Override
-                            public void onMessage(String msg) {
-                                view.showMessage(msg);
-                            }
-                        }, new DataSource.DatabaseSourse.AddToDatabase() {
-                            @Override
-                            public void saveProfile(Profile profile) {
+                    @Override
+                    public void onMessage(String msg) {
+                        view.showMessage(msg);
+                    }
+                },
+                new DataSource.DatabaseSourse.AddToDatabase() {
+                    @Override
+                    public void saveProfile(Profile profile) {
+                        repository.saveProfile(profile);
+                    }
 
-                            }
+                    @Override
+                    public void updateProfile(Profile profile) {
 
-                            @Override
-                            public void updateProfile(Profile profile) {
-                                repository.updateProfile(profile);
-                            }
-                        });
-            }
-        });
+                    }
+                });
+    }
+
+    @Override
+    public void setUserLoginStatus(boolean status) {
+        repository.saveUserLoginStatus(status);
+    }
+
+    @Override
+    public void saveUserMobile(String mobile) {
+        repository.saveUserMobile(mobile);
+    }
+
+    @Override
+    public String getUserMobile() {
+        return repository.getUserMobile();
     }
 }

@@ -1,5 +1,7 @@
 package com.yaratech.yaratube.ui.dialog.logincontainer;
 
+import android.support.v4.app.Fragment;
+
 /**
  * Created by Vah on 8/25/2018.
  */
@@ -10,7 +12,7 @@ public interface LoginDialogContract {
 
         void showLoginPhone();
 
-        void showVerification();
+        void showVerification(Fragment fragment);
     }
 
     interface Presenter{

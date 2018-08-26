@@ -18,7 +18,7 @@ public class Repository implements DataSource.RemoteDataSourse,
         if (remoteDataSource instanceof RemoteDataSource
                 && databaseSourse instanceof DatabaseSourse)
             this.remoteDataSource = (RemoteDataSource) remoteDataSource;
-            this.databaseSourse = (DatabaseSourse) databaseSourse;
+        this.databaseSourse = (DatabaseSourse) databaseSourse;
     }
 
     public static Repository getINSTANCE(DataSource.RemoteDataSourse remoteDataSource,
@@ -86,24 +86,39 @@ public class Repository implements DataSource.RemoteDataSourse,
     }
 
     @Override
-    public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
-                                     String deviceOs, String gcm, LoadDataCallback callback,
-                                     AddToDatabase addToDatabase) {
-        remoteDataSource.sendMobileLoginStep1(mobile, deviceId, deviceModel, deviceOs,
-                gcm, callback, addToDatabase);
+    public void sendMobileLoginStep1(
+            String mobile,
+            String deviceId,
+            String deviceModel,
+            String deviceOs,
+            String gcm,
+            LoadDataCallback callback,
+            AddToDatabase addToDatabase) {
+        remoteDataSource.sendMobileLoginStep1(
+                mobile,
+                deviceId,
+                deviceModel,
+                deviceOs,
+                gcm,
+                callback,
+                addToDatabase);
     }
 
     @Override
-    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                     String nickname, LoadDataCallback callback,
-                                     AddToDatabase addToDatabase) {
-        remoteDataSource.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
-                callback, addToDatabase);
-    }
-
-    @Override
-    public void getMobile(GetMobileCallback callback) {
-        databaseSourse.getMobile(callback);
+    public void sendMobileLoginStep2(
+            String mobile,
+            String deviceId,
+            String verificationCode,
+            String nickname,
+            LoadDataCallback callback,
+            AddToDatabase addToDatabase) {
+        remoteDataSource.sendMobileLoginStep2(
+                mobile,
+                deviceId,
+                verificationCode,
+                nickname,
+                callback,
+                addToDatabase);
     }
 
     @Override
@@ -134,5 +149,15 @@ public class Repository implements DataSource.RemoteDataSourse,
     @Override
     public int getUserLoginState() {
         return databaseSourse.getUserLoginState();
+    }
+
+    @Override
+    public void saveUserMobile(String mobile) {
+        databaseSourse.saveUserMobile(mobile);
+    }
+
+    @Override
+    public String getUserMobile() {
+        return databaseSourse.getUserMobile();
     }
 }

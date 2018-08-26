@@ -89,12 +89,12 @@ public class LoginDialogContainer extends DialogFragment implements
     }
 
     @Override
-    public void showVerification() {
+    public void showVerification(Fragment fragment) {
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(
                         R.id.dialog_container,
-                        VerificationDialog.newInstance(),
+                        fragment,
                         VERIFICATION_DIALOG_TAG)
                 .commit();
         presenter.setUserStateLogin(3);
@@ -105,7 +105,7 @@ public class LoginDialogContainer extends DialogFragment implements
         if (fragment instanceof LoginPhone) {
             showLoginPhone();
         } else if (fragment instanceof VerificationDialog) {
-            showVerification();
+            showVerification(fragment);
         }
     }
 

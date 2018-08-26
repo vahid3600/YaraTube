@@ -24,8 +24,4 @@ public class MenuActivityPresenter implements MenuActivityContract.Presenter {
         return repository.getUserLoginStatus();
     }
 
-    @Override
-    public void setUserLoginStatus(boolean status) {
-        repository.saveUserLoginStatus(status);
-    }
 }

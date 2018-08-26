@@ -12,7 +12,12 @@ public interface VerificationContract {
     }
 
     interface Presenter{
-        void sendVerificationCode(String deviceId, String verificationCode,
+        void sendVerificationCode(String mobile, String deviceId, String verificationCode,
                                   String nickname);
+        void setUserLoginStatus(boolean status);
+
+        void saveUserMobile(String mobile);
+
+        String getUserMobile();
     }
 }

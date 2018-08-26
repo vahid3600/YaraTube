@@ -57,12 +57,6 @@ public interface DataSource {
             void updateProfile(Profile profile);
         }
 
-        interface GetMobileCallback{
-            void loadMobileCallback(String mobile);
-        }
-
-        void getMobile(GetMobileCallback callback);
-
         void saveProfile(Profile profile);
 
         void updateProfile(Profile profile);
@@ -74,5 +68,9 @@ public interface DataSource {
         void saveUserLoginStatus(boolean status);
 
         int getUserLoginState();
+
+        void saveUserMobile(String mobile);
+
+        String getUserMobile();
     }
 }

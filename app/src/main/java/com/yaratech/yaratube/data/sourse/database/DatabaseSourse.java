@@ -9,6 +9,7 @@ import com.yaratech.yaratube.ui.MenuActivity;
 
 import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
+import static com.yaratech.yaratube.utils.Utils.USER_MOBILE_KEY;
 
 /**
  * Created by Vah on 8/24/2018.
@@ -20,11 +21,6 @@ public class DatabaseSourse implements DataSource.DatabaseSourse {
     public DatabaseSourse(Context context) {
 
         appDatabase = AppDatabase.getAppDatabase(context);
-    }
-
-    @Override
-    public void getMobile(final DataSource.DatabaseSourse.GetMobileCallback callback) {
-        callback.loadMobileCallback(appDatabase.profileDao().getMobile());
     }
 
     @Override
@@ -59,5 +55,17 @@ public class DatabaseSourse implements DataSource.DatabaseSourse {
     @Override
     public int getUserLoginState() {
         return MenuActivity.USER_LOGIN_STATE.getInt(USER_LOGIN_STATE_KEY, 1);
+    }
+
+    @Override
+    public void saveUserMobile(String mobile) {
+        MenuActivity.USER_MOBILE.edit()
+                .putString(USER_MOBILE_KEY, mobile)
+                .apply();
+    }
+
+    @Override
+    public String getUserMobile() {
+        return MenuActivity.USER_MOBILE.getString(USER_MOBILE_KEY,"");
     }
 }

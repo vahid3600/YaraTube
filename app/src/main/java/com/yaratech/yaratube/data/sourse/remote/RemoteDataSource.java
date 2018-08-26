@@ -275,9 +275,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                        @NonNull Response<MobileLoginStep1> response) {
 
                     if (response.isSuccessful()) {
-                        final Profile profile = new Profile();
-                        profile.setMobile(mobile);
-                        addToDatabase.saveProfile(profile);
 
                         callback.onDataLoaded(response.body());
                         callback.onMessage(response.body().getMessage());
@@ -299,12 +296,15 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                     String nickname,
-                                     final DataSource.RemoteDataSourse.LoadDataCallback callback,
-                                     final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
+    public void sendMobileLoginStep2(
+            final String mobile,
+            String deviceId,
+            String verificationCode,
+            String nickname,
+            final DataSource.RemoteDataSourse.LoadDataCallback callback,
+            final DataSource.DatabaseSourse.AddToDatabase addToDatabase)
+    {
         if (Utils.isOnline(context)) {
-            Log.e("tagine", mobile + " " + verificationCode);
             final Call<LoginResponse> loginVerification = Utils.getServices().getStoreService()
                     .sendMobileLoginStep2(
                             mobile,
@@ -320,8 +320,9 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                         callback.onMessage(response.body().getMessage());
                         callback.onDataLoaded(response.body());
                         Profile profile = new Profile();
+                        profile.setMobile(mobile);
                         profile.setUserToken(response.body().getToken());
-                        addToDatabase.updateProfile(profile);
+                        addToDatabase.saveProfile(profile);
                         MenuActivity.USER_LOGIN.edit()
                                 .putBoolean(LOGIN_KEY, true)
                                 .apply();

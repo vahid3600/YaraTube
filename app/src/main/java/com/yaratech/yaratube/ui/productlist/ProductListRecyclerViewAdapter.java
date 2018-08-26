@@ -36,7 +36,7 @@ public class ProductListRecyclerViewAdapter extends
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(List<Product> productLists){
+    public void setData(List<Product> productLists) {
         this.productLists = productLists;
         notifyDataSetChanged();
     }
@@ -62,11 +62,13 @@ public class ProductListRecyclerViewAdapter extends
     }
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.product_image)
-        ImageView product_avatar;
+        ImageView productAvatar;
         @BindView(R.id.product_title)
-        TextView product_title;
+        TextView productTitle;
+        @BindView(R.id.description_product)
+        TextView productDescription;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -76,10 +78,12 @@ public class ProductListRecyclerViewAdapter extends
         }
 
         public void onBind(Product product) {
-            String image_url = product.getFeatureAvatar().getXxxdpi();
-            String title = product.getName();
-            Glide.with(context).load(image_url).into(product_avatar);
-            product_title.setText(title);
+            Glide
+                    .with(context)
+                    .load(product.getFeatureAvatar().getXxxdpi())
+                    .into(productAvatar);
+            productTitle.setText(product.getName());
+            productDescription.setText(product.getShortDescription());
         }
 
         @Override
@@ -88,7 +92,7 @@ public class ProductListRecyclerViewAdapter extends
         }
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void getProductItem(Product product);
     }
 }

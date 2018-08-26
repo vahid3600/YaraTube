@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.Connects;
 import com.yaratech.yaratube.ui.dialog.logincontainer.DialogInteraction;
 import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
+import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
@@ -41,9 +43,15 @@ public class VerificationDialog extends Fragment implements
     @OnClick(R.id.enter)
     public void sendVerificationCode() {
         presenter.sendVerificationCode(
+                presenter.getUserMobile(),
                 Utils.getDeviceId(getContext()),
                 verificationCode.getText().toString(),
                 "");
+    }
+
+    @OnClick(R.id.return_back)
+    public void showEnterNumberDialog() {
+        dialogInteraction.showDialog(LoginPhone.newInstance());
     }
 
     @Nullable
@@ -64,13 +72,18 @@ public class VerificationDialog extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        dialogInteraction = (DialogInteraction)getParentFragment();
+        dialogInteraction = (DialogInteraction) getParentFragment();
+        if (getArguments() != null)
+            presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
     }
 
-    public static VerificationDialog newInstance() {
+    public static VerificationDialog newInstance(String mobileNumber) {
 
         Bundle args = new Bundle();
-
+        if (mobileNumber != null) {
+            args.putString(VERIFICATION_DIALOG_TAG, mobileNumber);
+            Log.e("mobile", mobileNumber);
+        }
         VerificationDialog fragment = new VerificationDialog();
         fragment.setArguments(args);
         return fragment;
@@ -79,6 +92,7 @@ public class VerificationDialog extends Fragment implements
     @Override
     public void closeDialog() {
         dialogInteraction.closeDialog();
+        presenter.setUserLoginStatus(true);
     }
 
     @Override

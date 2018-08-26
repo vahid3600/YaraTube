@@ -6,6 +6,7 @@ import android.util.Log;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
+import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
 
 /**
  * Created by Vah on 8/25/2018.
@@ -30,7 +31,7 @@ public class LoginDialogContainerPresenter implements LoginDialogContract.Presen
     public void checkUserStateLogin() {
         Log.e("Tag",repository.getUserLoginState()+"");
         if (repository.getUserLoginState() == 3)
-            view.showVerification();
+            view.showVerification(new VerificationDialog());
         else
             view.showLoginDialog();
     }

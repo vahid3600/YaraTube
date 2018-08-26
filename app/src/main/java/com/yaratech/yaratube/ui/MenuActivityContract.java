@@ -9,7 +9,5 @@ public interface MenuActivityContract {
     interface Presenter{
 
         boolean getUserLoginStatus();
-
-        void setUserLoginStatus(boolean status);
     }
 }

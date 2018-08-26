@@ -32,6 +32,7 @@ import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_L
 import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
+import static com.yaratech.yaratube.utils.Utils.USER_MOBILE_KEY;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -50,6 +51,7 @@ public class MenuActivity extends AppCompatActivity
     public ProfileFragment profileFragment;
     public static SharedPreferences USER_LOGIN;
     public static SharedPreferences USER_LOGIN_STATE;
+    public static SharedPreferences USER_MOBILE;
     private ActionBarDrawerToggle toggle;
     private MenuActivityContract.Presenter presenter;
 
@@ -70,6 +72,7 @@ public class MenuActivity extends AppCompatActivity
                 false);
         USER_LOGIN = getSharedPreferences(LOGIN_KEY, MODE_PRIVATE);
         USER_LOGIN_STATE = getSharedPreferences(USER_LOGIN_STATE_KEY, MODE_PRIVATE);
+        USER_MOBILE = getSharedPreferences(USER_MOBILE_KEY, MODE_PRIVATE);
     }
 
     private void initActivity() {
@@ -166,7 +169,7 @@ public class MenuActivity extends AppCompatActivity
                     BASE_FRAGMENT_TAG,
                     true);
         } else {
-            presenter.setUserLoginStatus(true);
+            LoginDialogContainer.newInstance(getSupportFragmentManager());
         }
     }
 }

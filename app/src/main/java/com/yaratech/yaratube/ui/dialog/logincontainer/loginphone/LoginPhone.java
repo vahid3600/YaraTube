@@ -84,7 +84,7 @@ public class LoginPhone extends Fragment implements
     @Override
     public void showVerificationDialog() {
 
-        dialogInteraction.showDialog(VerificationDialog.newInstance());
+        dialogInteraction.showDialog(VerificationDialog.newInstance(phoneNumber.getText().toString()));
     }
 
     @Override
