@@ -4,7 +4,7 @@ package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
  * Created by Vah on 8/17/2018.
  */
 
-public interface PhoneNumberContract {
+public interface LoginPhoneContract {
     interface View{
         void showVerificationDialog();
 

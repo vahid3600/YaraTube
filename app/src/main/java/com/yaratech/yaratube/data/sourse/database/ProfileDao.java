@@ -23,8 +23,9 @@ public interface ProfileDao {
     void updateProfile(Profile profile);
 
     @Query("select mobile " +
-            "from profile")
-    List<String> getMobile();
+            "from profile " +
+            "where id = 0")
+    String getMobile();
 
     @Query("select count(*) " +
             "from profile")

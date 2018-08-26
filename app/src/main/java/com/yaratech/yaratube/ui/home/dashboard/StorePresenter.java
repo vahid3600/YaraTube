@@ -38,6 +38,7 @@ public class StorePresenter implements StoreContract.Presenter {
             public void onMessage(String msg) {
                 view.hideLoading();
                 view.showMessage(msg);
+                view.showReload();
             }
         });
     }

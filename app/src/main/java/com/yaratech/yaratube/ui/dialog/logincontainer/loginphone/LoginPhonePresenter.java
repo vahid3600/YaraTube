@@ -12,12 +12,12 @@ import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
  * Created by Vah on 8/17/2018.
  */
 
-public class PhoneNumberPresenter implements PhoneNumberContract.Presenter {
+public class LoginPhonePresenter implements LoginPhoneContract.Presenter {
 
-    PhoneNumberContract.View view;
+    LoginPhoneContract.View view;
     Repository phoneRepository;
 
-    public PhoneNumberPresenter(Context context, PhoneNumberContract.View view) {
+    public LoginPhonePresenter(Context context, LoginPhoneContract.View view) {
         this.view = view;
         this.phoneRepository = Repository.getINSTANCE(new RemoteDataSource(context),
                 new DatabaseSourse(context));

@@ -122,6 +122,16 @@ public class Repository implements DataSource.RemoteDataSourse,
     }
 
     @Override
+    public boolean getUserLoginStatus() {
+        return databaseSourse.getUserLoginStatus();
+    }
+
+    @Override
+    public void saveUserLoginStatus(boolean status) {
+        databaseSourse.saveUserLoginStatus(status);
+    }
+
+    @Override
     public int getUserLoginState() {
         return databaseSourse.getUserLoginState();
     }

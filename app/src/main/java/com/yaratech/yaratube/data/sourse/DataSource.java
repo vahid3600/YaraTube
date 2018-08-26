@@ -69,6 +69,10 @@ public interface DataSource {
 
         void saveUserLoginState(int state);
 
+        boolean getUserLoginStatus();
+
+        void saveUserLoginStatus(boolean status);
+
         int getUserLoginState();
     }
 }

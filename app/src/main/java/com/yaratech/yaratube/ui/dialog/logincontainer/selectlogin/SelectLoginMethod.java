@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.dialog.logincontainer.DialogInteraction;
-import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
-import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.EnterPhoneNumber;
+import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.ButterKnife;
@@ -108,7 +107,7 @@ public class SelectLoginMethod extends Fragment implements SelectLoginMethodCont
 
     @Override
     public void showLoginByPhoneDialog() {
-        dialogInteraction.showDialog(EnterPhoneNumber.newInstance());
+        dialogInteraction.showDialog(LoginPhone.newInstance());
     }
 
     @Override

@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,10 +25,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CategoryFragment extends Fragment implements CategoryContract.View,
-        CategoryItemsRecyclerViewAdapter.ItemClickListener {
+        CategoryItemsRecyclerViewAdapter.ItemClickListener,
+        View.OnClickListener {
 
-    CategoryPresenter categoryPresenter;
+    CategoryPresenter presenter;
 
+    @BindView(R.id.reload)
+    LinearLayout reload;
     @BindView(R.id.loading)
     ProgressBar progressBar;
     @BindView(R.id.recyclerview)
@@ -60,14 +65,16 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
-        categoryPresenter = new CategoryPresenter(getContext(), this);
+        reload.setVisibility(View.GONE);
+        presenter = new CategoryPresenter(getContext(), this);
         initRecycleview(view);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        categoryPresenter.fetchCategoryFromRemote();
+        presenter.fetchCategoryFromRemote();
+        reload.setOnClickListener(this);
     }
 
     private void initRecycleview(View view) {
@@ -106,6 +113,11 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     }
 
     @Override
+    public void showReload() {
+        reload.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onItemClick(CategoryList category_list) {
         ((CategoryFragment.OnCategoryFragmentActionListener) getContext())
                 .onCategorylistItemClicked(category_list);
@@ -113,12 +125,20 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
 
     @Override
     public void onDestroyView() {
-        Log.e("dishab"," na parishab");
-        categoryPresenter.cancelCategoryRequest();
+        Log.e("dishab", " na parishab");
+        presenter.cancelCategoryRequest();
         super.onDestroyView();
     }
 
     public interface OnCategoryFragmentActionListener {
         void onCategorylistItemClicked(CategoryList category);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.reload) {
+            presenter.fetchCategoryFromRemote();
+            reload.setVisibility(View.INVISIBLE);
+        }
     }
 }

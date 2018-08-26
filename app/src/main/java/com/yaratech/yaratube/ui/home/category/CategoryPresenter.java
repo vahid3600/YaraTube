@@ -41,6 +41,7 @@ public class CategoryPresenter implements CategoryContract.Presenter {
             public void onMessage(String msg) {
                 view.hideLoading();
                 view.showMessage(msg);
+                view.showReload();
             }
         });
 

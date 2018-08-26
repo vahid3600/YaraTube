@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,11 +25,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StoreFragment extends Fragment implements StoreContract.View,
-        HomeItemsRecyclerViewAdapter.OnHomeItemClickListener{
+        HomeItemsRecyclerViewAdapter.OnHomeItemClickListener,
+        View.OnClickListener {
 
     private StoreContract.Presenter presenter;
     Connects.OnProductItemClick onProductItemClick;
 
+    @BindView(R.id.reload)
+    LinearLayout reload;
     @BindView(R.id.loading)
     ProgressBar progressBar;
     @BindView(R.id.recyclerview)
@@ -67,6 +72,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
+        reload.setVisibility(View.GONE);
         presenter = new StorePresenter(getContext(), this);
         initRecycleview();
     }
@@ -86,6 +92,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         presenter.fetchHomeFromRemote();
+        reload.setOnClickListener(this);
     }
 
     @Override
@@ -122,7 +129,20 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     }
 
     @Override
+    public void showReload() {
+        reload.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void getHomeProductItem(Product product) {
         onProductItemClick.onClick(product);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.reload) {
+            presenter.fetchHomeFromRemote();
+            reload.setVisibility(View.GONE);
+        }
     }
 }

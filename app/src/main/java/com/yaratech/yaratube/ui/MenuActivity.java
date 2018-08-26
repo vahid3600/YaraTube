@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,8 +17,6 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
-import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.EnterPhoneNumber;
-import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
@@ -55,6 +51,7 @@ public class MenuActivity extends AppCompatActivity
     public static SharedPreferences USER_LOGIN;
     public static SharedPreferences USER_LOGIN_STATE;
     private ActionBarDrawerToggle toggle;
+    private MenuActivityContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +61,7 @@ public class MenuActivity extends AppCompatActivity
         ButterKnife.bind(this);
         initActivity();
         homeFragment = HomeFragment.newInstance();
+        presenter = new MenuActivityPresenter(getApplicationContext());
         Utils.setFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
@@ -159,7 +157,7 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onClick(Product product) {
-        boolean userLogin = USER_LOGIN.getBoolean(LOGIN_KEY, false);
+        boolean userLogin = presenter.getUserLoginStatus();
         if (userLogin) {
             Utils.setFragment(
                     R.id.fragment_container,
@@ -168,7 +166,7 @@ public class MenuActivity extends AppCompatActivity
                     BASE_FRAGMENT_TAG,
                     true);
         } else {
-            LoginDialogContainer.newInstance(getSupportFragmentManager());
+            presenter.setUserLoginStatus(true);
         }
     }
 }

@@ -12,12 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone;
 import com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin.SelectLoginMethod;
-import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.EnterPhoneNumber;
 import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
-import com.yaratech.yaratube.utils.Utils;
 
-import static com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.EnterPhoneNumber.ENTER_PHONE_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone.ENTER_PHONE_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin.SelectLoginMethod.LOGIN_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog.VERIFICATION_DIALOG_TAG;
 
@@ -82,7 +81,7 @@ public class LoginDialogContainer extends DialogFragment implements
                 .beginTransaction()
                 .replace(
                         R.id.dialog_container,
-                        EnterPhoneNumber.newInstance(),
+                        LoginPhone.newInstance(),
                         ENTER_PHONE_DIALOG_TAG)
                 .commit();
         presenter.setUserStateLogin(2);
@@ -103,7 +102,7 @@ public class LoginDialogContainer extends DialogFragment implements
 
     @Override
     public void showDialog(Fragment fragment) {
-        if (fragment instanceof EnterPhoneNumber) {
+        if (fragment instanceof LoginPhone) {
             showLoginPhone();
         } else if (fragment instanceof VerificationDialog) {
             showVerification();

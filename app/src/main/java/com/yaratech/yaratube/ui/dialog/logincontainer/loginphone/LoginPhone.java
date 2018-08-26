@@ -1,10 +1,8 @@
 package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.dialog.logincontainer.DialogInteraction;
-import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
 import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
 import com.yaratech.yaratube.utils.Utils;
 
@@ -27,8 +24,8 @@ import butterknife.Unbinder;
  * Created by Vah on 8/12/2018.
  */
 
-public class EnterPhoneNumber extends Fragment implements
-        PhoneNumberContract.View {
+public class LoginPhone extends Fragment implements
+        LoginPhoneContract.View {
 
     @OnClick(R.id.save)
     public void sendPhoneNumberRequest() {
@@ -45,7 +42,7 @@ public class EnterPhoneNumber extends Fragment implements
 
     Unbinder unbind;
     DialogInteraction dialogInteraction;
-    PhoneNumberContract.Presenter presenter;
+    LoginPhoneContract.Presenter presenter;
     public static final String ENTER_PHONE_DIALOG_TAG = "EnterPhone";
 
     @Nullable
@@ -60,7 +57,7 @@ public class EnterPhoneNumber extends Fragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbind = ButterKnife.bind(this, view);
-        presenter = new PhoneNumberPresenter(getContext(), this);
+        presenter = new LoginPhonePresenter(getContext(), this);
     }
 
     @Override
@@ -75,11 +72,11 @@ public class EnterPhoneNumber extends Fragment implements
         super.onDetach();
     }
 
-    public static EnterPhoneNumber newInstance() {
+    public static LoginPhone newInstance() {
         
         Bundle args = new Bundle();
         
-        EnterPhoneNumber fragment = new EnterPhoneNumber();
+        LoginPhone fragment = new LoginPhone();
         fragment.setArguments(args);
         return fragment;
     }

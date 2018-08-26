@@ -17,6 +17,8 @@ public interface StoreContract {
         void showLoading();
 
         void hideLoading();
+
+        void showReload();
     }
 
     interface Presenter{

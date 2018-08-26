@@ -18,6 +18,8 @@ public interface CategoryContract {
         void showLoading();
 
         void hideLoading();
+
+        void showReload();
     }
 
     interface Presenter {
