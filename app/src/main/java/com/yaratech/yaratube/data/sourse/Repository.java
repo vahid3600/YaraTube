@@ -5,7 +5,8 @@ import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
-public class Repository implements DataSource.RemoteDataSourse, DataSource.DatabaseSourse {
+public class Repository implements DataSource.RemoteDataSourse,
+        DataSource.DatabaseSourse {
 
     private static Repository INSTANCE = null;
     private RemoteDataSource remoteDataSource;
@@ -14,9 +15,9 @@ public class Repository implements DataSource.RemoteDataSourse, DataSource.Datab
     private Repository(DataSource.RemoteDataSourse remoteDataSource,
                        DataSource.DatabaseSourse databaseSourse) {
         //no instance
-        if (remoteDataSource instanceof RemoteDataSource)
+        if (remoteDataSource instanceof RemoteDataSource
+                && databaseSourse instanceof DatabaseSourse)
             this.remoteDataSource = (RemoteDataSource) remoteDataSource;
-        if (databaseSourse instanceof DataSource.DatabaseSourse)
             this.databaseSourse = (DatabaseSourse) databaseSourse;
     }
 
@@ -101,17 +102,27 @@ public class Repository implements DataSource.RemoteDataSourse, DataSource.Datab
     }
 
     @Override
-    public String getMobile() {
-        return databaseSourse.getMobile();
+    public void getMobile(GetMobileCallback callback) {
+        databaseSourse.getMobile(callback);
     }
 
     @Override
-    public void setProfile(Profile profile) {
-        databaseSourse.setProfile(profile);
+    public void saveProfile(Profile profile) {
+        databaseSourse.saveProfile(profile);
     }
 
     @Override
     public void updateProfile(Profile profile) {
         databaseSourse.updateProfile(profile);
+    }
+
+    @Override
+    public void saveUserLoginState(int state) {
+        databaseSourse.saveUserLoginState(state);
+    }
+
+    @Override
+    public int getUserLoginState() {
+        return databaseSourse.getUserLoginState();
     }
 }

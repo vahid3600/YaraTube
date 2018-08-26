@@ -1,9 +1,13 @@
 package com.yaratech.yaratube.data.sourse.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.sourse.DataSource;
+import com.yaratech.yaratube.ui.MenuActivity;
+
+import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
 
 /**
  * Created by Vah on 8/24/2018.
@@ -13,38 +17,35 @@ public class DatabaseSourse implements DataSource.DatabaseSourse {
     AppDatabase appDatabase;
 
     public DatabaseSourse(Context context) {
+
         appDatabase = AppDatabase.getAppDatabase(context);
     }
 
     @Override
-    public String getMobile() {
-        final String[] mobile = new String[1];
-                new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mobile[0] = appDatabase.profileDao().getMobile();
-            }
-        }).start();
-        return mobile[0];
+    public void getMobile(final DataSource.DatabaseSourse.GetMobileCallback callback) {
+        callback.loadMobileCallback(appDatabase.profileDao().getMobile()
+                .get(appDatabase.profileDao().getMobile().size() - 1));
     }
 
     @Override
-    public void setProfile(final Profile profile) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                appDatabase.profileDao().insertProfile(profile);
-            }
-        }).start();
+    public void saveProfile(final Profile profile) {
+        appDatabase.profileDao().insertProfile(profile);
     }
 
     @Override
     public void updateProfile(final Profile profile) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                appDatabase.profileDao().updateProfile(profile);
-            }
-        }).start();
+        appDatabase.profileDao().updateProfile(profile);
+    }
+
+    @Override
+    public void saveUserLoginState(int state) {
+        MenuActivity.USER_LOGIN_STATE.edit()
+                .putInt(USER_LOGIN_STATE_KEY, state)
+                .apply();
+    }
+
+    @Override
+    public int getUserLoginState() {
+        return MenuActivity.USER_LOGIN_STATE.getInt(USER_LOGIN_STATE_KEY, 1);
     }
 }

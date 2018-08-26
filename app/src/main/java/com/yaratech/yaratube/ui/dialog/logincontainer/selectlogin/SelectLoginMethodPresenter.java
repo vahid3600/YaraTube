@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.login;
+package com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin;
 
 import android.content.Context;
 
@@ -11,13 +11,13 @@ import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
  * Created by Vah on 8/17/2018.
  */
 
-public class LoginPresenter implements LoginContract.Presenter {
+public class SelectLoginMethodPresenter implements SelectLoginMethodContract.Presenter {
 
-    LoginContract.View view;
+    SelectLoginMethodContract.View view;
     Context context;
     Repository loginRepository;
 
-    public LoginPresenter(Context context, LoginContract.View view) {
+    public SelectLoginMethodPresenter(Context context, SelectLoginMethodContract.View view) {
         this.view = view;
         this.loginRepository = Repository.getINSTANCE(
                 new RemoteDataSource(context),
@@ -32,7 +32,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
-                view.dismissDialog();
+                view.showLoginByPhoneDialog();
             }
 
             @Override

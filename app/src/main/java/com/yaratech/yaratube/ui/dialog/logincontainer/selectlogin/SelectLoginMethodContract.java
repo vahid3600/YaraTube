@@ -1,13 +1,13 @@
-package com.yaratech.yaratube.ui.dialog.login;
+package com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin;
 
 /**
  * Created by Vah on 8/17/2018.
  */
 
-public interface LoginContract {
+public interface SelectLoginMethodContract {
     interface View {
 
-        void dismissDialog();
+        void showLoginByPhoneDialog();
 
         void showMessage(String msg);
     }

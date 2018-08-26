@@ -11,7 +11,7 @@ import com.yaratech.yaratube.data.model.DBModel.Profile;
  * Created by Vah on 8/23/2018.
  */
 
-@Database(entities = {Profile.class}, version = 1)
+@Database(entities = {Profile.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private final static String DATABASE_NAME = "profile_db.db";
@@ -24,6 +24,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     context.getApplicationContext(),
                     AppDatabase.class,
                     DATABASE_NAME)
+                    .allowMainThreadQueries()
                     .build();
         }
         return appDatabase;

@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.verification;
+package com.yaratech.yaratube.ui.dialog.logincontainer.verification;
 
 /**
  * Created by Vah on 8/17/2018.
@@ -6,7 +6,7 @@ package com.yaratech.yaratube.ui.dialog.verification;
 
 public interface VerificationContract {
     interface View{
-        void dismissDialog();
+        void closeDialog();
 
         void showMessage(String msg);
     }

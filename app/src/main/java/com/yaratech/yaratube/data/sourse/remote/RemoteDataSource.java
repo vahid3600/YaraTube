@@ -16,6 +16,7 @@ import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.database.AppDatabase;
+import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
@@ -24,6 +25,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 
 /**
  * Created by Vah on 8/8/2018.
@@ -247,7 +250,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
+    public void sendMobileLoginStep1(final String mobile, String deviceId, String deviceModel,
                                      String deviceOs, String gcm,
                                      final DataSource.RemoteDataSourse.LoadDataCallback callback,
                                      final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
@@ -258,8 +261,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                 return;
             }
 
-            final Profile profile = new Profile();
-            profile.setMobile(mobile.toString());
 
             final Call<MobileLoginStep1> loginGoogleCall = Utils.getServices().getStoreService()
                     .sendMobileLoginStep1(
@@ -274,10 +275,12 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                        @NonNull Response<MobileLoginStep1> response) {
 
                     if (response.isSuccessful()) {
+                        final Profile profile = new Profile();
+                        profile.setMobile(mobile);
                         addToDatabase.saveProfile(profile);
+
                         callback.onDataLoaded(response.body());
                         callback.onMessage(response.body().getMessage());
-                        Log.e("Tag",response.body().getMessage()+" "+response.body().getError());
                     } else {
                         if (response.code() == 400)
                             callback.onMessage(context.getString(R.string.wrong_number));
@@ -301,7 +304,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                      final DataSource.RemoteDataSourse.LoadDataCallback callback,
                                      final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
         if (Utils.isOnline(context)) {
-
+            Log.e("tagine", mobile + " " + verificationCode);
             final Call<LoginResponse> loginVerification = Utils.getServices().getStoreService()
                     .sendMobileLoginStep2(
                             mobile,
@@ -314,11 +317,14 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                        @NonNull Response<LoginResponse> response) {
 
                     if (response.isSuccessful()) {
+                        callback.onMessage(response.body().getMessage());
                         callback.onDataLoaded(response.body());
                         Profile profile = new Profile();
                         profile.setUserToken(response.body().getToken());
                         addToDatabase.updateProfile(profile);
-                        Log.e("Tag",response.body().getMessage()+" "+response.body().getToken());
+                        MenuActivity.USER_LOGIN.edit()
+                                .putBoolean(LOGIN_KEY, true)
+                                .apply();
                     } else {
                         Log.e("tag", response.errorBody().toString());
 

@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.loginphone;
+package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
 
 import android.content.Context;
 
@@ -15,7 +15,6 @@ import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 public class PhoneNumberPresenter implements PhoneNumberContract.Presenter {
 
     PhoneNumberContract.View view;
-    Context context;
     Repository phoneRepository;
 
     public PhoneNumberPresenter(Context context, PhoneNumberContract.View view) {
@@ -31,7 +30,7 @@ public class PhoneNumberPresenter implements PhoneNumberContract.Presenter {
                 new DataSource.RemoteDataSourse.LoadDataCallback() {
                     @Override
                     public void onDataLoaded(Object result) {
-                        view.dismissDialog();
+                        view.showVerificationDialog();
                     }
 
                     @Override
@@ -42,7 +41,12 @@ public class PhoneNumberPresenter implements PhoneNumberContract.Presenter {
                 , new DataSource.DatabaseSourse.AddToDatabase() {
                     @Override
                     public void saveProfile(Profile profile) {
-                        phoneRepository.setProfile(profile);
+                        phoneRepository.saveProfile(profile);
+                    }
+
+                    @Override
+                    public void updateProfile(Profile profile) {
+
                     }
                 });
     }

@@ -1,11 +1,9 @@
 package com.yaratech.yaratube.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -20,11 +18,11 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.dialog.loginphone.EnterPhoneNumberDialog;
-import com.yaratech.yaratube.ui.dialog.verification.VerificationDialog;
+import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
+import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.EnterPhoneNumber;
+import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
-import com.yaratech.yaratube.ui.dialog.login.LoginDialog;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.productlist.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
@@ -37,12 +35,12 @@ import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
+import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnCategoryFragmentActionListener,
-        Connects.OnProductItemClick,
-        Connects.DismissDialog {
+        Connects.OnProductItemClick {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,18 +49,11 @@ public class MenuActivity extends AppCompatActivity
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    public EnterPhoneNumberDialog enterPhoneNumberDialog =
-            EnterPhoneNumberDialog.newInstance();
-    public LoginDialog loginDialog =
-            LoginDialog.newInstance();
-    public VerificationDialog verificationDialog =
-            VerificationDialog.newInstance();
-    public FragmentManager fragmentManager;
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
     public ProfileFragment profileFragment;
     public static SharedPreferences USER_LOGIN;
-    private FragmentTransaction fragmentTransaction;
+    public static SharedPreferences USER_LOGIN_STATE;
     private ActionBarDrawerToggle toggle;
 
     @Override
@@ -80,6 +71,7 @@ public class MenuActivity extends AppCompatActivity
                 BASE_FRAGMENT_TAG,
                 false);
         USER_LOGIN = getSharedPreferences(LOGIN_KEY, MODE_PRIVATE);
+        USER_LOGIN_STATE = getSharedPreferences(USER_LOGIN_STATE_KEY, MODE_PRIVATE);
     }
 
     private void initActivity() {
@@ -168,43 +160,16 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onClick(Product product) {
         boolean userLogin = USER_LOGIN.getBoolean(LOGIN_KEY, false);
-//        if (userLogin) {
-//            Utils.setFragment(
-//                    R.id.fragment_container,
-//                    getSupportFragmentManager(),
-//                    ProductDetailFragment.newInstance(product),
-//                    BASE_FRAGMENT_TAG,
-//                    true);
-//        } else {
-            loginDialog.show(getSupportFragmentManager(), LoginDialog.LOGIN_DIALOG_TAG);
-//        }
-    }
-
-    @Override
-    public void dismiss(Fragment fragment) {
-        if (fragment instanceof EnterPhoneNumberDialog) {
-            enterPhoneNumberDialog.dismiss();
-            verificationDialog
-                    .show(getSupportFragmentManager(),
-                            VerificationDialog.VERIFICATION_DIALOG_TAG);
-        } else if (fragment instanceof LoginDialog) {
-            loginDialog.dismiss();
-            enterPhoneNumberDialog
-                    .show(getSupportFragmentManager(),
-                            EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
-            MenuActivity.USER_LOGIN.edit().putBoolean(LOGIN_KEY, true).apply();
-        } else if (fragment instanceof VerificationDialog) {
-            verificationDialog.dismiss();
+        if (userLogin) {
+            Utils.setFragment(
+                    R.id.fragment_container,
+                    getSupportFragmentManager(),
+                    ProductDetailFragment.newInstance(product),
+                    BASE_FRAGMENT_TAG,
+                    true);
+        } else {
+            LoginDialogContainer.newInstance(getSupportFragmentManager());
         }
-
-    }
-
-    @Override
-    public void correction() {
-        verificationDialog.dismiss();
-        enterPhoneNumberDialog
-                .show(getSupportFragmentManager(),
-                        EnterPhoneNumberDialog.ENTER_PHONE_DIALOG_TAG);
     }
 }
 

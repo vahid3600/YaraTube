@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.loginphone;
+package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
 
 /**
  * Created by Vah on 8/17/2018.
@@ -6,7 +6,7 @@ package com.yaratech.yaratube.ui.dialog.loginphone;
 
 public interface PhoneNumberContract {
     interface View{
-        void dismissDialog();
+        void showVerificationDialog();
 
         void showMessage(String msg);
     }
