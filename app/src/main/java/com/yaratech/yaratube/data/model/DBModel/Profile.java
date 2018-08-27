@@ -18,6 +18,28 @@ public class Profile {
     @ColumnInfo(name = "nickname")
     private String nickName;
 
+    @ColumnInfo(name = "fino_token")
+    private String finoToken;
+
+    public String getFinoToken() {
+        return finoToken;
+    }
+
+    public void setFinoToken(String finoToken) {
+        this.finoToken = finoToken;
+    }
+
+    public double getUserId() {
+        return userId;
+    }
+
+    public void setUserId(double userId) {
+        this.userId = userId;
+    }
+
+    @ColumnInfo(name = "user_id")
+    private double userId;
+
     @ColumnInfo(name = "date_of_birth")
     private String dateOfBirth;
 

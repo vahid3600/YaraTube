@@ -320,6 +320,9 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                         callback.onMessage(response.body().getMessage());
                         callback.onDataLoaded(response.body());
                         Profile profile = new Profile();
+                        profile.setUserId(response.body().getUserId());
+                        profile.setFinoToken(response.body().getFinoToken());
+                        profile.setNickName(response.body().getNickname());
                         profile.setMobile(mobile);
                         profile.setUserToken(response.body().getToken());
                         addToDatabase.saveProfile(profile);

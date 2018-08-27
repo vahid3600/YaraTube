@@ -48,4 +48,5 @@
     <string name="re_enter">تصحیح شماره</string>
     <string name="wrong_number">این شماره صحیح نیست!</string>
     <string name="try_again">تلاش دوباره</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

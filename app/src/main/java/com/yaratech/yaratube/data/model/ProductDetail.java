@@ -1,11 +1,14 @@
 
 package com.yaratech.yaratube.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductDetail {
+public class ProductDetail implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -139,6 +142,43 @@ public class ProductDetail {
     @SerializedName("last_checked_file")
     @Expose
     private Object lastCheckedFile;
+
+    protected ProductDetail(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        nameEnglish = in.readString();
+        productType = in.readInt();
+        producerName = in.readString();
+        price = in.readInt();
+        rank = in.readDouble();
+        totalInstalled = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        isPurchased = in.readByte() != 0;
+        comments = in.readInt();
+        isJalali = in.readByte() != 0;
+        isBookmarked = in.readByte() != 0;
+        sku = in.readString();
+        tags = in.createStringArrayList();
+        priceUnit = in.readString();
+        totalView = in.readInt();
+        isEnable = in.readByte() != 0;
+        dateAdded = in.readString();
+        isSpecial = in.readByte() != 0;
+        datePublished = in.readString();
+    }
+
+    public static final Creator<ProductDetail> CREATOR = new Creator<ProductDetail>() {
+        @Override
+        public ProductDetail createFromParcel(Parcel in) {
+            return new ProductDetail(in);
+        }
+
+        @Override
+        public ProductDetail[] newArray(int size) {
+            return new ProductDetail[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -492,4 +532,34 @@ public class ProductDetail {
         this.lastCheckedFile = lastCheckedFile;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(nameEnglish);
+        dest.writeInt(productType);
+        dest.writeString(producerName);
+        dest.writeInt(price);
+        dest.writeDouble(rank);
+        dest.writeInt(totalInstalled);
+        dest.writeString(shortDescription);
+        dest.writeString(description);
+        dest.writeByte((byte) (isPurchased ? 1 : 0));
+        dest.writeInt(comments);
+        dest.writeByte((byte) (isJalali ? 1 : 0));
+        dest.writeByte((byte) (isBookmarked ? 1 : 0));
+        dest.writeString(sku);
+        dest.writeStringList(tags);
+        dest.writeString(priceUnit);
+        dest.writeInt(totalView);
+        dest.writeByte((byte) (isEnable ? 1 : 0));
+        dest.writeString(dateAdded);
+        dest.writeByte((byte) (isSpecial ? 1 : 0));
+        dest.writeString(datePublished);
+    }
 }

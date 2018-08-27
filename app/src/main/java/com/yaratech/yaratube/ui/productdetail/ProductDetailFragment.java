@@ -1,6 +1,7 @@
 package com.yaratech.yaratube.ui.productdetail;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,12 +27,17 @@ import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.ui.dialog.comment.CommentDialog;
+import com.yaratech.yaratube.ui.player.PlayerActivity;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.yaratech.yaratube.ui.player.PlayerActivity.PLAYER_ACTIVITY_KEY;
 
 public class ProductDetailFragment extends Fragment implements
         ProductDetailContract.View {
@@ -42,6 +48,7 @@ public class ProductDetailFragment extends Fragment implements
     private String videoUri;
     private ProductDetailContract.Presenter presenter;
     private ProgressDialog progressDialog;
+    private ProductDetail productDetail;
 
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
@@ -56,33 +63,9 @@ public class ProductDetailFragment extends Fragment implements
 
     @OnClick(R.id.play)
     public void playVideo() {
-//        progressDialog = new ProgressDialog(getContext());
-//        progressDialog.setMessage("Please wait");
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
-//
-//        try {
-//            if (videoView.isPlaying()) {
-//                videoView.setVideoURI(Uri.parse(videoUri));
-//                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mp) {
-//                    }
-//                });
-//            } else
-//                videoView.pause();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        videoView.requestFocus();
-//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                progressDialog.dismiss();
-//                mp.setLooping(true);
-//                videoView.start();
-//            }
-//        });
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        intent.putExtra(PLAYER_ACTIVITY_KEY, productDetail.getFiles().get(0).getFile());
+        startActivity(intent);
     }
 
     @OnClick(R.id.send_comment)
@@ -144,6 +127,7 @@ public class ProductDetailFragment extends Fragment implements
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
+        this.productDetail = productDetail;
         videoUri = productDetail.getFiles().get(0).getFile();
         productAbout.setText(productDetail.getDescription());
         presenter.fetchCommentFromRemote(product.getId());
