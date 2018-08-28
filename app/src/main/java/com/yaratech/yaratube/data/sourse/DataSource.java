@@ -47,6 +47,7 @@ public interface DataSource {
                                   String nickname, LoadDataCallback callback,
                                   DatabaseSourse.AddToDatabase addToDatabase);
 
+        void sendComment(int productId, String authorization, float rate, String commentText, LoadDataCallback callback);
     }
 
     interface DatabaseSourse{
@@ -76,5 +77,8 @@ public interface DataSource {
 
         String getUserMobile();
 
+        void saveUserAuthorization(String authorization);
+
+        String getUserAuthorization();
     }
 }

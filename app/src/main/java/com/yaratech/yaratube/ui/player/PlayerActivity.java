@@ -39,7 +39,7 @@ public class PlayerActivity extends AppCompatActivity {
 
 
         ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(videoUri));
+                .createMediaSource(Uri.parse("https://dl.gamefa.com/user5/Mr_Game/Official%20Character%20Modding%20Gameplay%20Demo%20%20The%20Ripper%20Doc%20%20%20Cyberpunk%202077480p.mp4"));
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
     }

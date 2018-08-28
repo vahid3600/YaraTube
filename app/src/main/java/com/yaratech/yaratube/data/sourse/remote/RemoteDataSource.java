@@ -7,6 +7,7 @@ import android.util.Log;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
+import com.yaratech.yaratube.data.model.CommentResponse;
 import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.data.model.LoginResponse;
@@ -300,8 +301,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
             String verificationCode,
             String nickname,
             final DataSource.RemoteDataSourse.LoadDataCallback callback,
-            final DataSource.DatabaseSourse.AddToDatabase addToDatabase)
-    {
+            final DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
         if (Utils.isOnline(context)) {
             final Call<LoginResponse> loginVerification = Utils.getServices().getStoreService()
                     .sendMobileLoginStep2(
@@ -326,6 +326,46 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    callback.onMessage(context.getString(R.string.fail_progress));
+                }
+            });
+        } else
+            callback.onMessage(context.getString(R.string.no_internet));
+    }
+
+    @Override
+    public void sendComment(int productId, String authorization, float rate, String commentText, final LoadDataCallback callback) {
+
+        if (Utils.isOnline(context)) {
+            final Call<CommentResponse> sendCommentCall = Utils.getServices().getStoreService()
+                    .sendComment(
+                            productId,
+                            "Token " + authorization,
+                            "",
+                            (int) rate,
+                            commentText);
+            sendCommentCall.enqueue(new Callback<CommentResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<CommentResponse> call,
+                                       @NonNull Response<CommentResponse> response) {
+
+                    if (response.isSuccessful()) {
+                        callback.onMessage(response.body().getMessage());
+                        callback.onDataLoaded(response.body());
+
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
+
+                        if (response.code() == 401)
+                            callback.onMessage(context.getString(R.string.you_must_login_first));
+                        else if (response.code() == 406)
+                            callback.onMessage(context.getString(R.string.your_score_not_acceptable));
+                        else callback.onMessage(context.getString(R.string.fail_progress));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CommentResponse> call, Throwable t) {
                     callback.onMessage(context.getString(R.string.fail_progress));
                 }
             });

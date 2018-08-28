@@ -49,4 +49,6 @@
     <string name="wrong_number">این شماره صحیح نیست!</string>
     <string name="try_again">تلاش دوباره</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="you_must_login_first">لطفاً ابتدا در برنامه ثبت نام کنید</string>
+    <string name="your_score_not_acceptable">امتیاز شما قابل قبول نیست</string>
 </resources>
