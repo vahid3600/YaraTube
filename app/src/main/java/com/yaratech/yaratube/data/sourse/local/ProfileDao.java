@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.data.sourse.database;
+package com.yaratech.yaratube.data.sourse.local;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
@@ -6,8 +6,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.yaratech.yaratube.data.model.DBModel.Profile;
-
-import java.util.List;
 
 /**
  * Created by Vah on 8/24/2018.

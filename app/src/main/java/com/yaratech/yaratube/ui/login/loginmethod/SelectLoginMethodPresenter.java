@@ -1,10 +1,11 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin;
+package com.yaratech.yaratube.ui.login.loginmethod;
 
 import android.content.Context;
 
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
@@ -21,7 +22,8 @@ public class SelectLoginMethodPresenter implements SelectLoginMethodContract.Pre
         this.view = view;
         this.loginRepository = Repository.getINSTANCE(
                 new RemoteDataSource(context),
-                new DatabaseSourse(context));
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
     }
 
 

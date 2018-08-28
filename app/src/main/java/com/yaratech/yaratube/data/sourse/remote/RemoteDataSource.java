@@ -14,8 +14,6 @@ import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.database.AppDatabase;
 import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
@@ -319,16 +317,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                     if (response.isSuccessful()) {
                         callback.onMessage(response.body().getMessage());
                         callback.onDataLoaded(response.body());
-                        Profile profile = new Profile();
-                        profile.setUserId(response.body().getUserId());
-                        profile.setFinoToken(response.body().getFinoToken());
-                        profile.setNickName(response.body().getNickname());
-                        profile.setMobile(mobile);
-                        profile.setUserToken(response.body().getToken());
-                        addToDatabase.saveProfile(profile);
-                        MenuActivity.USER_LOGIN.edit()
-                                .putBoolean(LOGIN_KEY, true)
-                                .apply();
                     } else {
                         Log.e("tag", response.errorBody().toString());
 

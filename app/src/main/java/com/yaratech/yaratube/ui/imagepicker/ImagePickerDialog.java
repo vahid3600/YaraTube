@@ -1,19 +1,15 @@
-package com.yaratech.yaratube.ui.dialog.imagepicker;
+package com.yaratech.yaratube.ui.imagepicker;
 
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
 /**

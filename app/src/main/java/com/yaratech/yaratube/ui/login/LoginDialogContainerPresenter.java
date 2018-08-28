@@ -1,12 +1,13 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer;
+package com.yaratech.yaratube.ui.login;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
-import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
+import com.yaratech.yaratube.ui.login.verification.VerificationFragment;
 
 /**
  * Created by Vah on 8/25/2018.
@@ -18,8 +19,10 @@ public class LoginDialogContainerPresenter implements LoginDialogContract.Presen
 
     public LoginDialogContainerPresenter(Context context, LoginDialogContract.View view){
         this.view = view;
-        this.repository = Repository.getINSTANCE(new RemoteDataSource(context)
-                , new DatabaseSourse(context));
+        this.repository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
     }
 
     @Override
@@ -31,7 +34,7 @@ public class LoginDialogContainerPresenter implements LoginDialogContract.Presen
     public void checkUserStateLogin() {
         Log.e("Tag",repository.getUserLoginState()+"");
         if (repository.getUserLoginState() == 3)
-            view.showVerification(new VerificationDialog());
+            view.showVerification(new VerificationFragment());
         else
             view.showLoginDialog();
     }

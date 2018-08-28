@@ -6,7 +6,8 @@ import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 import java.util.List;
@@ -21,8 +22,10 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     private Repository productDetailRepository;
 
     public ProductDetailPresenter(Context context, ProductDetailContract.View view){
-        this.productDetailRepository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        this.productDetailRepository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
         this.view = view;
     }
 

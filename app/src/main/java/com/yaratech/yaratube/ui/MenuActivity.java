@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
+import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
@@ -49,9 +49,6 @@ public class MenuActivity extends AppCompatActivity
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
     public ProfileFragment profileFragment;
-    public static SharedPreferences USER_LOGIN;
-    public static SharedPreferences USER_LOGIN_STATE;
-    public static SharedPreferences USER_MOBILE;
     private ActionBarDrawerToggle toggle;
     private MenuActivityContract.Presenter presenter;
 
@@ -70,10 +67,7 @@ public class MenuActivity extends AppCompatActivity
                 homeFragment,
                 BASE_FRAGMENT_TAG,
                 false);
-        USER_LOGIN = getSharedPreferences(LOGIN_KEY, MODE_PRIVATE);
-        USER_LOGIN_STATE = getSharedPreferences(USER_LOGIN_STATE_KEY, MODE_PRIVATE);
-        USER_MOBILE = getSharedPreferences(USER_MOBILE_KEY, MODE_PRIVATE);
-    }
+        }
 
     private void initActivity() {
         setSupportActionBar(toolbar);

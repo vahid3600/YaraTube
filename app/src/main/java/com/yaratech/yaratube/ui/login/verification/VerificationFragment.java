@@ -1,10 +1,8 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.verification;
+package com.yaratech.yaratube.ui.login.verification;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.Connects;
-import com.yaratech.yaratube.ui.dialog.logincontainer.DialogInteraction;
-import com.yaratech.yaratube.ui.dialog.logincontainer.LoginDialogContainer;
-import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone;
+import com.yaratech.yaratube.ui.login.DialogInteraction;
+import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
@@ -29,7 +25,7 @@ import butterknife.Unbinder;
  * Created by Vah on 8/12/2018.
  */
 
-public class VerificationDialog extends Fragment implements
+public class VerificationFragment extends Fragment implements
         VerificationContract.View {
 
     Unbinder unbind;
@@ -66,7 +62,7 @@ public class VerificationDialog extends Fragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbind = ButterKnife.bind(this, view);
-        presenter = new VerificationNumberPresenter(getContext(), this);
+        presenter = new VerificationPresenter(getContext(), this);
     }
 
     @Override
@@ -77,14 +73,14 @@ public class VerificationDialog extends Fragment implements
             presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
     }
 
-    public static VerificationDialog newInstance(String mobileNumber) {
+    public static VerificationFragment newInstance(String mobileNumber) {
 
         Bundle args = new Bundle();
         if (mobileNumber != null) {
             args.putString(VERIFICATION_DIALOG_TAG, mobileNumber);
             Log.e("mobile", mobileNumber);
         }
-        VerificationDialog fragment = new VerificationDialog();
+        VerificationFragment fragment = new VerificationFragment();
         fragment.setArguments(args);
         return fragment;
     }

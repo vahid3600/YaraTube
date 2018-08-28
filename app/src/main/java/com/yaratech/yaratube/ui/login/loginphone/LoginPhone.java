@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
+package com.yaratech.yaratube.ui.login.loginphone;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.dialog.logincontainer.DialogInteraction;
-import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
+import com.yaratech.yaratube.ui.login.DialogInteraction;
+import com.yaratech.yaratube.ui.login.verification.VerificationFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
@@ -84,7 +84,7 @@ public class LoginPhone extends Fragment implements
     @Override
     public void showVerificationDialog() {
 
-        dialogInteraction.showDialog(VerificationDialog.newInstance(phoneNumber.getText().toString()));
+        dialogInteraction.showDialog(VerificationFragment.newInstance(phoneNumber.getText().toString()));
     }
 
     @Override

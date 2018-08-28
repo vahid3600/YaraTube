@@ -68,4 +68,14 @@ public interface Service {
             @Field("device_id") String deviceId,
             @Field("verification_code") String verificationCode,
             @Field("nickname") String nickname);
+
+    @FormUrlEncoded
+    @POST("/comment/{product_id}")
+    Call<LoginResponse> sendComment(
+            @Path("product_id") int productId,
+            @Field("device_id") String deviceId,
+            @Field("verification_code") String verificationCode,
+            @Field("nickname") String nickname);
+
+
 }

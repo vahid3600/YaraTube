@@ -1,37 +1,52 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.verification;
+package com.yaratech.yaratube.ui.login.verification;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
  * Created by Vah on 8/17/2018.
  */
 
-public class VerificationNumberPresenter implements VerificationContract.Presenter {
+public class VerificationPresenter implements VerificationContract.Presenter {
 
     VerificationContract.View view;
     Context context;
     Repository repository;
 
-    public VerificationNumberPresenter(Context context, VerificationContract.View view) {
+    public VerificationPresenter(Context context, VerificationContract.View view) {
         this.view = view;
-        this.repository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        this.repository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
     }
 
     @Override
-    public void sendVerificationCode(String mobile, final String deviceId, final String verificationCode,
+    public void sendVerificationCode(final String mobile, final String deviceId, final String verificationCode,
                                      final String nickname) {
 
         repository.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
                 new DataSource.RemoteDataSourse.LoadDataCallback() {
                     @Override
                     public void onDataLoaded(Object result) {
+                        Profile profile = new Profile();
+                        LoginResponse loginResponse = (LoginResponse) result;
+                        profile.setUserId(loginResponse.getUserId());
+                        profile.setFinoToken(loginResponse.getFinoToken());
+                        profile.setNickName(loginResponse.getNickname());
+                        profile.setUserToken(loginResponse.getToken());
+                        profile.setMobile(mobile);
+                        Log.e("MOBILE",mobile);
+                        repository.saveProfile(profile);
+                        repository.saveUserLoginStatus(true);
                         view.closeDialog();
                     }
 

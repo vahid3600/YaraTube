@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.comment;
+package com.yaratech.yaratube.ui.comment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
