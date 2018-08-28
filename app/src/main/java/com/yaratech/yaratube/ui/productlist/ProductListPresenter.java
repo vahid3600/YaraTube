@@ -5,7 +5,8 @@ import android.content.Context;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 import java.util.List;
@@ -20,8 +21,10 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     private Repository productListRepository;
 
     public ProductListPresenter(Context context, ProductListContract.View view) {
-        this.productListRepository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        this.productListRepository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
         this.view = view;
     }
 

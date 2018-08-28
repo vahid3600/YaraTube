@@ -60,6 +60,9 @@ public interface DataSource {
         void saveProfile(Profile profile);
 
         void updateProfile(Profile profile);
+    }
+
+    interface PreferencesSource{
 
         void saveUserLoginState(int state);
 
@@ -72,5 +75,6 @@ public interface DataSource {
         void saveUserMobile(String mobile);
 
         String getUserMobile();
+
     }
 }

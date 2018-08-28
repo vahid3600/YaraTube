@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer;
+package com.yaratech.yaratube.ui.login;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone;
-import com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin.SelectLoginMethod;
-import com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog;
+import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
+import com.yaratech.yaratube.ui.login.loginmethod.SelectLoginMethodFragment;
+import com.yaratech.yaratube.ui.login.verification.VerificationFragment;
 
-import static com.yaratech.yaratube.ui.dialog.logincontainer.loginphone.LoginPhone.ENTER_PHONE_DIALOG_TAG;
-import static com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin.SelectLoginMethod.LOGIN_DIALOG_TAG;
-import static com.yaratech.yaratube.ui.dialog.logincontainer.verification.VerificationDialog.VERIFICATION_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.login.loginphone.LoginPhone.ENTER_PHONE_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.login.loginmethod.SelectLoginMethodFragment.LOGIN_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.login.verification.VerificationFragment.VERIFICATION_DIALOG_TAG;
 
 /**
  * Created by Vah on 8/25/2018.
@@ -68,7 +68,7 @@ public class LoginDialogContainer extends DialogFragment implements
                 .beginTransaction()
                 .replace(
                         R.id.dialog_container,
-                        SelectLoginMethod.newInstance(),
+                        SelectLoginMethodFragment.newInstance(),
                         LOGIN_DIALOG_TAG)
                 .commit();
         presenter.setUserStateLogin(1);
@@ -104,7 +104,7 @@ public class LoginDialogContainer extends DialogFragment implements
     public void showDialog(Fragment fragment) {
         if (fragment instanceof LoginPhone) {
             showLoginPhone();
-        } else if (fragment instanceof VerificationDialog) {
+        } else if (fragment instanceof VerificationFragment) {
             showVerification(fragment);
         }
     }

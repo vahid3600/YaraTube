@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.selectlogin;
+package com.yaratech.yaratube.ui.login.loginmethod;
 
 /**
  * Created by Vah on 8/17/2018.

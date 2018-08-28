@@ -1,11 +1,12 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
+package com.yaratech.yaratube.ui.login.loginphone;
 
 import android.content.Context;
 
 import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
@@ -19,8 +20,10 @@ public class LoginPhonePresenter implements LoginPhoneContract.Presenter {
 
     public LoginPhonePresenter(Context context, LoginPhoneContract.View view) {
         this.view = view;
-        this.phoneRepository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        this.phoneRepository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
     }
 
     @Override

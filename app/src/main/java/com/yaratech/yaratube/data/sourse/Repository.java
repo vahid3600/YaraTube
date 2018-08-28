@@ -2,29 +2,40 @@ package com.yaratech.yaratube.data.sourse;
 
 
 import com.yaratech.yaratube.data.model.DBModel.Profile;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
-public class Repository implements DataSource.RemoteDataSourse,
-        DataSource.DatabaseSourse {
+public class Repository implements
+        DataSource.RemoteDataSourse,
+        DataSource.DatabaseSourse,
+        DataSource.PreferencesSource {
 
     private static Repository INSTANCE = null;
     private RemoteDataSource remoteDataSource;
     private DatabaseSourse databaseSourse;
+    private PreferencesSourse preferencesSourse;
 
     private Repository(DataSource.RemoteDataSourse remoteDataSource,
-                       DataSource.DatabaseSourse databaseSourse) {
-        //no instance
-        if (remoteDataSource instanceof RemoteDataSource
-                && databaseSourse instanceof DatabaseSourse)
+                       DataSource.DatabaseSourse databaseSourse,
+                       DataSource.PreferencesSource preferencesSource) {
+
+        if (remoteDataSource instanceof RemoteDataSource)
             this.remoteDataSource = (RemoteDataSource) remoteDataSource;
-        this.databaseSourse = (DatabaseSourse) databaseSourse;
+        if (databaseSourse instanceof DatabaseSourse)
+            this.databaseSourse = (DatabaseSourse) databaseSourse;
+        if (preferencesSource instanceof PreferencesSourse)
+            this.preferencesSourse = (PreferencesSourse) preferencesSource;
     }
 
     public static Repository getINSTANCE(DataSource.RemoteDataSourse remoteDataSource,
-                                         DataSource.DatabaseSourse databaseSourse) {
+                                         DataSource.DatabaseSourse databaseSourse,
+                                         DataSource.PreferencesSource preferencesSource) {
         if (INSTANCE == null) {
-            INSTANCE = new Repository(remoteDataSource, databaseSourse);
+            INSTANCE = new Repository(
+                    remoteDataSource,
+                    databaseSourse,
+                    preferencesSource);
         }
         return INSTANCE;
     }
@@ -80,9 +91,18 @@ public class Repository implements DataSource.RemoteDataSourse,
     }
 
     @Override
-    public void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
-                                String deviceModel, LoadDataCallback callback) {
-        remoteDataSource.sendGoogleLogin(tokenId, deviceId, deviceOs, deviceModel, callback);
+    public void sendGoogleLogin(
+            String tokenId,
+            String deviceId,
+            String deviceOs,
+            String deviceModel,
+            LoadDataCallback callback) {
+        remoteDataSource.sendGoogleLogin(
+                tokenId,
+                deviceId,
+                deviceOs,
+                deviceModel,
+                callback);
     }
 
     @Override
@@ -133,31 +153,31 @@ public class Repository implements DataSource.RemoteDataSourse,
 
     @Override
     public void saveUserLoginState(int state) {
-        databaseSourse.saveUserLoginState(state);
+        preferencesSourse.saveUserLoginState(state);
     }
 
     @Override
     public boolean getUserLoginStatus() {
-        return databaseSourse.getUserLoginStatus();
+        return preferencesSourse.getUserLoginStatus();
     }
 
     @Override
     public void saveUserLoginStatus(boolean status) {
-        databaseSourse.saveUserLoginStatus(status);
+        preferencesSourse.saveUserLoginStatus(status);
     }
 
     @Override
     public int getUserLoginState() {
-        return databaseSourse.getUserLoginState();
+        return preferencesSourse.getUserLoginState();
     }
 
     @Override
     public void saveUserMobile(String mobile) {
-        databaseSourse.saveUserMobile(mobile);
+        preferencesSourse.saveUserMobile(mobile);
     }
 
     @Override
     public String getUserMobile() {
-        return databaseSourse.getUserMobile();
+        return preferencesSourse.getUserMobile();
     }
 }

@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.loginphone;
+package com.yaratech.yaratube.ui.login.loginphone;
 
 /**
  * Created by Vah on 8/17/2018.

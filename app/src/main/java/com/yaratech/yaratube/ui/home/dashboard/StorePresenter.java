@@ -5,7 +5,8 @@ import android.content.Context;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
@@ -18,8 +19,10 @@ public class StorePresenter implements StoreContract.Presenter {
     private Repository homeRepository;
 
     public StorePresenter(Context context, StoreContract.View view){
-        this.homeRepository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        this.homeRepository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
         this.view = view;
     }
     @Override

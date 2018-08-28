@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer.verification;
+package com.yaratech.yaratube.ui.login.verification;
 
 /**
  * Created by Vah on 8/17/2018.

@@ -3,7 +3,8 @@ package com.yaratech.yaratube.ui;
 import android.content.Context;
 
 import com.yaratech.yaratube.data.sourse.Repository;
-import com.yaratech.yaratube.data.sourse.database.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
+import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 /**
@@ -15,8 +16,10 @@ public class MenuActivityPresenter implements MenuActivityContract.Presenter {
     Repository repository;
 
     public MenuActivityPresenter(Context context) {
-        repository = Repository.getINSTANCE(new RemoteDataSource(context),
-                new DatabaseSourse(context));
+        repository = Repository.getINSTANCE(
+                new RemoteDataSource(context),
+                new DatabaseSourse(context),
+                new PreferencesSourse(context));
     }
 
     @Override

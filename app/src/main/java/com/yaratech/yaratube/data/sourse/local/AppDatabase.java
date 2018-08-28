@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.data.sourse.database;
+package com.yaratech.yaratube.data.sourse.local;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

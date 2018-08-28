@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.ui.dialog.logincontainer;
+package com.yaratech.yaratube.ui.login;
 
 import android.support.v4.app.Fragment;
 
