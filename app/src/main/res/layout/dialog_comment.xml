@@ -8,15 +8,18 @@
     android:orientation="vertical">
 
     <RatingBar
+        android:id="@+id/rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/button_margin"
         android:layout_marginLeft="@dimen/button_margin"
         android:layout_marginTop="@dimen/button_margin"
+        android:stepSize="1"
         android:pointerIcon="@drawable/ic_star"
         android:numStars="5"/>
 
     <EditText
+        android:id="@+id/comment_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_background"
@@ -37,6 +40,7 @@
         android:padding="@dimen/button_padding_top">
 
         <TextView
+            android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/details_text_size"

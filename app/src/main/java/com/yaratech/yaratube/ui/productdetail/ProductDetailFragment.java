@@ -64,7 +64,7 @@ public class ProductDetailFragment extends Fragment implements
 
     @OnClick(R.id.send_comment)
     public void sendComment() {
-        CommentDialog commentDialog = new CommentDialog();
+        CommentDialog commentDialog = CommentDialog.newInstance(product.getId());
         FragmentManager fragmentManager = getFragmentManager();
         commentDialog.show(fragmentManager, "comment dialog");
     }

@@ -142,6 +142,11 @@ public class Repository implements
     }
 
     @Override
+    public void sendComment(int productId, String authorization, float rate, String commentText, LoadDataCallback callback) {
+        remoteDataSource.sendComment(productId, authorization, rate, commentText, callback);
+    }
+
+    @Override
     public void saveProfile(Profile profile) {
         databaseSourse.saveProfile(profile);
     }
@@ -179,5 +184,15 @@ public class Repository implements
     @Override
     public String getUserMobile() {
         return preferencesSourse.getUserMobile();
+    }
+
+    @Override
+    public void saveUserAuthorization(String authorization) {
+        preferencesSourse.saveUserAuthorization(authorization);
+    }
+
+    @Override
+    public String getUserAuthorization() {
+        return preferencesSourse.getUserAuthorization();
     }
 }

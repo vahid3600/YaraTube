@@ -30,6 +30,7 @@ public class Utils {
     public static final String LOGIN_KEY = "USER_LOGIN";
     public static final String USER_LOGIN_STATE_KEY = "USER_LOGIN_STATE";
     public static final String USER_MOBILE_KEY = "USER_MOBILE";
+    public static final String USER_AUTHORIZATION_KEY = "USER_AUTHORIZATION";
 
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(
