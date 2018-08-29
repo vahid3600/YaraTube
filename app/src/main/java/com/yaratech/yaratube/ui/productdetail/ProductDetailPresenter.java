@@ -19,10 +19,10 @@ import java.util.List;
 public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     private ProductDetailContract.View view;
-    private Repository productDetailRepository;
+    private Repository repository;
 
     public ProductDetailPresenter(Context context, ProductDetailContract.View view){
-        this.productDetailRepository = Repository.getINSTANCE(
+        this.repository = Repository.getINSTANCE(
                 new RemoteDataSource(context),
                 new DatabaseSourse(context),
                 new PreferencesSourse(context));
@@ -33,7 +33,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     public void fetchProductDetailFromRemote(int id) {
         view.showLoading();
 
-        productDetailRepository.getProductDetail(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        repository.getProductDetail(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {
@@ -52,14 +52,14 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     @Override
     public void cancelProductDetailRequest() {
-        productDetailRepository.cancelGetProductDetailRequest();
+        repository.cancelGetProductDetailRequest();
     }
 
     @Override
     public void fetchCommentFromRemote(int id) {
         view.showLoading();
 
-        productDetailRepository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        repository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
@@ -76,6 +76,11 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     @Override
     public void cancelCommentRequest() {
-        productDetailRepository.cancelGetCommentRequest();
+        repository.cancelGetCommentRequest();
+    }
+
+    @Override
+    public boolean getUserLoginStatus() {
+        return repository.getUserLoginStatus();
     }
 }

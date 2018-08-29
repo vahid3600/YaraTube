@@ -32,5 +32,7 @@ public interface ProductDetailContract {
         void fetchCommentFromRemote(int id);
 
         void cancelCommentRequest();
+
+        boolean getUserLoginStatus();
     }
 }

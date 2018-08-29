@@ -67,7 +67,7 @@ public class MenuActivity extends AppCompatActivity
                 homeFragment,
                 BASE_FRAGMENT_TAG,
                 false);
-        }
+    }
 
     private void initActivity() {
         setSupportActionBar(toolbar);
@@ -153,17 +153,13 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onClick(Product product) {
-        boolean userLogin = presenter.getUserLoginStatus();
-        if (userLogin) {
-            Utils.setFragment(
-                    R.id.fragment_container,
-                    getSupportFragmentManager(),
-                    ProductDetailFragment.newInstance(product),
-                    BASE_FRAGMENT_TAG,
-                    true);
-        } else {
-            LoginDialogContainer.newInstance(getSupportFragmentManager());
-        }
+
+        Utils.setFragment(
+                R.id.fragment_container,
+                getSupportFragmentManager(),
+                ProductDetailFragment.newInstance(product),
+                BASE_FRAGMENT_TAG,
+                true);
     }
 }
 

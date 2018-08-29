@@ -12,6 +12,7 @@ import com.yaratech.yaratube.data.model.ProductList;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.utils.Utils;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,10 +42,6 @@ public interface Service {
 
     @GET("comment/{product_id}")
     Call<List<Comment>> getComment(@Path("product_id") int productId);
-
-    @FormUrlEncoded
-    @POST("profile")
-    Call<List<CategoryList>> sendProfile();
 
     @FormUrlEncoded
     @POST("login_google/" + Utils.STORE_ID)
@@ -80,5 +77,20 @@ public interface Service {
             @Field("score") int score,
             @Field("comment_text") String commentText);
 
+
+    @FormUrlEncoded
+    @POST("profile")
+    Call<List<CategoryList>> sendProfile(
+            @Field("nickname") String nickname,
+            @Field("date_of_birth") Date dateOfBirth,
+            @Field("gender") String gender,
+            @Field("avatar") String avatar,
+            @Field("mobile") String mobile,
+            @Field("email") String email,
+            @Field("device_id") Date deviceId,
+            @Field("device_model") Date deviceModel,
+            @Field("device_os") Date deviceOs,
+            @Field("password") Date password
+    );
 
 }

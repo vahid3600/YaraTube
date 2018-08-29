@@ -23,7 +23,9 @@ import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.ui.comment.CommentDialog;
+import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.player.PlayerActivity;
+import com.yaratech.yaratube.utils.Utils;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.yaratech.yaratube.ui.comment.CommentDialog.COMMENT_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.player.PlayerActivity.PLAYER_ACTIVITY_KEY;
 
 public class ProductDetailFragment extends Fragment implements
@@ -57,16 +61,26 @@ public class ProductDetailFragment extends Fragment implements
 
     @OnClick(R.id.play)
     public void playVideo() {
-        Intent intent = new Intent(getActivity(), PlayerActivity.class);
-        intent.putExtra(PLAYER_ACTIVITY_KEY, productDetail.getFiles().get(0).getFile());
-        startActivity(intent);
+        boolean userLogin = presenter.getUserLoginStatus();
+        if (userLogin) {
+            Intent intent = new Intent(getActivity(), PlayerActivity.class);
+            intent.putExtra(PLAYER_ACTIVITY_KEY, productDetail.getFiles().get(0).getFile());
+            startActivity(intent);
+        } else {
+            LoginDialogContainer.newInstance(getFragmentManager());
+        }
     }
 
     @OnClick(R.id.send_comment)
     public void sendComment() {
-        CommentDialog commentDialog = CommentDialog.newInstance(product.getId());
-        FragmentManager fragmentManager = getFragmentManager();
-        commentDialog.show(fragmentManager, "comment dialog");
+        boolean userLogin = presenter.getUserLoginStatus();
+        if (userLogin) {
+            CommentDialog commentDialog = CommentDialog.newInstance(product.getId());
+            FragmentManager fragmentManager = getFragmentManager();
+            commentDialog.show(fragmentManager, COMMENT_DIALOG_TAG);
+        } else {
+            LoginDialogContainer.newInstance(getFragmentManager());
+        }
     }
 
     public ProductDetailFragment() {
