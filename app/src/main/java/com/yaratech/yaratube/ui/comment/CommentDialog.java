@@ -26,6 +26,7 @@ public class CommentDialog extends DialogFragment implements CommentContract.Vie
 
     private int productId;
     private CommentContract.Presenter presenter;
+    public static final String COMMENT_DIALOG_TAG = "comment_dialog";
     private static String COMMENT_KEY = "product_id";
     @BindView(R.id.rate)
     RatingBar ratingBar;

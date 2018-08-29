@@ -18,6 +18,8 @@ import butterknife.OnClick;
 
 public class ImagePickerDialog extends DialogFragment {
 
+    public static final String IMAGE_PICKER_TAG = "image_picker_dialog";
+
     @OnClick(R.id.camera)
     public void getImageFromCamera() {
         profileFragment.getFromCamera();
