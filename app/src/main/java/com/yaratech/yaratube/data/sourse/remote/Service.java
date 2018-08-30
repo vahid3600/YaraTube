@@ -37,7 +37,7 @@ public interface Service {
     @GET("listproducts/{category_id}")
     Call<List<Product>> getProductList(@Path("category_id") int categoryId);
 
-    @GET("product/{product_id}")
+    @GET("product/{product_id}?device_os=ios")
     Call<ProductDetail> getProductDetail(@Path("product_id") int productId);
 
     @GET("comment/{product_id}")

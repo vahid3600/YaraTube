@@ -1,9 +1,11 @@
 package com.yaratech.yaratube.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,17 +18,20 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
+import com.yaratech.yaratube.ui.comment.CommentDialog;
 import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.productlist.ProductListFragment;
+import com.yaratech.yaratube.ui.profile.ProfileActivity;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.yaratech.yaratube.ui.comment.CommentDialog.COMMENT_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
@@ -107,15 +112,22 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            profileFragment = ProfileFragment.newInstance();
-            Utils.setFragment(
-                    R.id.fragment_container,
-                    getSupportFragmentManager(),
-                    profileFragment,
-                    PROFILE_FRAGMENT_TAG,
-                    true);
-            toggle.setDrawerIndicatorEnabled(false);
-            toolbar.inflateMenu(R.menu.menu_back_button);
+//            profileFragment = ProfileFragment.newInstance();
+//            Utils.setFragment(
+//                    R.id.fragment_container,
+//                    getSupportFragmentManager(),
+//                    profileFragment,
+//                    PROFILE_FRAGMENT_TAG,
+//                    true);
+
+            boolean userLogin = presenter.getUserLoginStatus();
+            if (userLogin) {
+                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+                toggle.setDrawerIndicatorEnabled(false);
+                toolbar.inflateMenu(R.menu.menu_back_button);
+            } else {
+                LoginDialogContainer.newInstance(getSupportFragmentManager());
+            }
         } else if (id == R.id.nav_about_us) {
 
         } else if (id == R.id.nav_connect_with_us) {
