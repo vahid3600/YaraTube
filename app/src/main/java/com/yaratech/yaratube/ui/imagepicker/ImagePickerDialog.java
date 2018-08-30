@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.profile.ProfileActivity;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -22,12 +24,12 @@ public class ImagePickerDialog extends DialogFragment {
 
     @OnClick(R.id.camera)
     public void getImageFromCamera() {
-        profileFragment.getFromCamera();
+//        new ProfileActivity().getFromCamera();
     }
 
     @OnClick(R.id.galery)
     public void getImageFromGalery() {
-        profileFragment.getFromGalery();
+//        ProfileActivity.getFromGalery();
     }
 
     ProfileFragment profileFragment;
@@ -37,6 +39,7 @@ public class ImagePickerDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_image_picker, container, false);
+        ButterKnife.bind(this, view);
         profileFragment = new ProfileFragment();
         return view;
     }
