@@ -1,6 +1,6 @@
 package com.yaratech.yaratube.data.sourse;
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 
 /**
  * Created by Vah on 8/8/2018.

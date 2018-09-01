@@ -1,4 +1,4 @@
-package com.yaratech.yaratube.data.model.DBModel;
+package com.yaratech.yaratube.data.model.dbmodel;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 
 /**
  * Created by Vah on 8/23/2018.

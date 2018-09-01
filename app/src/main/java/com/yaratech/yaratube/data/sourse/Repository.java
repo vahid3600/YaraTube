@@ -1,7 +1,7 @@
 package com.yaratech.yaratube.data.sourse;
 
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;

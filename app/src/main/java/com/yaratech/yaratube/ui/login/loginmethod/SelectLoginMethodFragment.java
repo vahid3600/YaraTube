@@ -46,13 +46,11 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
 
     @Override
     public void onAttach(Context context) {
-        Log.e("SelectLoginMethodFragment ","onAttach");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.e("SelectLoginMethodFragment ","onCreate");
         super.onCreate(savedInstanceState);
     }
 
@@ -60,13 +58,11 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
-        Log.e("SelectLoginMethodFragment ","onCreateView");
         return inflater.inflate(R.layout.dialog_login, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.e("SelectLoginMethodFragment ","onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         presenter = new SelectLoginMethodPresenter(getContext(), this);
@@ -74,26 +70,22 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("SelectLoginMethodFragment ","onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         dialogInteraction = (DialogInteraction) getParentFragment();
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        Log.e("SelectLoginMethodFragment ","onViewStateRestored");
         super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
     public void onStart() {
-        Log.e("SelectLoginMethodFragment ","onStart");
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        Log.e("SelectLoginMethodFragment ","onResume");
         super.onResume();
     }
 
@@ -117,26 +109,22 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
 
     @Override
     public void onStop() {
-        Log.e("SelectLoginMethodFragment ","onStop");
         super.onStop();
     }
 
     @Override
     public void onDestroyView() {
-        Log.e("SelectLoginMethodFragment ","onDestroyView");
         unbinder.unbind();
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Log.e("SelectLoginMethodFragment ","onDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        Log.e("SelectLoginMethodFragment ","onDestroy");
         dialogInteraction = null;
         super.onDetach();
     }

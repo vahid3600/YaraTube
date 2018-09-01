@@ -8,14 +8,12 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.CommentResponse;
-import com.yaratech.yaratube.data.model.DBModel.Profile;
 import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
@@ -24,8 +22,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
 
 /**
  * Created by Vah on 8/8/2018.

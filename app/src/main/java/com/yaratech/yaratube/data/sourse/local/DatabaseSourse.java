@@ -2,13 +2,8 @@ package com.yaratech.yaratube.data.sourse.local;
 
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.sourse.DataSource;
-import com.yaratech.yaratube.ui.MenuActivity;
-
-import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
-import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
-import static com.yaratech.yaratube.utils.Utils.USER_MOBILE_KEY;
 
 /**
  * Created by Vah on 8/24/2018.

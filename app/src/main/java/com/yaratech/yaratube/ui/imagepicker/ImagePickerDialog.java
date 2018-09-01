@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.profile.ProfileActivity;
-import com.yaratech.yaratube.ui.profile.ProfileFragment;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,18 +19,28 @@ import butterknife.OnClick;
 public class ImagePickerDialog extends DialogFragment {
 
     public static final String IMAGE_PICKER_TAG = "image_picker_dialog";
+    private static ImagePickerListener imagePicker;
 
     @OnClick(R.id.camera)
     public void getImageFromCamera() {
-//        new ProfileActivity().getFromCamera();
+        imagePicker.onCamera();
+        dismiss();
     }
 
     @OnClick(R.id.galery)
     public void getImageFromGalery() {
-//        ProfileActivity.getFromGalery();
+        imagePicker.onGalery();
+        dismiss();
     }
 
-    ProfileFragment profileFragment;
+    public static ImagePickerDialog newInstance(ImagePickerListener imagePickerListener) {
+
+        Bundle args = new Bundle();
+        imagePicker = imagePickerListener;
+        ImagePickerDialog fragment = new ImagePickerDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -40,7 +48,16 @@ public class ImagePickerDialog extends DialogFragment {
             , Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_image_picker, container, false);
         ButterKnife.bind(this, view);
-        profileFragment = new ProfileFragment();
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public interface ImagePickerListener{
+        void onCamera();
+        void onGalery();
     }
 }

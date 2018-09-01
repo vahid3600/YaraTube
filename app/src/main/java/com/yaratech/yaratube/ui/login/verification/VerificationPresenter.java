@@ -3,7 +3,7 @@ package com.yaratech.yaratube.ui.login.verification;
 import android.content.Context;
 import android.util.Log;
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;

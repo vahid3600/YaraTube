@@ -1,11 +1,9 @@
 package com.yaratech.yaratube.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,26 +16,19 @@ import android.view.MenuItem;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.comment.CommentDialog;
 import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.productlist.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileActivity;
-import com.yaratech.yaratube.ui.profile.ProfileFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.yaratech.yaratube.ui.comment.CommentDialog.COMMENT_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
-import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
-import static com.yaratech.yaratube.utils.Utils.LOGIN_KEY;
-import static com.yaratech.yaratube.utils.Utils.USER_LOGIN_STATE_KEY;
-import static com.yaratech.yaratube.utils.Utils.USER_MOBILE_KEY;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -53,7 +44,6 @@ public class MenuActivity extends AppCompatActivity
 
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
-    public ProfileFragment profileFragment;
     private ActionBarDrawerToggle toggle;
     private MenuActivityContract.Presenter presenter;
 

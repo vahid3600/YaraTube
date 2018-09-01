@@ -5,9 +5,9 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -33,15 +33,20 @@ public class PlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String videoUri = intent.getStringExtra(PLAYER_ACTIVITY_KEY);
         player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
-        playerView.setPlayer(player);
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "ExoPlayer"));
 
-
-        ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+        HlsMediaSource mediaSource = new HlsMediaSource
+                .Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(videoUri));
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
+        playerView.setPlayer(player);
+
+//        ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(videoUri));
+//        player.prepare(mediaSource);
+//        player.setPlayWhenReady(true);
     }
 
     @Override
