@@ -2,7 +2,7 @@ package com.yaratech.yaratube.ui.login.loginphone;
 
 import android.content.Context;
 
-import com.yaratech.yaratube.data.model.DBModel.Profile;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;

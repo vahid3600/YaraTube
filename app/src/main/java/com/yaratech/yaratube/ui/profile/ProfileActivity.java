@@ -1,6 +1,7 @@
 package com.yaratech.yaratube.ui.profile;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,12 +21,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.webkit.PermissionRequest;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,7 +56,7 @@ import butterknife.OnClick;
 
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ImagePickerDialog.ImagePickerListener {
 
     @BindView(R.id.cancel)
     Button cancel_button;
@@ -67,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @OnClick(R.id.profile_picture)
     public void onImageClick() {
-        ImagePickerDialog imagePickerDialog = new ImagePickerDialog();
+        ImagePickerDialog imagePickerDialog = ImagePickerDialog.newInstance(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         imagePickerDialog.show(fragmentManager, IMAGE_PICKER_TAG);
     }
@@ -76,23 +82,59 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 0);
-
     }
 
-    public static void getImageFromCamera(Context context){
+    @Override
+    public void onCamera() {
+        Log.e("camera", "camera");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onGalery() {
+        Log.e("galery", "camera");
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "select picture"), 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
-    }
 
+        if (resultCode == Activity.RESULT_OK) {
+            Log.e("Tag", "ok");
+            Bitmap bitmap = null;
+            if (requestCode == 0) {
+                Log.e("Tag", "camera");
+                bitmap = (Bitmap) data.getExtras().get("data");
+                Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
+            } else if (requestCode == 1) {
+                Log.e("Tag", "galery");
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
+            }
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+//            File destination = new File(Environment.getExternalStorageDirectory(),
+//                    System.currentTimeMillis() + ".jpg");
+//            FileOutputStream fileOutputStream = null;
+//            try {
+//                destination.createNewFile();
+//                fileOutputStream.write(byteArrayOutputStream.toByteArray());
+//                fileOutputStream.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+        }
+    }
 }
