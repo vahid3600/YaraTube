@@ -43,7 +43,6 @@ public class ProductDetailFragment extends Fragment implements
     private Product product;
     private static final String PRODUCT_KEY = "product_id";
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
-    private String videoUri;
     private ProductDetailContract.Presenter presenter;
     private ProgressDialog progressDialog;
     private ProductDetail productDetail;
@@ -136,7 +135,6 @@ public class ProductDetailFragment extends Fragment implements
     @Override
     public void showProductDetail(ProductDetail productDetail) {
         this.productDetail = productDetail;
-        videoUri = productDetail.getFiles().get(0).getFile();
         productAbout.setText(productDetail.getDescription());
         presenter.fetchCommentFromRemote(product.getId());
     }

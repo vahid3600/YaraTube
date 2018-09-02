@@ -9,9 +9,11 @@ import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.utils.Utils;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -85,16 +87,16 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("profile")
-    Call<List<CategoryList>> sendProfile(
+    Call<ProfileResponse> sendProfile(
             @Field("nickname") String nickname,
-            @Field("date_of_birth") Date dateOfBirth,
+            @Field("date_of_birth") DateFormat dateOfBirth,
             @Field("gender") String gender,
             @Field("avatar") String avatar,
             @Field("mobile") String mobile,
             @Field("email") String email,
-            @Field("device_id") Date deviceId,
-            @Field("device_model") Date deviceModel,
-            @Field("device_os") Date deviceOs,
+            @Field("device_id") String deviceId,
+            @Field("device_model") String deviceModel,
+            @Field("device_os") String deviceOs,
             @Field("password") String password
     );
 

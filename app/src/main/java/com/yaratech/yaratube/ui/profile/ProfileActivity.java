@@ -54,14 +54,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
 public class ProfileActivity extends AppCompatActivity implements ImagePickerDialog.ImagePickerListener {
 
-    @BindView(R.id.cancel)
-    Button cancel_button;
-    @BindView(R.id.save)
-    Button send_button;
     @BindView(R.id.name_family)
     EditText name_family;
     @BindView(R.id.birth_date)
@@ -70,6 +67,18 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
     Spinner gender;
     @BindView(R.id.profile_picture)
     ImageView profilePicture;
+
+    @OnClick(R.id.save)
+
+    public void saveProfile() {
+
+    }
+
+    @OnClick(R.id.cancel)
+    public void cancel() {
+        onBackPressed();
+    }
+
 
     @OnClick(R.id.profile_picture)
     public void onImageClick() {
@@ -88,9 +97,12 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
 
     @Override
     public void onCamera() {
-        Log.e("camera", "camera");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 0);
+        if (!checkPermissions(getApplicationContext())) {
+            requestCameraPermission(MEDIA_TYPE_IMAGE);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, 0);
+        }
     }
 
     @Override
@@ -127,15 +139,51 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
             File destination = new File(Environment.getExternalStorageDirectory(),
                     System.currentTimeMillis() + ".jpg");
             FileOutputStream fileOutputStream = null;
+
             try {
                 destination.createNewFile();
+                fileOutputStream = new FileOutputStream(destination);
                 fileOutputStream.write(byteArrayOutputStream.toByteArray());
                 fileOutputStream.close();
-                Log.e("tag",destination.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+                Log.e("tag", destination.toString());
+
+
         }
+    }
+
+    public boolean checkPermissions(Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCameraPermission(final int type) {
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+
+                            if (type == MEDIA_TYPE_IMAGE) {
+                                // capture picture
+                                onCamera();
+                            }
+
+                        } else if (report.isAnyPermissionPermanentlyDenied()) {
+                            Log.e("Tag ", "ajab!");
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+
+                }).check();
     }
 }
