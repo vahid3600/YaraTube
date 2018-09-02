@@ -43,7 +43,6 @@ public class ProductListRecyclerViewAdapter extends
     }
 
     public void updateData(List<Product> productList) {
-        Log.e("tag",productList.size()+" "+this.productList.size());
         List<Product> newProductList = new ArrayList<>();
         newProductList.addAll(this.productList);
         newProductList.addAll(productList);
@@ -96,11 +95,8 @@ public class ProductListRecyclerViewAdapter extends
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        @BindView(R.id.product_image)
         ImageView productAvatar;
-//        @BindView(R.id.product_title)
         TextView productTitle;
-//        @BindView(R.id.description_product)
         TextView productDescription;
 
         ViewHolder(View itemView) {
@@ -108,7 +104,6 @@ public class ProductListRecyclerViewAdapter extends
             productAvatar = itemView.findViewById(R.id.product_image);
             productTitle = itemView.findViewById(R.id.product_title);
             productDescription = itemView.findViewById(R.id.description_product);
-//            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
         }

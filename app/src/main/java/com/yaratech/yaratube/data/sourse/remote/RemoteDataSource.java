@@ -112,7 +112,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
             productListCall = Utils.getServices().getStoreService()
                     .getProductList(
                             id,
-                            Utils.LIMIT,
+                            Utils.PRODUCT_LIST_LIMIT,
                             offset);
             productListCall.enqueue(new Callback<List<Product>>() {
                 @Override
@@ -120,7 +120,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                        Response<List<Product>> response) {
 
                     if (response.isSuccessful()) {
-                        Log.e("taramana",response.body().size()+"");
+                        Log.e("taramana", response.body().size() + "");
                         List<Product> productLists = response.body();
                         callback.onDataLoaded(response.body());
                     } else
@@ -181,12 +181,15 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void getComment(int id, final DataSource.RemoteDataSourse.LoadDataCallback callback) {
+    public void getComment(int id, int offset, final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             Log.e("tag", id + "");
 
             productCommentCall = Utils.getServices().getStoreService()
-                    .getComment(id);
+                    .getComment(
+                            id,
+                            Utils.COMMENT_LIMIT,
+                            offset);
             productCommentCall.enqueue(new Callback<List<Comment>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Comment>> call,

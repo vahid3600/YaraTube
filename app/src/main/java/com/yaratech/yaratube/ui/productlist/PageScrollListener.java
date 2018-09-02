@@ -28,9 +28,9 @@ public abstract class PageScrollListener extends RecyclerView.OnScrollListener {
 
     }
 
-    abstract void loadMoreItems();
+    public abstract void loadMoreItems();
 
-    abstract boolean isLastPage();
+    protected abstract boolean isLastPage();
 
     public abstract boolean isLoading();
 }

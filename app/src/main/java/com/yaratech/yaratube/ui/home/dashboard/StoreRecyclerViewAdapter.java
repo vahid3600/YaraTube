@@ -59,6 +59,7 @@ public class StoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         HeaderListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            headerViewPager.setRotationY(180);
         }
 
         void bindViewHeaderList() {

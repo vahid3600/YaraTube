@@ -94,16 +94,16 @@ public class ProductListFragment extends Fragment implements ProductListContract
         recyclerView.setAdapter(productListRecyclerViewAdapter);
         recyclerView.addOnScrollListener(new PageScrollListener(gridLayoutManager) {
             @Override
-            void loadMoreItems() {
-//                isLoading = true;
-                productListRecyclerViewAdapter.addLoadingFooter();
+            public void loadMoreItems() {
+                isLoading = true;
+//                productListRecyclerViewAdapter.addLoadingFooter();
                 productListPresenter.fetchProductListFromRemote(
                         getArguments().getInt(KEY_ID),
                         offset);
             }
 
             @Override
-            boolean isLastPage() {
+            protected boolean isLastPage() {
                 return isLastPage;
             }
 
@@ -124,15 +124,15 @@ public class ProductListFragment extends Fragment implements ProductListContract
     public void showListProducts(List<Product> productList) {
         productListRecyclerViewAdapter.updateData(productList);
         offset += productList.size();
-        productListRecyclerViewAdapter.removeLoadingFooter();
-//        isLoading = false;
+//        productListRecyclerViewAdapter.removeLoadingFooter();
+        isLoading = false;
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-        productListRecyclerViewAdapter.removeLoadingFooter();
-//        isLoading = false;
+//        productListRecyclerViewAdapter.removeLoadingFooter();
+        isLoading = false;
     }
 
     @Override
