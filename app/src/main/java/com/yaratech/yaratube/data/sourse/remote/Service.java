@@ -22,6 +22,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Vah on 8/6/2018.
@@ -35,7 +36,11 @@ public interface Service {
     Call<List<CategoryList>> getCategory();
 
     @GET("listproducts/{category_id}")
-    Call<List<Product>> getProductList(@Path("category_id") int categoryId);
+    Call<List<Product>> getProductList(
+            @Path("category_id") int categoryId,
+            @Query("limit") int limit,
+            @Query("offset") int offset
+    );
 
     @GET("product/{product_id}?device_os=ios")
     Call<ProductDetail> getProductDetail(@Path("product_id") int productId);
@@ -90,7 +95,7 @@ public interface Service {
             @Field("device_id") Date deviceId,
             @Field("device_model") Date deviceModel,
             @Field("device_os") Date deviceOs,
-            @Field("password") Date password
+            @Field("password") String password
     );
 
 }

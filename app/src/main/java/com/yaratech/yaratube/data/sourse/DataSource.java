@@ -24,7 +24,7 @@ public interface DataSource {
 
         void cancelGetCategoryRequest();
 
-        void getProductList(int id, LoadDataCallback callback);
+        void getProductList(int id, int offset, LoadDataCallback callback);
 
         void cancelGetProductListRequest();
 
@@ -48,6 +48,7 @@ public interface DataSource {
                                   DatabaseSourse.AddToDatabase addToDatabase);
 
         void sendComment(int productId, String authorization, float rate, String commentText, LoadDataCallback callback);
+
     }
 
     interface DatabaseSourse{

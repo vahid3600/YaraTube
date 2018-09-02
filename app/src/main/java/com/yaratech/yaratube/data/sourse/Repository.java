@@ -61,8 +61,8 @@ public class Repository implements
     }
 
     @Override
-    public void getProductList(int id, LoadDataCallback callback) {
-        remoteDataSource.getProductList(id, callback);
+    public void getProductList(int id, int offset, LoadDataCallback callback) {
+        remoteDataSource.getProductList(id, offset, callback);
     }
 
     @Override

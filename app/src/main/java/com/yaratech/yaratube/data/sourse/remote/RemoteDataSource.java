@@ -104,16 +104,21 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
     @Override
     public void getProductList(int id,
+                               int offset,
                                final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             productListCall = Utils.getServices().getStoreService()
-                    .getProductList(id);
+                    .getProductList(
+                            id,
+                            Utils.LIMIT,
+                            offset);
             productListCall.enqueue(new Callback<List<Product>>() {
                 @Override
                 public void onResponse(Call<List<Product>> call,
                                        Response<List<Product>> response) {
 
                     if (response.isSuccessful()) {
+                        Log.e("taramana",response.body().size()+"");
                         List<Product> productLists = response.body();
                         callback.onDataLoaded(response.body());
                     } else

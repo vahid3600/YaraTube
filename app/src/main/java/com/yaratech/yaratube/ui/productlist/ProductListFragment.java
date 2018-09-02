@@ -35,6 +35,9 @@ public class ProductListFragment extends Fragment implements ProductListContract
     ProgressBar progressBar;
     @BindView(R.id.product_list_recycleview)
     RecyclerView recyclerView;
+    private int offset = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
     public static final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
     public static final String KEY_ID = "category_id";
     private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
@@ -82,27 +85,54 @@ public class ProductListFragment extends Fragment implements ProductListContract
     }
 
     private void initRecycleView() {
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2,
-                LinearLayoutManager.VERTICAL, false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2,
+                LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayoutManager);
         productListRecyclerViewAdapter = new ProductListRecyclerViewAdapter(getContext()
                 , this);
+        productListRecyclerViewAdapter.setHasStableIds(true);
         recyclerView.setAdapter(productListRecyclerViewAdapter);
+        recyclerView.addOnScrollListener(new PageScrollListener(gridLayoutManager) {
+            @Override
+            void loadMoreItems() {
+//                isLoading = true;
+                productListRecyclerViewAdapter.addLoadingFooter();
+                productListPresenter.fetchProductListFromRemote(
+                        getArguments().getInt(KEY_ID),
+                        offset);
+            }
+
+            @Override
+            boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        productListPresenter.fetchProductListFromRemote(getArguments().getInt(KEY_ID));
+        productListPresenter.fetchProductListFromRemote(getArguments().getInt(KEY_ID), offset);
     }
 
     @Override
     public void showListProducts(List<Product> productList) {
-        productListRecyclerViewAdapter.setData(productList);
+        productListRecyclerViewAdapter.updateData(productList);
+        offset += productList.size();
+        productListRecyclerViewAdapter.removeLoadingFooter();
+//        isLoading = false;
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        productListRecyclerViewAdapter.removeLoadingFooter();
+//        isLoading = false;
     }
 
     @Override

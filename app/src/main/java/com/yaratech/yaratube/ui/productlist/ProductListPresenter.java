@@ -29,10 +29,10 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     }
 
     @Override
-    public void fetchProductListFromRemote(int id) {
+    public void fetchProductListFromRemote(int id, int offset) {
         view.showLoading();
 
-        productListRepository.getProductList(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        productListRepository.getProductList(id, offset, new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {

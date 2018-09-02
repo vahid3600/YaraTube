@@ -122,18 +122,19 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
                 }
                 Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
             }
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-//            File destination = new File(Environment.getExternalStorageDirectory(),
-//                    System.currentTimeMillis() + ".jpg");
-//            FileOutputStream fileOutputStream = null;
-//            try {
-//                destination.createNewFile();
-//                fileOutputStream.write(byteArrayOutputStream.toByteArray());
-//                fileOutputStream.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            File destination = new File(Environment.getExternalStorageDirectory(),
+                    System.currentTimeMillis() + ".jpg");
+            FileOutputStream fileOutputStream = null;
+            try {
+                destination.createNewFile();
+                fileOutputStream.write(byteArrayOutputStream.toByteArray());
+                fileOutputStream.close();
+                Log.e("tag",destination.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
     }
