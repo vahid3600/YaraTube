@@ -23,7 +23,7 @@ public interface ProductListContract {
 
     interface Presenter {
 
-        void fetchProductListFromRemote(int id);
+        void fetchProductListFromRemote(int id, int offset);
 
         void cancelProductListRequest();
     }

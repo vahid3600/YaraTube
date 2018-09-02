@@ -32,8 +32,9 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
         <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name=".ui.player.PlayerActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
