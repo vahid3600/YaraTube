@@ -6,6 +6,8 @@ import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
+import java.text.DateFormat;
+
 public class Repository implements
         DataSource.RemoteDataSourse,
         DataSource.DatabaseSourse,
@@ -97,6 +99,7 @@ public class Repository implements
             String deviceOs,
             String deviceModel,
             LoadDataCallback callback) {
+
         remoteDataSource.sendGoogleLogin(
                 tokenId,
                 deviceId,
@@ -114,6 +117,7 @@ public class Repository implements
             String gcm,
             LoadDataCallback callback,
             AddToDatabase addToDatabase) {
+
         remoteDataSource.sendMobileLoginStep1(
                 mobile,
                 deviceId,
@@ -132,6 +136,7 @@ public class Repository implements
             String nickname,
             LoadDataCallback callback,
             AddToDatabase addToDatabase) {
+
         remoteDataSource.sendMobileLoginStep2(
                 mobile,
                 deviceId,
@@ -142,8 +147,34 @@ public class Repository implements
     }
 
     @Override
-    public void sendComment(int productId, String authorization, float rate, String commentText, LoadDataCallback callback) {
-        remoteDataSource.sendComment(productId, authorization, rate, commentText, callback);
+    public void sendComment(
+            int productId,
+            String authorization,
+            float rate,
+            String commentText,
+            LoadDataCallback callback) {
+        remoteDataSource.sendComment(productId,
+                authorization,
+                rate,
+                commentText,
+                callback);
+    }
+
+    @Override
+    public void sendProfile(
+            String nickname,
+            DateFormat dateOfBirth,
+            String gender,
+            String avatar,
+            String mobile,
+            String email,
+            String deviceId,
+            String deviceModel,
+            String deviceOs,
+            String password,
+            LoadDataCallback callback,
+            AddToDatabase addToDatabase) {
+
     }
 
     @Override

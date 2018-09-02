@@ -13,10 +13,12 @@ import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductDetail;
+import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import retrofit2.Call;
@@ -367,6 +369,60 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                 @Override
                 public void onFailure(Call<CommentResponse> call, Throwable t) {
+                    callback.onMessage(context.getString(R.string.fail_progress));
+                }
+            });
+        } else
+            callback.onMessage(context.getString(R.string.no_internet));
+    }
+
+    @Override
+    public void sendProfile(String nickname,
+                            DateFormat dateOfBirth,
+                            String gender,
+                            String avatar,
+                            String mobile,
+                            String email,
+                            String deviceId,
+                            String deviceModel,
+                            String deviceOs,
+                            String password,
+                            final LoadDataCallback callback,
+                            DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
+        if (Utils.isOnline(context)) {
+            final Call<ProfileResponse> sendProfileCall = Utils.getServices().getStoreService()
+                    .sendProfile(
+                            nickname,
+                            dateOfBirth,
+                            gender,
+                            avatar,
+                            mobile,
+                            email,
+                            deviceId,
+                            deviceModel,
+                            deviceOs,
+                            password);
+            sendProfileCall.enqueue(new Callback<ProfileResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<ProfileResponse> call,
+                                       @NonNull Response<ProfileResponse> response) {
+
+                    if (response.isSuccessful()) {
+                        callback.onDataLoaded(response.body());
+
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
+
+                        if (response.code() == 401)
+                            callback.onMessage(context.getString(R.string.you_must_login_first));
+                        else if (response.code() == 406)
+                            callback.onMessage(context.getString(R.string.your_score_not_acceptable));
+                        else callback.onMessage(context.getString(R.string.fail_progress));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProfileResponse> call, Throwable t) {
                     callback.onMessage(context.getString(R.string.fail_progress));
                 }
             });

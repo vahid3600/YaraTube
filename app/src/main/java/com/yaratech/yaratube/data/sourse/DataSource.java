@@ -2,6 +2,8 @@ package com.yaratech.yaratube.data.sourse;
 
 import com.yaratech.yaratube.data.model.dbmodel.Profile;
 
+import java.text.DateFormat;
+
 /**
  * Created by Vah on 8/8/2018.
  */
@@ -24,32 +26,62 @@ public interface DataSource {
 
         void cancelGetCategoryRequest();
 
-        void getProductList(int id, int offset, LoadDataCallback callback);
+        void getProductList(int id,
+                            int offset,
+                            LoadDataCallback callback);
 
         void cancelGetProductListRequest();
 
-        void getProductDetail(int id, LoadDataCallback callback);
+        void getProductDetail(int id,
+                              LoadDataCallback callback);
 
         void cancelGetProductDetailRequest();
 
-        void getComment(int id, LoadDataCallback callback);
+        void getComment(int id,
+                        LoadDataCallback callback);
 
         void cancelGetCommentRequest();
 
-        void sendGoogleLogin(String tokenId, String deviceId, String deviceOs,
-                             String deviceModel, LoadDataCallback callback);
+        void sendGoogleLogin(String tokenId,
+                             String deviceId,
+                             String deviceOs,
+                             String deviceModel,
+                             LoadDataCallback callback);
 
-        void sendMobileLoginStep1(String mobile, String deviceId, String deviceModel,
-                                  String deviceOs, String gcm, LoadDataCallback callback,
+        void sendMobileLoginStep1(String mobile,
+                                  String deviceId,
+                                  String deviceModel,
+                                  String deviceOs,
+                                  String gcm,
+                                  LoadDataCallback callback,
                                   DatabaseSourse.AddToDatabase addToDatabase);
 
-        void sendMobileLoginStep2(String mobile, String deviceId, String verificationCode,
-                                  String nickname, LoadDataCallback callback,
+        void sendMobileLoginStep2(String mobile,
+                                  String deviceId,
+                                  String verificationCode,
+                                  String nickname,
+                                  LoadDataCallback callback,
                                   DatabaseSourse.AddToDatabase addToDatabase);
 
-        void sendComment(int productId, String authorization, float rate, String commentText, LoadDataCallback callback);
+        void sendComment(int productId,
+                         String authorization,
+                         float rate,
+                         String commentText,
+                         LoadDataCallback callback);
 
-    }
+        void sendProfile(String nickname,
+                         DateFormat dateOfBirth,
+                         String gender,
+                         String avatar,
+                         String mobile,
+                         String email,
+                         String deviceId,
+                         String deviceModel,
+                         String deviceOs,
+                         String password,
+                         LoadDataCallback callback,
+                         DatabaseSourse.AddToDatabase addToDatabase);
+            }
 
     interface DatabaseSourse{
 
