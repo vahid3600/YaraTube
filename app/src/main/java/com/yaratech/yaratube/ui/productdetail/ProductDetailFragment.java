@@ -25,7 +25,7 @@ import com.yaratech.yaratube.data.model.ProductDetail;
 import com.yaratech.yaratube.ui.comment.CommentDialog;
 import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.player.PlayerActivity;
-import com.yaratech.yaratube.utils.Utils;
+import com.yaratech.yaratube.ui.productlist.PageScrollListener;
 
 import java.util.List;
 
@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.yaratech.yaratube.ui.comment.CommentDialog.COMMENT_DIALOG_TAG;
-import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.player.PlayerActivity.PLAYER_ACTIVITY_KEY;
 
 public class ProductDetailFragment extends Fragment implements
@@ -44,7 +43,9 @@ public class ProductDetailFragment extends Fragment implements
     private static final String PRODUCT_KEY = "product_id";
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
     private ProductDetailContract.Presenter presenter;
-    private ProgressDialog progressDialog;
+    private int offset = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
     private ProductDetail productDetail;
 
     @BindView(R.id.progressbar)
@@ -128,25 +129,48 @@ public class ProductDetailFragment extends Fragment implements
                 false);
         recyclerView.setLayoutManager(linearLayoutManager);
         commentRecyclerViewAdapter = new CommentRecyclerViewAdapter();
+        commentRecyclerViewAdapter.setHasStableIds(true);
         recyclerView.setAdapter(commentRecyclerViewAdapter);
-    }
+        recyclerView.addOnScrollListener(new PageScrollListener(linearLayoutManager) {
+            @Override
+            public void loadMoreItems() {
+                isLoading = true;
+                commentRecyclerViewAdapter.addLoadingFooter();
+                presenter.fetchCommentFromRemote(product.getId(), offset);
+            }
 
+            @Override
+            protected boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
         this.productDetail = productDetail;
         productAbout.setText(productDetail.getDescription());
-        presenter.fetchCommentFromRemote(product.getId());
+        presenter.fetchCommentFromRemote(product.getId(), offset);
     }
 
     @Override
     public void showComment(List<Comment> comments) {
-        commentRecyclerViewAdapter.setComments(comments);
+        commentRecyclerViewAdapter.updateComments(comments);
+        offset += comments.size();
+        commentRecyclerViewAdapter.removeLoadingFooter();
+        isLoading = false;
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        commentRecyclerViewAdapter.removeLoadingFooter();
+        isLoading = false;
     }
 
     @Override

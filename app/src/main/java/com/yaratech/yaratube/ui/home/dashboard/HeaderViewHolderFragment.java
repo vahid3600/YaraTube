@@ -66,6 +66,7 @@ public class HeaderViewHolderFragment extends Fragment implements View.OnClickLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Glide.with(this).load(headeritem.getFeatureAvatar().getXxxdpi()).into(headerImageView);
+        headerImageView.setScaleX(-1);
     }
 
     @Override

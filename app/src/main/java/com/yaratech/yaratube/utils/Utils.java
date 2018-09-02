@@ -31,7 +31,8 @@ public class Utils {
     public static final String USER_LOGIN_STATE_KEY = "USER_LOGIN_STATE";
     public static final String USER_MOBILE_KEY = "USER_MOBILE";
     public static final String USER_AUTHORIZATION_KEY = "USER_AUTHORIZATION";
-    public static final int LIMIT = 10;
+    public static final int PRODUCT_LIST_LIMIT = 10;
+    public static final int COMMENT_LIMIT = 5;
 
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(

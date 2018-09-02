@@ -19,6 +19,7 @@ import java.util.List;
 public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     private ProductDetailContract.View view;
+    private int offset = 0;
     private Repository repository;
 
     public ProductDetailPresenter(Context context, ProductDetailContract.View view){
@@ -56,10 +57,10 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     }
 
     @Override
-    public void fetchCommentFromRemote(int id) {
+    public void fetchCommentFromRemote(int id, int offset) {
         view.showLoading();
 
-        repository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        repository.getComment(id, offset, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
