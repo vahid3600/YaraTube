@@ -1,17 +1,17 @@
 package com.yaratech.yaratube.ui.home.category;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,7 +29,8 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         View.OnClickListener {
 
     CategoryPresenter presenter;
-
+    @BindView(R.id.activity_main_swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.reload)
     LinearLayout reload;
     @BindView(R.id.loading)
@@ -68,6 +69,20 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         reload.setVisibility(View.GONE);
         presenter = new CategoryPresenter(getContext(), this);
         initRecycleview(view);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                presenter.fetchCategoryFromRemote();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
     }
 
     @Override
@@ -125,7 +140,6 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
 
     @Override
     public void onDestroyView() {
-        Log.e("dishab", " na parishab");
         presenter.cancelCategoryRequest();
         super.onDestroyView();
     }
