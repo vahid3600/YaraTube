@@ -2,9 +2,11 @@ package com.yaratech.yaratube.ui.home.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     private StoreContract.Presenter presenter;
     Connects.OnProductItemClick onProductItemClick;
 
+    @BindView(R.id.activity_main_swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.reload)
     LinearLayout reload;
     @BindView(R.id.loading)
@@ -75,6 +79,20 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         reload.setVisibility(View.GONE);
         presenter = new StorePresenter(getContext(), this);
         initRecycleview();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                presenter.fetchHomeFromRemote();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
     }
 
     private void initRecycleview() {
