@@ -183,7 +183,6 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
                     public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
                         token.continuePermissionRequest();
                     }
-
                 }).check();
     }
 }

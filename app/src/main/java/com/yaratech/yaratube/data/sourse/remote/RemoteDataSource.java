@@ -181,15 +181,10 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void getComment(int id, int offset, final DataSource.RemoteDataSourse.LoadDataCallback callback) {
+    public void getComment(int id, final DataSource.RemoteDataSourse.LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
-            Log.e("tag", id + "");
-
             productCommentCall = Utils.getServices().getStoreService()
-                    .getComment(
-                            id,
-                            Utils.COMMENT_LIMIT,
-                            offset);
+                    .getComment(id);
             productCommentCall.enqueue(new Callback<List<Comment>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Comment>> call,

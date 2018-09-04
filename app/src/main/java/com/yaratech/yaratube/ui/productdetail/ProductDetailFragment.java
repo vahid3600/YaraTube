@@ -43,9 +43,6 @@ public class ProductDetailFragment extends Fragment implements
     private static final String PRODUCT_KEY = "product_id";
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
     private ProductDetailContract.Presenter presenter;
-    private int offset = 0;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
     private ProductDetail productDetail;
 
     @BindView(R.id.progressbar)
@@ -131,46 +128,23 @@ public class ProductDetailFragment extends Fragment implements
         commentRecyclerViewAdapter = new CommentRecyclerViewAdapter();
         commentRecyclerViewAdapter.setHasStableIds(true);
         recyclerView.setAdapter(commentRecyclerViewAdapter);
-        recyclerView.addOnScrollListener(new PageScrollListener(linearLayoutManager) {
-            @Override
-            public void loadMoreItems() {
-                isLoading = true;
-                commentRecyclerViewAdapter.addLoadingFooter();
-                presenter.fetchCommentFromRemote(product.getId(), offset);
-            }
-
-            @Override
-            protected boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
     }
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
         this.productDetail = productDetail;
         productAbout.setText(productDetail.getDescription());
-        presenter.fetchCommentFromRemote(product.getId(), offset);
+        presenter.fetchCommentFromRemote(product.getId());
     }
 
     @Override
     public void showComment(List<Comment> comments) {
         commentRecyclerViewAdapter.updateComments(comments);
-        offset += comments.size();
-        commentRecyclerViewAdapter.removeLoadingFooter();
-        isLoading = false;
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-        commentRecyclerViewAdapter.removeLoadingFooter();
-        isLoading = false;
     }
 
     @Override

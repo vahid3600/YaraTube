@@ -38,7 +38,6 @@ public interface DataSource {
         void cancelGetProductDetailRequest();
 
         void getComment(int id,
-                        int offset,
                         LoadDataCallback callback);
 
         void cancelGetCommentRequest();

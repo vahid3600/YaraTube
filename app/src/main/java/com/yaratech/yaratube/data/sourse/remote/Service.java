@@ -49,9 +49,7 @@ public interface Service {
 
     @GET("comment/{product_id}")
     Call<List<Comment>> getComment(
-            @Path("product_id") int productId,
-            @Query("limit") int limit,
-            @Query("offset") int offset);
+            @Path("product_id") int productId);
 
     @FormUrlEncoded
     @POST("login_google/" + Utils.STORE_ID)
