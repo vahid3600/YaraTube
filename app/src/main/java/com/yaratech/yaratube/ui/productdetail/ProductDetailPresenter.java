@@ -57,10 +57,10 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     }
 
     @Override
-    public void fetchCommentFromRemote(int id, int offset) {
+    public void fetchCommentFromRemote(int id) {
         view.showLoading();
 
-        repository.getComment(id, offset, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        repository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();

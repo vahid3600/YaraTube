@@ -36,45 +36,19 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
-        CommentRecyclerViewAdapter.ViewHolder viewHolder = null;
-        View view = null;
-        switch (viewType) {
-            case item:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false);
-                viewHolder = new ViewHolder(view);
-                break;
-            case loading:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_progress, parent, false);
-                viewHolder = new CommentRecyclerViewAdapter.ViewHolder(view);
-                break;
-        }
-        return viewHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, parent, false);
+        return new ViewHolder(view);
     }
 
     public void updateComments(List<Comment> commentList){
-        List<Comment> newCommentList = new ArrayList<>();
-        newCommentList.addAll(this.commentList);
-        newCommentList.addAll(commentList);
-        DiffUtil.DiffResult diffResult
-                = DiffUtil.calculateDiff(new CommentRecyclerViewAdapter
-                .DiffUtilfCallBack(this.commentList, newCommentList));
-        this.commentList = newCommentList;
-        diffResult.dispatchUpdatesTo(this);
+        this.commentList = commentList;
+        notifyDataSetChanged();
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
-        switch (getItemViewType(position)) {
-            case item:
-                holder.onBind(commentList.get(position));
-                break;
-            case loading:
-                break;
-        }
+        holder.onBind(commentList.get(position));
     }
 
     // total number of rows
@@ -100,64 +74,6 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             product_title.setText(comment.getUser());
             product_text.setText(comment.getCommentText());
         }
-    }
-
-    class DiffUtilfCallBack extends DiffUtil.Callback {
-
-
-        private List<Comment> oldComments = new ArrayList<>();
-        private List<Comment> newComments = new ArrayList<>();
-
-        DiffUtilfCallBack(List<Comment> oldComments, List<Comment> newComments) {
-            this.oldComments = oldComments;
-            this.newComments = newComments;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldComments.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            return newComments.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldComments.get(oldItemPosition).getId()
-                    == newComments.get(newItemPosition).getId();
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldComments.get(oldItemPosition).equals(newComments.get(newItemPosition));
-        }
-
-        @Override
-        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-            return super.getChangePayload(oldItemPosition, newItemPosition);
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return (position == commentList.size() - 1 && isLoadingAdded) ? loading : item;
-
-    }
-
-    @Override
-    public long getItemId(int position) {
-        Comment comment = commentList.get(position);
-        return comment.getId();
-    }
-
-    public void addLoadingFooter() {
-        isLoadingAdded = true;
-    }
-
-    public void removeLoadingFooter() {
-        isLoadingAdded = false;
     }
 }
 

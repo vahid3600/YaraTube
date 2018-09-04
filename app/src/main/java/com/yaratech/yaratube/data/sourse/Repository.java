@@ -89,10 +89,9 @@ public class Repository implements
     }
 
     @Override
-    public void getComment(int id, int offset, LoadDataCallback callback) {
+    public void getComment(int id, LoadDataCallback callback) {
         remoteDataSource.getComment(
                 id,
-                offset,
                 callback);
     }
 
