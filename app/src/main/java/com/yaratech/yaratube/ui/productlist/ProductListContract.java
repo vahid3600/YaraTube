@@ -14,6 +14,8 @@ public interface ProductListContract {
 
         void showListProducts(List<Product> productList);
 
+        void showNextListProducts(List<Product> productList);
+
         void showMessage(String msg);
 
         void showLoading();
@@ -24,6 +26,8 @@ public interface ProductListContract {
     interface Presenter {
 
         void fetchProductListFromRemote(int id, int offset);
+
+        void fetchNextProductListPageFromRemote(int id, int offset);
 
         void cancelProductListRequest();
     }

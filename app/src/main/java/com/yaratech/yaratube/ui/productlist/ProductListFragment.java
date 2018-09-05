@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     ProgressBar progressBar;
     @BindView(R.id.product_list_recycleview)
     RecyclerView recyclerView;
+    GridLayoutManager gridLayoutManager;
     private int offset = 0;
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -85,9 +87,23 @@ public class ProductListFragment extends Fragment implements ProductListContract
     }
 
     private void initRecycleView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2,
+        gridLayoutManager = new GridLayoutManager(getContext(), 2,
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+                switch (productListRecyclerViewAdapter.getItemViewType(position)) {
+                    case ProductListRecyclerViewAdapter.loading:
+                        return 2;
+                    case ProductListRecyclerViewAdapter.item:
+                        return 1;
+                    default:
+                        return -1;
+                }
+            }
+        });
         productListRecyclerViewAdapter = new ProductListRecyclerViewAdapter(getContext()
                 , this);
         productListRecyclerViewAdapter.setHasStableIds(true);
@@ -96,8 +112,8 @@ public class ProductListFragment extends Fragment implements ProductListContract
             @Override
             public void loadMoreItems() {
                 isLoading = true;
-//                productListRecyclerViewAdapter.addLoadingFooter();
-                productListPresenter.fetchProductListFromRemote(
+                productListRecyclerViewAdapter.addLoadingFooter();
+                productListPresenter.fetchNextProductListPageFromRemote(
                         getArguments().getInt(KEY_ID),
                         offset);
             }
@@ -122,16 +138,22 @@ public class ProductListFragment extends Fragment implements ProductListContract
 
     @Override
     public void showListProducts(List<Product> productList) {
+        isLoading = false;
+        productListRecyclerViewAdapter.setData(productList);
+        offset += productList.size();
+    }
+
+    @Override
+    public void showNextListProducts(List<Product> productList) {
+        productListRecyclerViewAdapter.removeLoadingFooter();
+        isLoading = false;
         productListRecyclerViewAdapter.updateData(productList);
         offset += productList.size();
-//        productListRecyclerViewAdapter.removeLoadingFooter();
-        isLoading = false;
     }
 
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-//        productListRecyclerViewAdapter.removeLoadingFooter();
         isLoading = false;
     }
 

@@ -128,11 +128,13 @@ public class StoreFragment extends Fragment implements StoreContract.View,
 
     @Override
     public void showListHome(Store store) {
+        reload.setVisibility(View.GONE);
         storeRecyclerViewAdapter.setData(store);
     }
 
     @Override
     public void showMessage(String msg) {
+        reload.setVisibility(View.GONE);
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 

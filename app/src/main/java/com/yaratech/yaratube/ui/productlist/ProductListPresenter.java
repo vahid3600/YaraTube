@@ -50,6 +50,24 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     }
 
     @Override
+    public void fetchNextProductListPageFromRemote(int id, int offset) {
+        productListRepository.getProductList(id, offset, new DataSource.RemoteDataSourse.LoadDataCallback() {
+
+            @Override
+            public void onDataLoaded(Object result) {
+                view.hideLoading();
+                view.showNextListProducts((List<Product>) result);
+            }
+
+            @Override
+            public void onMessage(String msg) {
+                view.hideLoading();
+                view.showMessage(msg);
+            }
+        });
+    }
+
+    @Override
     public void cancelProductListRequest() {
         productListRepository.cancelGetProductListRequest();
     }

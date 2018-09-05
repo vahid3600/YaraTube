@@ -2,7 +2,6 @@ package com.yaratech.yaratube.ui.productlist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,25 +13,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.data.model.ProductList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Vah on 8/4/2018.
  */
 
 public class ProductListRecyclerViewAdapter extends
-        RecyclerView.Adapter<ProductListRecyclerViewAdapter.ViewHolder> {
+        RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     OnItemClickListener onItemClickListener;
     private boolean isLoadingAdded = false;
-    private static final int item = 0;
-    private static final int loading = 1;
+    public static final int item = 0;
+    public static final int loading = 1;
     private List<Product> productList = new ArrayList<>();
     private Context context;
 
@@ -42,33 +37,33 @@ public class ProductListRecyclerViewAdapter extends
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void setData(List<Product> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
+
     public void updateData(List<Product> productList) {
-        List<Product> newProductList = new ArrayList<>();
-        newProductList.addAll(this.productList);
-        newProductList.addAll(productList);
-        DiffUtil.DiffResult diffResult
-                = DiffUtil.calculateDiff(new DiffUtilfCallBack(this.productList, newProductList));
-        this.productList = newProductList;
-        diffResult.dispatchUpdatesTo(this);
+        this.productList.addAll(productList);
+        notifyItemRangeInserted(this.productList.size(), productList.size());
     }
 
     // inflates the row layout from xml when needed
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder = null;
         View view = null;
         switch (viewType) {
             case item:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.home_item, parent, false);
-                viewHolder = new ViewHolder(view);
+                viewHolder = new ItemViewHolder(view);
                 break;
             case loading:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_progress, parent, false);
-                viewHolder = new ViewHolder(view);
+                viewHolder = new LoadingViewHolder(view);
                 break;
         }
         return viewHolder;
@@ -76,11 +71,12 @@ public class ProductListRecyclerViewAdapter extends
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         switch (getItemViewType(position)) {
             case item:
-                holder.onBind(productList.get(position));
+                ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+                itemViewHolder.onBind(productList.get(position));
                 break;
             case loading:
                 break;
@@ -90,16 +86,16 @@ public class ProductListRecyclerViewAdapter extends
     // total number of rows
     @Override
     public int getItemCount() {
-        return productList.size();
+        return productList == null ? 0 : productList.size();
     }
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView productAvatar;
         TextView productTitle;
         TextView productDescription;
 
-        ViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
             productAvatar = itemView.findViewById(R.id.product_image);
             productTitle = itemView.findViewById(R.id.product_title);
@@ -109,10 +105,11 @@ public class ProductListRecyclerViewAdapter extends
         }
 
         public void onBind(Product product) {
-            Glide
-                    .with(context)
-                    .load(product.getFeatureAvatar().getXxxdpi())
-                    .into(productAvatar);
+            if (product.getFeatureAvatar() != null)
+                Glide
+                        .with(context)
+                        .load(product.getFeatureAvatar().getXxxdpi())
+                        .into(productAvatar);
             productTitle.setText(product.getName());
             productDescription.setText(product.getShortDescription());
         }
@@ -120,6 +117,13 @@ public class ProductListRecyclerViewAdapter extends
         @Override
         public void onClick(View v) {
             onItemClickListener.getProductItem(productList.get(getAdapterPosition()));
+        }
+    }
+
+    public class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
@@ -137,10 +141,27 @@ public class ProductListRecyclerViewAdapter extends
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
+        add(new Product());
     }
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
+        int position = productList.size() - 1;
+        Product item = getItem(position);
+
+        if (item != null) {
+            productList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void add(Product product) {
+        this.productList.add(product);
+        notifyItemInserted(productList.size() - 1);
+    }
+
+    private Product getItem(int position) {
+        return productList.get(position);
     }
 
     public interface OnItemClickListener {
