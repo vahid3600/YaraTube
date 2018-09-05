@@ -86,7 +86,11 @@ public class Product implements Parcelable {
     @Expose
     private Object customjson;
 
-    protected Product(Parcel in) {
+    public Product(){
+
+    }
+
+    public Product(Parcel in) {
         id = in.readInt();
         name = in.readString();
         nameEnglish = in.readString();
