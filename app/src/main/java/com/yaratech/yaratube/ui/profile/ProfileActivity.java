@@ -44,6 +44,7 @@ import com.yaratech.yaratube.BuildConfig;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog;
+import com.yaratech.yaratube.utils.Permissions;
 import com.yaratech.yaratube.utils.Utils;
 
 import java.io.File;
@@ -97,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
 
     @Override
     public void onCamera() {
-        if (!checkPermissions(getApplicationContext())) {
+        if (Permissions.checkCameraPermissions(getApplicationContext())) {
             requestCameraPermission(MEDIA_TYPE_IMAGE);
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -153,11 +154,6 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerDia
 
 
         }
-    }
-
-    public boolean checkPermissions(Context context) {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestCameraPermission(final int type) {

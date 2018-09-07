@@ -26,4 +26,9 @@ public class DatabaseSourse implements DataSource.DatabaseSourse {
         appDatabase.profileDao().updateProfile(profile);
     }
 
+    @Override
+    public void deleteProfile() {
+        appDatabase.profileDao().deleteProfile();
+    }
+
 }

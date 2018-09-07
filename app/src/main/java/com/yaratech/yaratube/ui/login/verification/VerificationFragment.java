@@ -1,8 +1,12 @@
 package com.yaratech.yaratube.ui.login.verification;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.yaratech.yaratube.BuildConfig;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
+import com.yaratech.yaratube.utils.Permissions;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
@@ -31,6 +37,8 @@ public class VerificationFragment extends Fragment implements
     Unbinder unbind;
     DialogInteraction dialogInteraction;
     VerificationContract.Presenter presenter;
+    SMSBroadcastReceiver smsBroadcastReceiver;
+    SMSBroadcastReceiver.SMSBroadcastListener smsBroadcastListener;
     public static final String VERIFICATION_DIALOG_TAG = "Verification";
 
     @BindView(R.id.verification_code)
@@ -48,6 +56,12 @@ public class VerificationFragment extends Fragment implements
     @OnClick(R.id.return_back)
     public void showEnterNumberDialog() {
         dialogInteraction.showDialog(LoginPhone.newInstance());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        smsBroadcastListener = getSmsListener();
     }
 
     @Nullable
@@ -71,6 +85,12 @@ public class VerificationFragment extends Fragment implements
         dialogInteraction = (DialogInteraction) getParentFragment();
         if (getArguments() != null)
             presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
+        SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
+        if (!Permissions.isSmsPermissionGranted(getContext()))
+            requestReadAndSendSmsPermission();
+        else
+            smsBroadcastReceiver.bindListener(smsBroadcastListener);
+
     }
 
     public static VerificationFragment newInstance(String mobileNumber) {
@@ -78,7 +98,6 @@ public class VerificationFragment extends Fragment implements
         Bundle args = new Bundle();
         if (mobileNumber != null) {
             args.putString(VERIFICATION_DIALOG_TAG, mobileNumber);
-            Log.e("mobile", mobileNumber);
         }
         VerificationFragment fragment = new VerificationFragment();
         fragment.setArguments(args);
@@ -100,5 +119,42 @@ public class VerificationFragment extends Fragment implements
     public void onDestroyView() {
         unbind.unbind();
         super.onDestroyView();
+    }
+
+    private void requestReadAndSendSmsPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
+            // You may display a non-blocking explanation here, read more in the documentation:
+            // https://developer.android.com/training/permissions/requesting.html
+        }
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    smsBroadcastReceiver.bindListener(smsBroadcastListener);
+
+                } else {
+                    Log.e("permission", " denied");
+                }
+                return;
+            }
+        }
+    }
+
+    public SMSBroadcastReceiver.SMSBroadcastListener getSmsListener() {
+        return new SMSBroadcastReceiver.SMSBroadcastListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onTextReceived(String text) {
+                verificationCode.setText(Integer.toString(Integer.parseInt(text)));
+            }
+        };
+
     }
 }

@@ -94,6 +94,8 @@ public interface DataSource {
         void saveProfile(Profile profile);
 
         void updateProfile(Profile profile);
+
+        void deleteProfile();
     }
 
     interface PreferencesSource{
