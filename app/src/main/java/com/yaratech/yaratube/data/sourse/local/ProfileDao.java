@@ -23,4 +23,9 @@ public interface ProfileDao {
     @Query("select count(*) " +
             "from profile")
     int getProfile();
+
+    @Query("delete " +
+            "from profile " +
+            "where id=0")
+    void deleteProfile();
 }

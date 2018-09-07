@@ -45,7 +45,7 @@ public class PreferencesSourse implements DataSource.PreferencesSource {
     @Override
     public void saveUserLoginStatus(boolean status) {
         USER_LOGIN.edit()
-                .putBoolean(LOGIN_KEY, true)
+                .putBoolean(LOGIN_KEY, status)
                 .apply();
     }
 

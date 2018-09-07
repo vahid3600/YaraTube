@@ -196,6 +196,11 @@ public class Repository implements
     }
 
     @Override
+    public void deleteProfile() {
+        databaseSourse.deleteProfile();
+    }
+
+    @Override
     public void saveUserLoginState(int state) {
         preferencesSourse.saveUserLoginState(state);
     }
