@@ -122,6 +122,8 @@ public class MenuActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_connect_with_us) {
 
+        } else if (id == R.id.nav_sign_out){
+            presenter.signOut();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

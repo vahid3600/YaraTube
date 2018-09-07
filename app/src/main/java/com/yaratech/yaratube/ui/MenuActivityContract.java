@@ -9,5 +9,7 @@ public interface MenuActivityContract {
     interface Presenter{
 
         boolean getUserLoginStatus();
+
+        void signOut();
     }
 }
