@@ -30,17 +30,11 @@ public class SelectLoginMethodPresenter implements SelectLoginMethodContract.Pre
     @Override
     public void loginByGoogle(String tokenId, String deviceId, String deviceOs, String deviceModel) {
 
-        loginRepository.sendGoogleLogin(tokenId, deviceId, deviceOs, deviceModel,
-                new DataSource.RemoteDataSourse.LoadDataCallback() {
-            @Override
-            public void onDataLoaded(Object result) {
-                view.showLoginByPhoneDialog();
-            }
 
-            @Override
-            public void onMessage(String msg) {
-                view.showMessage(msg);
-            }
-        });
+    }
+
+    @Override
+    public void onSuccessGoogleLogin() {
+        loginRepository.saveUserLoginStatus(true);
     }
 }

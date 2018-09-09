@@ -19,7 +19,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.tasks.Task;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
@@ -35,13 +40,18 @@ import static android.support.constraint.Constraints.TAG;
  * Created by Vah on 8/12/2018.
  */
 
-public class SelectLoginMethodFragment extends Fragment implements SelectLoginMethodContract.View, GoogleApiClient.OnConnectionFailedListener {
-    private int RC_SIGN_IN = 1;
-    GoogleSignInClient mGoogleSignInClient;
-    Unbinder unbinder;
-    SelectLoginMethodContract.Presenter presenter;
-    DialogInteraction dialogInteraction;
+public class SelectLoginMethodFragment extends Fragment implements
+        SelectLoginMethodContract.View,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
+
     public static final String LOGIN_DIALOG_TAG = "SelectLoginMethodFragment";
+    private static final int RC_SIGN_IN = 0;
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleApiClient mGoogleApiClient;
+    private Unbinder unbinder;
+    private SelectLoginMethodContract.Presenter presenter;
+    private DialogInteraction dialogInteraction;
 
     @OnClick(R.id.phonenumber)
     public void LoginByMobile() {
@@ -81,11 +91,20 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(new Scope(Scopes.PROFILE))
+                .addScope(new Scope(Scopes.EMAIL))
+                .build();
+
         dialogInteraction = (DialogInteraction) getParentFragment();
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(),
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build());
+                        .requestEmail()
+                        .build());
     }
 
     @Override
@@ -96,6 +115,7 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
     @Override
     public void onStart() {
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -116,20 +136,22 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+            presenter.onSuccessGoogleLogin();
+
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
-        int statusCode = result.getStatus().getStatusCode();
-        Log.e("TAG", "handleSignInResult:" + statusCode);
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
 
-        if (result.isSuccess()) {
-            Log.e("TAG", "handleSignInResult:" + " success");
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-        } else {
-            Log.e("TAG", "handleSignInResult:" + " not succ");
+            account.getServerAuthCode();
+        }
+        catch (ApiException e) {
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
 
@@ -146,6 +168,7 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
     @Override
     public void onStop() {
         super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -168,5 +191,15 @@ public class SelectLoginMethodFragment extends Fragment implements SelectLoginMe
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         showMessage(getString(R.string.no_internet));
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }

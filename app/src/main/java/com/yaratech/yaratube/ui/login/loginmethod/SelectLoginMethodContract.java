@@ -16,5 +16,7 @@ public interface SelectLoginMethodContract {
 
         void loginByGoogle(String tokenId, String deviceId, String deviceOs,
                            String deviceModel);
+
+        void onSuccessGoogleLogin();
     }
 }
