@@ -1,7 +1,6 @@
 package com.yaratech.yaratube.ui.login.loginmethod;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,19 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.tasks.Task;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
@@ -34,25 +20,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static android.support.constraint.Constraints.TAG;
-
 /**
  * Created by Vah on 8/12/2018.
  */
 
-public class SelectLoginMethodFragment extends Fragment implements
-        SelectLoginMethodContract.View,
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
-
-    public static final String LOGIN_DIALOG_TAG = "SelectLoginMethodFragment";
-    private static final int RC_SIGN_IN = 0;
-    private GoogleSignInClient mGoogleSignInClient;
-    private GoogleApiClient mGoogleApiClient;
-    private Unbinder unbinder;
-    private SelectLoginMethodContract.Presenter presenter;
-    private DialogInteraction dialogInteraction;
-
+public class SelectLoginMethodFragment extends Fragment implements SelectLoginMethodContract.View {
     @OnClick(R.id.phonenumber)
     public void LoginByMobile() {
         showLoginByPhoneDialog();
@@ -60,9 +32,17 @@ public class SelectLoginMethodFragment extends Fragment implements
 
     @OnClick(R.id.google)
     public void LoginByGoogle() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        presenter.loginByGoogle(
+                "",
+                Utils.getDeviceId(getContext()),
+                Utils.getDeviceOS(),
+                Utils.getDeviceModel());
     }
+
+    Unbinder unbinder;
+    SelectLoginMethodContract.Presenter presenter;
+    DialogInteraction dialogInteraction;
+    public static final String LOGIN_DIALOG_TAG = "SelectLoginMethodFragment";
 
     @Override
     public void onAttach(Context context) {
@@ -91,20 +71,7 @@ public class SelectLoginMethodFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .addScope(new Scope(Scopes.EMAIL))
-                .build();
-
         dialogInteraction = (DialogInteraction) getParentFragment();
-        mGoogleSignInClient = GoogleSignIn.getClient(getContext(),
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .build());
     }
 
     @Override
@@ -115,7 +82,6 @@ public class SelectLoginMethodFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override
@@ -132,30 +98,6 @@ public class SelectLoginMethodFragment extends Fragment implements
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-            presenter.onSuccessGoogleLogin();
-
-        }
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            account.getServerAuthCode();
-        }
-        catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
-
-    @Override
     public void showLoginByPhoneDialog() {
         dialogInteraction.showDialog(LoginPhone.newInstance());
     }
@@ -168,7 +110,6 @@ public class SelectLoginMethodFragment extends Fragment implements
     @Override
     public void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -188,18 +129,4 @@ public class SelectLoginMethodFragment extends Fragment implements
         super.onDetach();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        showMessage(getString(R.string.no_internet));
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }

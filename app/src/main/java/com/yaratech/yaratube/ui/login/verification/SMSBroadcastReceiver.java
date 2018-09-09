@@ -7,7 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
 
 /**
  * Created by Vah on 9/7/2018.
@@ -32,7 +35,10 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                 }
             }
 
+<<<<<<< HEAD
             Log.e("Tag",smsBody);
+=======
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
             if (smsSender.equals(serviceProviderNumber)) {
                 if (mlistener != null) {
                     smsBody = smsBody.replaceAll("\\D+", "");
@@ -46,10 +52,13 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
         mlistener = listener;
     }
 
+<<<<<<< HEAD
     public void unbindListener() {
         mlistener = null;
     }
 
+=======
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
     interface SMSBroadcastListener {
         void onTextReceived(String text);
     }

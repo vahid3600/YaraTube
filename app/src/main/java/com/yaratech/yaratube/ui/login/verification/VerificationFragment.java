@@ -2,16 +2,22 @@ package com.yaratech.yaratube.ui.login.verification;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+<<<<<<< HEAD
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+=======
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+<<<<<<< HEAD
 import android.support.v4.content.LocalBroadcastManager;
+=======
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +25,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+<<<<<<< HEAD
+=======
+import com.yaratech.yaratube.BuildConfig;
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
@@ -88,6 +98,7 @@ public class VerificationFragment extends Fragment implements
         dialogInteraction = (DialogInteraction) getParentFragment();
         if (getArguments() != null)
             presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
+<<<<<<< HEAD
 
         if (!Permissions.checkSMSPermissions(getContext())) {
             requestReadAndSendSmsPermission();
@@ -100,6 +111,14 @@ public class VerificationFragment extends Fragment implements
         getContext().registerReceiver(smsBroadcastReceiver,
                 new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
         smsBroadcastReceiver.bindListener(smsBroadcastListener);
+=======
+        SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
+        if (!Permissions.isSmsPermissionGranted(getContext()))
+            requestReadAndSendSmsPermission();
+        else
+            smsBroadcastReceiver.bindListener(smsBroadcastListener);
+
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
     }
 
     public static VerificationFragment newInstance(String mobileNumber) {
@@ -127,6 +146,7 @@ public class VerificationFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         unbind.unbind();
+<<<<<<< HEAD
         if (smsBroadcastReceiver != null)
             smsBroadcastReceiver.unbindListener();
         super.onDestroyView();
@@ -141,6 +161,15 @@ public class VerificationFragment extends Fragment implements
 
     private void requestReadAndSendSmsPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
+=======
+        super.onDestroyView();
+    }
+
+    private void requestReadAndSendSmsPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
+            // You may display a non-blocking explanation here, read more in the documentation:
+            // https://developer.android.com/training/permissions/requesting.html
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
         }
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 1);
     }
@@ -154,7 +183,11 @@ public class VerificationFragment extends Fragment implements
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     smsBroadcastReceiver.bindListener(smsBroadcastListener);
+<<<<<<< HEAD
                     getMessageFromBroadcast();
+=======
+
+>>>>>>> daa60e45d156f167875e34092ae171504d245a65
                 } else {
                     Log.e("permission", " denied");
                 }
