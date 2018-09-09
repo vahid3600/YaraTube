@@ -29,12 +29,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ui.login.verification.SMSBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
@@ -44,6 +38,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:name=".ui.player.PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".ui.login.verification.SMSBroadcastReceiver" />
     </application>
+
+
 
 </manifest>

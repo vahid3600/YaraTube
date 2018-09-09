@@ -16,37 +16,79 @@
         android:layout_margin="@dimen/button_margin"
         android:text="@string/login" />
 
-    <Button
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/phonenumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/button_margin"
-        android:layout_marginEnd="@dimen/button_margin"
-        android:layout_marginTop="@dimen/button_margin"
-        android:text="@string/login_by_phone_number"
-        android:textColor="@android:color/white"
-        android:drawableEnd="@drawable/ic_phone"
+        android:orientation="horizontal"
         android:background="@color/button_background_1"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:paddingBottom="@dimen/button_padding_bottom"
-        android:paddingStart="@dimen/button_padding_left"
-        android:paddingEnd="@dimen/button_padding_right"
-        />
+        android:layout_marginStart="@dimen/button_margin"
+        android:layout_marginEnd="@dimen/button_margin">
 
-    <Button
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:paddingEnd="@dimen/button_padding_left"
+            android:paddingStart="@dimen/button_padding_left"
+            android:text="@string/login_by_phone_number"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/google"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/button_margin"
-        android:text="@string/login_by_phone_number"
-        android:textColor="@android:color/white"
-        android:drawableEnd="@drawable/ic_google_plus"
+        android:orientation="horizontal"
         android:background="@color/button_background_2"
-        android:paddingBottom="@dimen/button_padding_bottom"
-        android:paddingStart="@dimen/button_padding_left"
-        android:paddingEnd="@dimen/button_padding_right"
-        android:paddingTop="@dimen/button_padding_top">
+        android:layout_margin="@dimen/button_margin">
 
-    </Button>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:paddingEnd="@dimen/button_padding_left"
+            android:paddingStart="@dimen/button_padding_left"
+            android:text="@string/login_by_google"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_google_plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView1"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

@@ -31,6 +31,7 @@ public class MenuActivityPresenter implements MenuActivityContract.Presenter {
     public void signOut() {
         repository.saveUserLoginStatus(false);
         repository.deleteProfile();
+        repository.saveUserLoginState(1);
     }
 
 }

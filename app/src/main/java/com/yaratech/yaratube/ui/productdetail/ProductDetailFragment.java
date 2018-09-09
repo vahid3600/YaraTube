@@ -117,6 +117,12 @@ public class ProductDetailFragment extends Fragment implements
         Glide.with(getContext()).load(product.getFeatureAvatar().getXxxdpi()).into(productImage);
         productTitle.setText(product.getName());
         initRecycleview();
+        productImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playVideo();
+            }
+        });
     }
 
     private void initRecycleview() {

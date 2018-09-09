@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 /**
  * Created by Vah on 9/7/2018.
@@ -31,6 +32,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                 }
             }
 
+            Log.e("Tag",smsBody);
             if (smsSender.equals(serviceProviderNumber)) {
                 if (mlistener != null) {
                     smsBody = smsBody.replaceAll("\\D+", "");
