@@ -1,9 +1,13 @@
 package com.yaratech.yaratube.ui.player;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,24 +33,23 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         ButterKnife.bind(this);
+        hideStatusBar();
 
         Intent intent = getIntent();
         String videoUri = intent.getStringExtra(PLAYER_ACTIVITY_KEY);
         player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "ExoPlayer"));
+//        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
+//                Util.getUserAgent(this, "ExoPlayer"));
 
         HlsMediaSource mediaSource = new HlsMediaSource
-                .Factory(dataSourceFactory)
+                .Factory(new CacheDataSourceFactory(
+                getApplicationContext(),
+                100 * 1024 * 1024,
+                5 * 1024 * 1024))
                 .createMediaSource(Uri.parse(videoUri));
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
         playerView.setPlayer(player);
-
-//        ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(Uri.parse(videoUri));
-//        player.prepare(mediaSource);
-//        player.setPlayWhenReady(true);
     }
 
     @Override
@@ -55,5 +58,11 @@ public class PlayerActivity extends AppCompatActivity {
         playerView.setPlayer(null);
         player.release();
         player = null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void hideStatusBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }

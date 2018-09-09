@@ -12,7 +12,7 @@ import android.support.v4.content.ContextCompat;
 
 public class Permissions {
 
-    public static boolean isSmsPermissionGranted(Context context) {
+    public static boolean checkSMSPermissions(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
     }
 

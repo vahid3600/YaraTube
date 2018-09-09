@@ -44,6 +44,10 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
         mlistener = listener;
     }
 
+    public void unbindListener() {
+        mlistener = null;
+    }
+
     interface SMSBroadcastListener {
         void onTextReceived(String text);
     }

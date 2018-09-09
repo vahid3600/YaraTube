@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.yaratech.yaratube.BuildConfig;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
@@ -86,7 +85,7 @@ public class VerificationFragment extends Fragment implements
         if (getArguments() != null)
             presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
         SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
-        if (!Permissions.isSmsPermissionGranted(getContext()))
+        if (!Permissions.checkSMSPermissions(getContext()))
             requestReadAndSendSmsPermission();
         else
             smsBroadcastReceiver.bindListener(smsBroadcastListener);
@@ -118,13 +117,13 @@ public class VerificationFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         unbind.unbind();
+        if (smsBroadcastReceiver != null)
+            smsBroadcastReceiver.unbindListener();
         super.onDestroyView();
     }
 
     private void requestReadAndSendSmsPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
-            // You may display a non-blocking explanation here, read more in the documentation:
-            // https://developer.android.com/training/permissions/requesting.html
         }
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 1);
     }

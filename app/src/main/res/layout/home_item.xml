@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/image_header"
+    android:transitionName="product_cardview"
     android:layout_width="@dimen/cardview_width"
     android:layout_height="@dimen/cardview_height"
     android:layout_margin="@dimen/cardview_margin"
-    app:cardCornerRadius="@dimen/cardview_corner_radius">
+    app:cardCornerRadius="@dimen/cardview_corner_radius"
+    tools:targetApi="lollipop">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
