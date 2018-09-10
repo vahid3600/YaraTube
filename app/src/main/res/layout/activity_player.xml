@@ -15,7 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-<<<<<<< HEAD
 
     <ProgressBar
         android:id="@+id/progressbar"
@@ -25,7 +24,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-=======
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
 
 </android.support.constraint.ConstraintLayout>

@@ -9,11 +9,8 @@
     <uses-feature android:name="android.hardware.camera2" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-=======
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
 
     <application
         android:allowBackup="true"
@@ -34,15 +31,8 @@
             </intent-filter>
         </activity>
 
-<<<<<<< HEAD
-=======
-        <receiver android:name=".ui.login.verification.SMSBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".ui.login.verification.SMSBroadcastReceiver"/>
 
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
@@ -52,13 +42,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:name=".ui.player.PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-<<<<<<< HEAD
 
         <receiver android:name=".ui.login.verification.SMSBroadcastReceiver" />
-=======
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
     </application>
-
-
 
 </manifest>

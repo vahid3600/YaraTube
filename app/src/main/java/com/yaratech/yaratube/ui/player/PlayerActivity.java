@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -17,9 +16,6 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-=======
-
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -52,22 +48,15 @@ public class PlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String videoUri = intent.getStringExtra(PLAYER_ACTIVITY_KEY);
         player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
-<<<<<<< HEAD
+
 //        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
 //                Util.getUserAgent(this, "ExoPlayer"));
 
         HlsMediaSource mediaSource = new HlsMediaSource
                 .Factory(new CacheDataSourceFactory(
-                getApplicationContext(),
+                        getApplicationContext(),
                 100 * 1024 * 1024,
                 5 * 1024 * 1024))
-=======
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "ExoPlayer"));
-
-        HlsMediaSource mediaSource = new HlsMediaSource
-                .Factory(dataSourceFactory)
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
                 .createMediaSource(Uri.parse(videoUri));
         player.prepare(mediaSource);
         player.addListener(new Player.EventListener() {
@@ -127,14 +116,11 @@ public class PlayerActivity extends AppCompatActivity {
         });
         player.setPlayWhenReady(true);
         playerView.setPlayer(player);
-<<<<<<< HEAD
-=======
 
 //        ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
 //                .createMediaSource(Uri.parse(videoUri));
 //        player.prepare(mediaSource);
 //        player.setPlayWhenReady(true);
->>>>>>> daa60e45d156f167875e34092ae171504d245a65
     }
 
     @Override
