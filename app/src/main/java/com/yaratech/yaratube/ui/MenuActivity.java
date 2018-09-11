@@ -35,16 +35,8 @@ public class MenuActivity extends AppCompatActivity
         CategoryFragment.OnCategoryFragmentActionListener,
         Connects.OnProductItemClick {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
-    private ActionBarDrawerToggle toggle;
     private MenuActivityContract.Presenter presenter;
 
     @Override
@@ -65,23 +57,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     private void initActivity() {
-        setSupportActionBar(toolbar);
-        toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-            toolbar.getMenu().clear();
-            toggle.setDrawerIndicatorEnabled(true);
-        }
     }
 
     @Override
@@ -113,8 +89,6 @@ public class MenuActivity extends AppCompatActivity
             boolean userLogin = presenter.getUserLoginStatus();
             if (userLogin) {
                 startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
-                toggle.setDrawerIndicatorEnabled(false);
-                toolbar.inflateMenu(R.menu.menu_back_button);
             } else {
                 LoginDialogContainer.newInstance(getSupportFragmentManager());
             }
@@ -125,7 +99,6 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_sign_out){
             presenter.signOut();
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -152,8 +125,6 @@ public class MenuActivity extends AppCompatActivity
                 productListFragment,
                 PRODUCT_LIST_FRAGMENT_TAG,
                 true);
-        toggle.setDrawerIndicatorEnabled(false);
-        toolbar.inflateMenu(R.menu.menu_back_button);
     }
 
     @Override
