@@ -1,23 +1,22 @@
 package com.yaratech.yaratube.ui;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.home.HomeFragment;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
+import com.yaratech.yaratube.ui.home.more.MoreFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.productlist.ProductListFragment;
-import com.yaratech.yaratube.ui.profile.ProfileActivity;
+import com.yaratech.yaratube.ui.profile.ProfileFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.ButterKnife;
@@ -28,7 +27,8 @@ import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_L
 public class MenuActivity extends AppCompatActivity
         implements
         CategoryFragment.OnCategoryFragmentActionListener,
-        Connects.OnProductItemClick {
+        Connects.OnProductItemClick,
+        MoreFragment.onActionClickListener{
 
     public HomeFragment homeFragment;
     public ProductListFragment productListFragment;
@@ -83,7 +83,7 @@ public class MenuActivity extends AppCompatActivity
 
 //            boolean userLogin = presenter.getUserLoginStatus();
 //            if (userLogin) {
-//                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+//                startActivity(new Intent(MenuActivity.this, ProfileFragment.class));
 //            } else {
 //                LoginDialogContainer.newInstance(getSupportFragmentManager());
 //            }
@@ -131,6 +131,16 @@ public class MenuActivity extends AppCompatActivity
                 ProductDetailFragment.newInstance(product),
                 BASE_FRAGMENT_TAG,
                 true);
+    }
+
+    @Override
+    public void onFragmentClickListener(Fragment fragment) {
+        Utils.replaceFragment(
+                R.id.fragment_container,
+                getSupportFragmentManager(),
+                fragment,
+                "",
+                false);
     }
 }
 

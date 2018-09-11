@@ -1,5 +1,6 @@
 package com.yaratech.yaratube.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,6 @@ public class HomeFragment extends Fragment {
     private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
     private MoreFragment moreFragment;
-    private FragmentManager fragmentManager;
 
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
     public static HomeFragment newInstance() {
 
         Bundle args = new Bundle();
-
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;

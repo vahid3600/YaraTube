@@ -14,14 +14,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,7 +63,7 @@ import butterknife.OnClick;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
-public class ProfileActivity extends AppCompatActivity
+public class ProfileFragment extends Fragment
         implements ImagePickerDialog.ImagePickerListener {
 
     @BindView(R.id.name_family)
@@ -78,28 +83,42 @@ public class ProfileActivity extends AppCompatActivity
 
     @OnClick(R.id.cancel)
     public void cancel() {
-        onBackPressed();
+        cancel();
     }
 
 
     @OnClick(R.id.profile_picture)
     public void onImageClick() {
         ImagePickerDialog imagePickerDialog = ImagePickerDialog.newInstance(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         imagePickerDialog.show(fragmentManager, IMAGE_PICKER_TAG);
     }
 
+    public static ProfileFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
     }
 
     @Override
     public void onCamera() {
-        if (Permissions.checkCameraPermissions(getApplicationContext())) {
+        if (Permissions.checkCameraPermissions(getContext())) {
             requestCameraPermission(MEDIA_TYPE_IMAGE);
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -117,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
@@ -126,15 +145,15 @@ public class ProfileActivity extends AppCompatActivity
             if (requestCode == 0) {
                 Log.e("Tag", "camera");
                 bitmap = (Bitmap) data.getExtras().get("data");
-                Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
+                Glide.with(getContext()).load(bitmap).into(profilePicture);
             } else if (requestCode == 1) {
                 Log.e("Tag", "galery");
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Glide.with(getApplicationContext()).load(bitmap).into(profilePicture);
+                Glide.with(getContext()).load(bitmap).into(profilePicture);
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
@@ -158,7 +177,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void requestCameraPermission(final int type) {
-        Dexter.withActivity(this)
+        Dexter.withActivity(getActivity())
                 .withPermissions(Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
