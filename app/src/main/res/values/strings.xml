@@ -52,4 +52,6 @@
     <string name="you_must_login_first">لطفاً ابتدا در برنامه ثبت نام کنید</string>
     <string name="your_score_not_acceptable">امتیاز شما قابل قبول نیست</string>
     <string name="sign_out">خروج از اکانت</string>
+    <string name="login_success">ورود شما با موفقیت انجام شد</string>
+    <string name="more">بیشتر</string>
 </resources>

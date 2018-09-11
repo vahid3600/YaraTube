@@ -58,7 +58,8 @@ import butterknife.OnClick;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
-public class ProfileActivity extends AppCompatActivity implements ImagePickerDialog.ImagePickerListener {
+public class ProfileActivity extends AppCompatActivity
+        implements ImagePickerDialog.ImagePickerListener {
 
     @BindView(R.id.name_family)
     EditText name_family;

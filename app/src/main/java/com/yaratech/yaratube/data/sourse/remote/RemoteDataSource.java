@@ -232,9 +232,10 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                                        @NonNull Response<LoginGoogle> response) {
 
                     if (response.isSuccessful()) {
+                        callback.onMessage(context.getString(R.string.login_success));
                         callback.onDataLoaded(response.body());
                     } else {
-                        Log.e("tag", response.errorBody().toString());
+                        Log.e("Tag", response.errorBody().toString());
 
                         callback.onMessage(context.getString(R.string.fail_progress));
                     }

@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
@@ -24,6 +26,7 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.tasks.Task;
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
 import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
 import com.yaratech.yaratube.utils.Utils;
@@ -41,15 +44,14 @@ import static com.google.android.exoplayer2.ExoPlayerLibraryInfo.TAG;
 public class SelectLoginMethodFragment extends Fragment implements
         SelectLoginMethodContract.View,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks{
+        GoogleApiClient.ConnectionCallbacks {
 
-        public static final String LOGIN_DIALOG_TAG = "SelectLoginMethodFragment";
-        private static final int RC_SIGN_IN = 0;
-        private GoogleSignInClient mGoogleSignInClient;
-        private GoogleApiClient mGoogleApiClient;
-        private Unbinder unbinder;
-        private SelectLoginMethodContract.Presenter presenter;
-        private DialogInteraction dialogInteraction;
+    public static final String LOGIN_DIALOG_TAG = "SelectLoginMethodFragment";
+    private static final int RC_SIGN_IN = 0;
+    private GoogleSignInClient mGoogleSignInClient;
+    private Unbinder unbinder;
+    private SelectLoginMethodContract.Presenter presenter;
+    private DialogInteraction dialogInteraction;
 
     @OnClick(R.id.phonenumber)
     public void LoginByMobile() {
@@ -90,16 +92,10 @@ public class SelectLoginMethodFragment extends Fragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .addScope(new Scope(Scopes.EMAIL))
-                .build();
         dialogInteraction = (DialogInteraction) getParentFragment();
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(),
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail()
                         .build());
     }
@@ -112,7 +108,6 @@ public class SelectLoginMethodFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override
@@ -124,18 +119,31 @@ public class SelectLoginMethodFragment extends Fragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            int statusCode = result.getStatus().getStatusCode();
+            String statusMessage = result.getStatus().getStatusMessage();
+            Log.e("result status code", "onActivityResult: " + statusCode + " " + statusMessage);
+
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-            presenter.onSuccessGoogleLogin();
         }
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             account.getServerAuthCode();
-        }
-        catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            presenter.loginByGoogle(
+                    account.getIdToken(),
+                    Utils.getDeviceId(getContext()),
+                    Utils.getDeviceOS(),
+                    Utils.getDeviceModel());
+            presenter.onSuccessGoogleLogin();
+            Log.e("Tag ", account.getServerAuthCode() + " " + account.getId() + " " + account.getIdToken());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            Log.e("Tag", "signInResult:failed code=" + e.getStatusCode());
         }
     }
 
@@ -153,6 +161,12 @@ public class SelectLoginMethodFragment extends Fragment implements
     }
 
     @Override
+    public void onSuccessGoogleLoginResponseLoaded(LoginGoogle loginGoogle) {
+        Log.e("Tag",loginGoogle.getToken());
+        dialogInteraction.closeDialog();
+    }
+
+    @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
@@ -160,7 +174,6 @@ public class SelectLoginMethodFragment extends Fragment implements
     @Override
     public void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
     }
 
     @Override

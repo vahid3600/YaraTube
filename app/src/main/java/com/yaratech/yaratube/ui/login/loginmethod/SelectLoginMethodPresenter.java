@@ -1,7 +1,11 @@
 package com.yaratech.yaratube.ui.login.loginmethod;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.yaratech.yaratube.data.model.LoginGoogle;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
@@ -28,8 +32,29 @@ public class SelectLoginMethodPresenter implements SelectLoginMethodContract.Pre
 
 
     @Override
-    public void loginByGoogle(String tokenId, String deviceId, String deviceOs, String deviceModel) {
+    public void loginByGoogle(String tokenId,
+                              String deviceId,
+                              String deviceOs,
+                              String deviceModel) {
+    loginRepository.sendGoogleLogin(tokenId,
+            deviceId,
+            deviceOs,
+            deviceModel, new DataSource.RemoteDataSourse.LoadDataCallback() {
+                @Override
+                public void onDataLoaded(Object result) {
+                    view.onSuccessGoogleLoginResponseLoaded((LoginGoogle) result);
+                    onSuccessGoogleLogin();
+                    LoginGoogle loginGoogle = (LoginGoogle)result;
+                    Profile profile = new Profile();
+                    profile.setUserToken(loginGoogle.getToken());
+                    loginRepository.saveProfile(profile);
+                }
 
+                @Override
+                public void onMessage(String msg) {
+                    view.showMessage(msg);
+                }
+            });
 
     }
 

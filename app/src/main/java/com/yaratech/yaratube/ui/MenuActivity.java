@@ -144,7 +144,8 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
-        productListFragment = ProductListFragment.newInstance(category.getId());
+        productListFragment = ProductListFragment.newInstance(
+                category.getId());
         Utils.setFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
