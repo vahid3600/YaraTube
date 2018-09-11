@@ -6,11 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.yaratech.yaratube.R;
@@ -24,14 +20,13 @@ import com.yaratech.yaratube.ui.productlist.ProductListFragment;
 import com.yaratech.yaratube.ui.profile.ProfileActivity;
 import com.yaratech.yaratube.utils.Utils;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.yaratech.yaratube.ui.home.HomeFragment.BASE_FRAGMENT_TAG;
 import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_LIST_FRAGMENT_TAG;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
+        implements
         CategoryFragment.OnCategoryFragmentActionListener,
         Connects.OnProductItemClick {
 
@@ -48,7 +43,7 @@ public class MenuActivity extends AppCompatActivity
         initActivity();
         homeFragment = HomeFragment.newInstance();
         presenter = new MenuActivityPresenter(getApplicationContext());
-        Utils.setFragment(
+        Utils.addFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
                 homeFragment,
@@ -70,37 +65,37 @@ public class MenuActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_profile) {
+//
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        // Handle navigation view item clicks here.
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_profile) {
 //            profileFragment = ProfileFragment.newInstance();
-//            Utils.setFragment(
+//            Utils.addFragment(
 //                    R.id.fragment_container,
 //                    getSupportFragmentManager(),
 //                    profileFragment,
 //                    PROFILE_FRAGMENT_TAG,
 //                    true);
 
-            boolean userLogin = presenter.getUserLoginStatus();
-            if (userLogin) {
-                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
-            } else {
-                LoginDialogContainer.newInstance(getSupportFragmentManager());
-            }
-        } else if (id == R.id.nav_about_us) {
-
-        } else if (id == R.id.nav_connect_with_us) {
-
-        } else if (id == R.id.nav_sign_out){
-            presenter.signOut();
-        }
-        return true;
-    }
+//            boolean userLogin = presenter.getUserLoginStatus();
+//            if (userLogin) {
+//                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+//            } else {
+//                LoginDialogContainer.newInstance(getSupportFragmentManager());
+//            }
+//        } else if (id == R.id.nav_about_us) {
+//
+//        } else if (id == R.id.nav_connect_with_us) {
+//
+//        } else if (id == R.id.nav_sign_out){
+//            presenter.signOut();
+//        }
+//        return true;
+//    }
 
     public boolean checkPermissions(String permission) {
 
@@ -119,7 +114,7 @@ public class MenuActivity extends AppCompatActivity
     public void onCategorylistItemClicked(CategoryList category) {
         productListFragment = ProductListFragment.newInstance(
                 category.getId());
-        Utils.setFragment(
+        Utils.addFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
                 productListFragment,
@@ -130,7 +125,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onClick(Product product) {
 
-        Utils.setFragment(
+        Utils.addFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
                 ProductDetailFragment.newInstance(product),

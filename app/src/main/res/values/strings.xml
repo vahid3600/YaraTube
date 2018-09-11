@@ -8,9 +8,12 @@
     <string name="home_screen">صفحه اصلی</string>
     <string name="categorys">دسته بندی ها</string>
 
-    <string name="profile">پروفایل</string>
-    <string name="about_us">درباره ما</string>
-    <string name="connect_with_us">تماس با ما</string>
+    <string-array name="more_array">
+        <item>پروفایل</item>
+        <item>درباره ما</item>
+        <item>تماس با ما</item>
+    </string-array>
+
     <string name="user_name">نام کاربر</string>
 
     <!-- TODO: Remove or change this placeholder text -->

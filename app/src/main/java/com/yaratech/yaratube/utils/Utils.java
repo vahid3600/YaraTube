@@ -50,7 +50,7 @@ public class Utils {
         return getServices;
     }
 
-    public static void setFragment(int container, FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack) {
+    public static void addFragment(int container, FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack) {
         if (!fragment.isAdded()) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(container, fragment, tag);
@@ -59,6 +59,21 @@ public class Utils {
             fragmentTransaction.commit();
         }
     }
+
+    public static void replaceFragment(int container, FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(container, fragment, tag);
+        if (addToBackStack)
+            fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
+    }
+
+    public static void removeFragment(FragmentManager fragmentManager, String tag) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(fragmentManager.findFragmentByTag(tag));
+        fragmentTransaction.commit();
+    }
+
 
     public static final String[] CAMERA_PERMISSION = {
             Manifest.permission.CAMERA

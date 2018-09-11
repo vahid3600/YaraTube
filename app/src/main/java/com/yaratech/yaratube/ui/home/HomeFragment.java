@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +15,14 @@ import android.view.ViewGroup;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.dashboard.StoreFragment;
+import com.yaratech.yaratube.ui.home.more.MoreFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.yaratech.yaratube.ui.home.more.MoreFragment.MoreFragmentTag;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +30,7 @@ public class HomeFragment extends Fragment {
     Unbinder unbind;
     private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
+    private MoreFragment moreFragment;
     private FragmentManager fragmentManager;
 
     @BindView(R.id.navigation)
@@ -75,6 +79,9 @@ public class HomeFragment extends Fragment {
                                 item.setChecked(true);
                                 setCategoryFragment();
                                 break;
+                            case R.id.navigation_more:
+                                item.setChecked(true);
+                                setMoreFragment();
                         }
                         return false;
                     }
@@ -82,6 +89,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void setHomeFragment() {
+        if (moreFragment != null && moreFragment.isVisible())
+            Utils.removeFragment(getChildFragmentManager(),MoreFragmentTag);
+
         if (homeFragment == null) {
             if (categoryFragment != null && categoryFragment.isVisible()) {
                 getChildFragmentManager()
@@ -89,8 +99,9 @@ public class HomeFragment extends Fragment {
                         .hide(categoryFragment)
                         .commit();
             }
+
             homeFragment = StoreFragment.newInstance();
-            Utils.setFragment(
+            Utils.addFragment(
                     R.id.frameLayout,
                     getChildFragmentManager(),
                     homeFragment,
@@ -107,6 +118,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void setCategoryFragment() {
+        if (moreFragment != null && moreFragment.isVisible())
+            Utils.removeFragment(getChildFragmentManager(),MoreFragmentTag);
+
         if (categoryFragment == null) {
             if (homeFragment != null && homeFragment.isVisible()) {
                 getChildFragmentManager()
@@ -115,7 +129,7 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
             categoryFragment = CategoryFragment.newInstance();
-            Utils.setFragment(
+            Utils.addFragment(
                     R.id.frameLayout,
                     getChildFragmentManager(),
                     categoryFragment,
@@ -127,6 +141,37 @@ public class HomeFragment extends Fragment {
                     .show(categoryFragment)
                     .commit();
         }
+    }
+
+    private void setMoreFragment() {
+
+        if (categoryFragment != null && categoryFragment.isVisible()) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .hide(categoryFragment)
+                    .commit();
+        }
+
+        if (homeFragment != null && homeFragment.isVisible()) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .hide(homeFragment)
+                    .commit();
+        }
+
+        if (moreFragment == null) {
+            moreFragment = MoreFragment.newInstance();
+        }
+        if (!moreFragment.isVisible()){
+            Utils.addFragment(
+                    R.id.frameLayout,
+                    getChildFragmentManager(),
+                    moreFragment,
+                    MoreFragmentTag,
+                    false
+            );
+        }
+        Log.e("Tagss", moreFragment.isAdded() + " " + moreFragment.isVisible() + moreFragment.isDetached() + moreFragment);
     }
 
     @Override
