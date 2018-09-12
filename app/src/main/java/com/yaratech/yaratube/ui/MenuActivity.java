@@ -139,8 +139,8 @@ public class MenuActivity extends AppCompatActivity
                 R.id.fragment_container,
                 getSupportFragmentManager(),
                 fragment,
-                "",
-                false);
+                "tag",
+                true);
     }
 }
 

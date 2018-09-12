@@ -170,7 +170,6 @@ public class HomeFragment extends Fragment {
                     false
             );
         }
-        Log.e("Tagss", moreFragment.isAdded() + " " + moreFragment.isVisible() + moreFragment.isDetached() + moreFragment);
     }
 
     @Override

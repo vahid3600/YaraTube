@@ -85,12 +85,14 @@ public interface Service {
             @Field("score") int score,
             @Field("comment_text") String commentText);
 
+    @GET("profile")
+    Call<ProfileResponse> getProfile();
 
     @FormUrlEncoded
     @POST("profile")
     Call<ProfileResponse> sendProfile(
             @Field("nickname") String nickname,
-            @Field("date_of_birth") DateFormat dateOfBirth,
+            @Field("date_of_birth") Date dateOfBirth,
             @Field("gender") String gender,
             @Field("avatar") String avatar,
             @Field("mobile") String mobile,

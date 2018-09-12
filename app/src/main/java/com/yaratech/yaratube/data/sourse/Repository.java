@@ -7,6 +7,7 @@ import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 
 import java.text.DateFormat;
+import java.util.Date;
 
 public class Repository implements
         DataSource.RemoteDataSourse,
@@ -171,7 +172,7 @@ public class Repository implements
     @Override
     public void sendProfile(
             String nickname,
-            DateFormat dateOfBirth,
+            Date dateOfBirth,
             String gender,
             String avatar,
             String mobile,
@@ -180,8 +181,7 @@ public class Repository implements
             String deviceModel,
             String deviceOs,
             String password,
-            LoadDataCallback callback,
-            AddToDatabase addToDatabase) {
+            LoadDataCallback callback) {
 
     }
 

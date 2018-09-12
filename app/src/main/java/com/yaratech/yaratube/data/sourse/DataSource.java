@@ -3,6 +3,7 @@ package com.yaratech.yaratube.data.sourse;
 import com.yaratech.yaratube.data.model.dbmodel.Profile;
 
 import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Created by Vah on 8/8/2018.
@@ -70,7 +71,7 @@ public interface DataSource {
                          LoadDataCallback callback);
 
         void sendProfile(String nickname,
-                         DateFormat dateOfBirth,
+                         Date dateOfBirth,
                          String gender,
                          String avatar,
                          String mobile,
@@ -79,8 +80,7 @@ public interface DataSource {
                          String deviceModel,
                          String deviceOs,
                          String password,
-                         LoadDataCallback callback,
-                         DatabaseSourse.AddToDatabase addToDatabase);
+                         LoadDataCallback callback);
             }
 
     interface DatabaseSourse{

@@ -19,6 +19,7 @@ import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -377,7 +378,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
     @Override
     public void sendProfile(String nickname,
-                            DateFormat dateOfBirth,
+                            Date dateOfBirth,
                             String gender,
                             String avatar,
                             String mobile,
@@ -386,8 +387,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                             String deviceModel,
                             String deviceOs,
                             String password,
-                            final LoadDataCallback callback,
-                            DataSource.DatabaseSourse.AddToDatabase addToDatabase) {
+                            final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             final Call<ProfileResponse> sendProfileCall = Utils.getServices().getStoreService()
                     .sendProfile(
@@ -411,12 +411,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                     } else {
                         Log.e("tag", response.errorBody().toString());
-
-                        if (response.code() == 401)
-                            callback.onMessage(context.getString(R.string.you_must_login_first));
-                        else if (response.code() == 406)
-                            callback.onMessage(context.getString(R.string.your_score_not_acceptable));
-                        else callback.onMessage(context.getString(R.string.fail_progress));
+                        callback.onMessage(context.getString(R.string.fail_progress));
                     }
                 }
 

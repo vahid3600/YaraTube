@@ -1,12 +1,17 @@
 package com.yaratech.yaratube.ui.profile;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
 import com.yaratech.yaratube.data.sourse.local.PreferencesSourse;
 import com.yaratech.yaratube.data.sourse.remote.RemoteDataSource;
 import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.utils.Utils;
+
+import java.util.Date;
 
 /**
  * Created by Vah on 8/8/2018.
@@ -48,7 +53,32 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void sendProfileData() {
+    public void sendProfileData(final String image,final String name,final String gender,final Date birthday) {
+        view.showLoading();
+        Log.e("Tag","1");
+        profileRepository.sendProfile(null, null, null, image, null, null, null, null, null, null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+            @Override
+            public void onDataLoaded(Object result) {
+                Log.e("Tag","2");
+                profileRepository.sendProfile(name, birthday, gender, null, null, null, Utils.getDeviceId(context), Utils.getDeviceModel(), Utils.getDeviceOS(), null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+                    @Override
+                    public void onDataLoaded(Object result) {
+                        Log.e("Tag","1");
+                        view.hideLoading();
+                    }
 
+                    @Override
+                    public void onMessage(String msg) {
+                        view.hideLoading();
+                        view.showMessage(msg);
+                    }
+                });
+            }
+
+            @Override
+            public void onMessage(String msg) {
+                Log.e("Tag","4");
+            }
+        });
     }
 }

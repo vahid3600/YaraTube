@@ -23,6 +23,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -64,7 +66,10 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
 public class ProfileFragment extends Fragment
-        implements ImagePickerDialog.ImagePickerListener {
+        implements ImagePickerDialog.ImagePickerListener,
+                    ProfileContract.View{
+    ProfileContract.Presenter presenter;
+    String img;
 
     @BindView(R.id.name_family)
     EditText name_family;
@@ -76,14 +81,26 @@ public class ProfileFragment extends Fragment
     ImageView profilePicture;
 
     @OnClick(R.id.save)
-
     public void saveProfile() {
-
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            date = format.parse(birth_date.getText().toString());
+            Log.e("Tag",date+" "+img);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.e("Tag",date+" "+img);
+        presenter.sendProfileData(
+                img,
+                name_family.getText().toString(),
+                gender.getSelectedItem().toString(),
+                date);
     }
 
     @OnClick(R.id.cancel)
     public void cancel() {
-        cancel();
+        getChildFragmentManager().popBackStack();
     }
 
 
@@ -95,14 +112,14 @@ public class ProfileFragment extends Fragment
     }
 
     public static ProfileFragment newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         ProfileFragment fragment = new ProfileFragment();
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,15 +131,20 @@ public class ProfileFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        presenter = new ProfilePresenter(getContext(), this);
     }
 
     @Override
     public void onCamera() {
-        if (Permissions.checkCameraPermissions(getContext())) {
+        if (!Permissions.checkCameraPermissions(getContext())) {
             requestCameraPermission(MEDIA_TYPE_IMAGE);
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, 0);
+            File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp1.jpg");
+            Uri mImageCaptureUri = Uri.fromFile(f);
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            getActivity().startActivityForResult(intent, 0);
         }
     }
 
@@ -156,21 +178,23 @@ public class ProfileFragment extends Fragment
                 Glide.with(getContext()).load(bitmap).into(profilePicture);
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            File destination = new File(Environment.getExternalStorageDirectory(),
-                    System.currentTimeMillis() + ".jpg");
-            FileOutputStream fileOutputStream = null;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] imgByte = byteArrayOutputStream.toByteArray();
+            img = Base64.encodeToString(imgByte, Base64.DEFAULT);
+//            File destination = new File(Environment.getExternalStorageDirectory(),
+//                    System.currentTimeMillis() + ".jpg");
+//            FileOutputStream fileOutputStream = null;
+//
+//            try {
+//                destination.createNewFile();
+//                fileOutputStream = new FileOutputStream(destination);
+//                fileOutputStream.write(byteArrayOutputStream.toByteArray());
+//                fileOutputStream.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
-            try {
-                destination.createNewFile();
-                fileOutputStream = new FileOutputStream(destination);
-                fileOutputStream.write(byteArrayOutputStream.toByteArray());
-                fileOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-                Log.e("tag", destination.toString());
+//            Log.e("tag", destination.toString());
 
 
         }
@@ -200,5 +224,25 @@ public class ProfileFragment extends Fragment
                         token.continuePermissionRequest();
                     }
                 }).check();
+    }
+
+    @Override
+    public void updateImage(Uri uri) {
+
+    }
+
+    @Override
+    public void showMessage(String msg) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
     }
 }

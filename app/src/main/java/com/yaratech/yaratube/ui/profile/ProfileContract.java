@@ -5,6 +5,8 @@ import android.net.Uri;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.ui.MenuActivity;
 
+import java.util.Date;
+
 /**
  * Created by Vah on 8/6/2018.
  */
@@ -28,6 +30,9 @@ public interface ProfileContract {
 
         void fetchProfileCamera();
 
-        void sendProfileData();
+        void sendProfileData(String image,
+                             String name,
+                             String gender,
+                             Date birthday);
     }
 }
