@@ -138,19 +138,6 @@ public class ProfileFragment extends Fragment
         dpd.show(getActivity().getFragmentManager(), "tag");
     }
 
-    private ProfileFragment switchToProfileFragment() {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        ProfileFragment fragment = (ProfileFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = ProfileFragment.newInstance();
-            fragmentTransaction.add(R.id.fragment_container, fragment, PROFILE_FRAGMENT_TAG).commit();
-            fragmentTransaction.attach(fragment);
-        }
-        return fragment;
-    }
-
-
     @Override
     public void onCamera() {
         if (!Permissions.checkCameraPermissions(getContext())) {
