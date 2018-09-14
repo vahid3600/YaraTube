@@ -1,101 +1,87 @@
 package com.yaratech.yaratube.ui.profile;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
+import android.support.v4.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.PermissionRequest;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.yaratech.yaratube.BuildConfig;
+import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
+import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
+import com.soundcloud.android.crop.Crop;
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog;
 import com.yaratech.yaratube.utils.Permissions;
-import com.yaratech.yaratube.utils.Utils;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog.IMAGE_PICKER_TAG;
 
 public class ProfileFragment extends Fragment
         implements ImagePickerDialog.ImagePickerListener,
-                    ProfileContract.View{
+        DatePickerDialog.OnDateSetListener,
+        ProfileContract.View {
+    public static String PROFILE_FRAGMENT_TAG = "profile_fragment";
     ProfileContract.Presenter presenter;
-    String img;
+    File destination;
+    final int CAMERA = 0;
 
     @BindView(R.id.name_family)
     EditText name_family;
-    @BindView(R.id.birth_date)
-    EditText birth_date;
     @BindView(R.id.gender)
     Spinner gender;
     @BindView(R.id.profile_picture)
     ImageView profilePicture;
+    @BindView(R.id.birth_date)
+    TextView birthDate;
 
     @OnClick(R.id.save)
     public void saveProfile() {
-        Date date = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        try {
-            date = format.parse(birth_date.getText().toString());
-            Log.e("Tag",date+" "+img);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Log.e("Tag",date+" "+img);
-        presenter.sendProfileData(
-                img,
-                name_family.getText().toString(),
-                gender.getSelectedItem().toString(),
-                date);
+        Log.e("salar", presenter.getUserAuthorization());
+        presenter.sendImage(presenter.getUserAuthorization(), destination.toString());
+//        Date date = null;
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+//        try {
+//            date = format.parse(birth_date.getText().toString());
+//            Log.e("Tag", date + " " + img);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Log.e("Tag", date + " " + img);
+//        presenter.sendProfileData(
+//                img,
+//                name_family.getText().toString(),
+//                gender.getSelectedItem().toString(),
+//                date);
     }
 
     @OnClick(R.id.cancel)
@@ -132,56 +118,82 @@ public class ProfileFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         presenter = new ProfilePresenter(getContext(), this);
+        birthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate();
+            }
+        });
     }
+
+    public void setDate() {
+        PersianCalendar now = new PersianCalendar();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.getPersianYear(),
+                now.getPersianMonth(),
+                now.getPersianDay()
+        );
+        dpd.setThemeDark(false);
+        dpd.show(getActivity().getFragmentManager(), "tag");
+    }
+
+    private ProfileFragment switchToProfileFragment() {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        ProfileFragment fragment = (ProfileFragment) getActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_container);
+        if (fragment == null) {
+            fragment = ProfileFragment.newInstance();
+            fragmentTransaction.add(R.id.fragment_container, fragment, PROFILE_FRAGMENT_TAG).commit();
+            fragmentTransaction.attach(fragment);
+        }
+        return fragment;
+    }
+
 
     @Override
     public void onCamera() {
         if (!Permissions.checkCameraPermissions(getContext())) {
             requestCameraPermission(MEDIA_TYPE_IMAGE);
         } else {
+            Log.e("TASA",this+"");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp1.jpg");
-            Uri mImageCaptureUri = Uri.fromFile(f);
-
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            getActivity().startActivityForResult(intent, 0);
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            this.startActivityForResult(intent, CAMERA);
         }
     }
 
     @Override
     public void onGalery() {
-        Log.e("galery", "camera");
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "select picture"), 1);
+        Crop.pickImage(getContext(), this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-            Log.e("Tag", "ok");
-            Bitmap bitmap = null;
-            if (requestCode == 0) {
-                Log.e("Tag", "camera");
-                bitmap = (Bitmap) data.getExtras().get("data");
-                Glide.with(getContext()).load(bitmap).into(profilePicture);
-            } else if (requestCode == 1) {
-                Log.e("Tag", "galery");
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Glide.with(getContext()).load(bitmap).into(profilePicture);
+        if (resultCode == RESULT_OK) {
+
+            Log.e("Tag ", "Ok");
+            if (requestCode == CAMERA) {
+
+                beginCrop(data.getData());
+
+            } else if (requestCode == Crop.REQUEST_PICK) {
+
+                beginCrop(data.getData());
+
+            } else if (requestCode == Crop.REQUEST_CROP) {
+
+                Log.e("Cropeer", Crop.getOutput(data).getPath());
+                handleCrop(resultCode, data);
+//                Glide.with(getContext()).load(Crop.getOutput(data)).into(profilePicture);
             }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            byte[] imgByte = byteArrayOutputStream.toByteArray();
-            img = Base64.encodeToString(imgByte, Base64.DEFAULT);
-//            File destination = new File(Environment.getExternalStorageDirectory(),
+
+
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//            destination = new File(Environment.getExternalStorageDirectory(),
 //                    System.currentTimeMillis() + ".jpg");
 //            FileOutputStream fileOutputStream = null;
 //
@@ -195,9 +207,21 @@ public class ProfileFragment extends Fragment
 //            }
 
 //            Log.e("tag", destination.toString());
-
-
         }
+    }
+
+    private void handleCrop(int code, Intent data) {
+        if (code == RESULT_OK) {
+            Glide.with(getContext()).load(Crop.getOutput(data)).into(profilePicture);
+        } else if (code == Crop.RESULT_ERROR) {
+            Log.e("Tag", " Error");
+        }
+    }
+
+    private void beginCrop(Uri source) {
+        Log.e("camera",source.getPath());
+        Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(getContext(), this);
     }
 
     private void requestCameraPermission(final int type) {
@@ -244,5 +268,47 @@ public class ProfileFragment extends Fragment
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("Tag", "detach");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("Tag", "destroy");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Tag", "very");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Tag", "pause");
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("Tag", "start");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Tag", "stop");
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        birthDate.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
     }
 }

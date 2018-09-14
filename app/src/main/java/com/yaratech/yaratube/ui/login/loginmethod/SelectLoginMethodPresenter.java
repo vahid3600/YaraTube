@@ -47,6 +47,7 @@ public class SelectLoginMethodPresenter implements SelectLoginMethodContract.Pre
                     LoginGoogle loginGoogle = (LoginGoogle)result;
                     Profile profile = new Profile();
                     profile.setUserToken(loginGoogle.getToken());
+                    loginRepository.saveUserAuthorization(loginGoogle.getToken());
                     loginRepository.saveProfile(profile);
                 }
 

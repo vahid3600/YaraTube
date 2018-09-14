@@ -1,13 +1,20 @@
 package com.yaratech.yaratube.ui;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.bumptech.glide.Glide;
+import com.soundcloud.android.crop.Crop;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
@@ -38,6 +45,7 @@ public class MenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Log.e("MenuActivity", " onCreate");
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         ButterKnife.bind(this);
         initActivity();
@@ -65,50 +73,6 @@ public class MenuActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-//
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_profile) {
-//            profileFragment = ProfileFragment.newInstance();
-//            Utils.addFragment(
-//                    R.id.fragment_container,
-//                    getSupportFragmentManager(),
-//                    profileFragment,
-//                    PROFILE_FRAGMENT_TAG,
-//                    true);
-
-//            boolean userLogin = presenter.getUserLoginStatus();
-//            if (userLogin) {
-//                startActivity(new Intent(MenuActivity.this, ProfileFragment.class));
-//            } else {
-//                LoginDialogContainer.newInstance(getSupportFragmentManager());
-//            }
-//        } else if (id == R.id.nav_about_us) {
-//
-//        } else if (id == R.id.nav_connect_with_us) {
-//
-//        } else if (id == R.id.nav_sign_out){
-//            presenter.signOut();
-//        }
-//        return true;
-//    }
-
-    public boolean checkPermissions(String permission) {
-
-        int permissionRequest = ActivityCompat.checkSelfPermission(
-                MenuActivity.this,
-                permission);
-
-        if (permissionRequest != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
@@ -134,12 +98,12 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentClickListener(Fragment fragment) {
-        Utils.replaceFragment(
+    public void onFragmentClickListener(FragmentManager fragmentManager, Fragment fragment, String tag) {
+        Utils.addFragment(
                 R.id.fragment_container,
-                getSupportFragmentManager(),
+                fragmentManager,
                 fragment,
-                "tag",
+                tag,
                 true);
     }
 }

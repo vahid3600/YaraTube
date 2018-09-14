@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_TAG;
 
 public class MoreFragment extends Fragment {
     public static String MoreFragmentTag = "more_fragment";
@@ -94,7 +97,7 @@ public class MoreFragment extends Fragment {
                     public void onClick(View v) {
                         switch (position) {
                             case 0:
-                                listener.onFragmentClickListener(ProfileFragment.newInstance());
+                                listener.onFragmentClickListener(getActivity().getSupportFragmentManager(), ProfileFragment.newInstance(), PROFILE_FRAGMENT_TAG);
                                 break;
                             case 1:
                                 break;
@@ -110,7 +113,7 @@ public class MoreFragment extends Fragment {
 
     public interface onActionClickListener {
 
-        void onFragmentClickListener(Fragment fragment);
+        void onFragmentClickListener(FragmentManager fragmentManager, Fragment fragment, String tag);
     }
 
     @Override

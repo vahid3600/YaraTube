@@ -18,10 +18,15 @@ import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.utils.Utils;
 import com.yaratech.yaratube.data.model.Store;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -377,6 +382,43 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
+    public void sendImage(String authorization, String path, final LoadDataCallback callback) {
+        if (Utils.isOnline(context)) {
+
+
+            File file = new File(path);
+
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            Log.e("Tag",authorization+" "+path+file.getName()+" "+reqFile.toString());
+            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+
+            Call<okhttp3.ResponseBody> req = Utils.getServices().getStoreService().postImage(
+                    "Token " + authorization,
+                    body,
+                    name);
+            req.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()){
+                        callback.onDataLoaded(response.body());
+                    }
+                    else{
+                    }
+                        callback.onMessage(context.getString(R.string.fail_progress));
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+        } else
+            callback.onMessage(context.getString(R.string.no_internet));
+    }
+
+    @Override
     public void sendProfile(String nickname,
                             Date dateOfBirth,
                             String gender,
@@ -394,7 +436,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                             nickname,
                             dateOfBirth,
                             gender,
-                            avatar,
                             mobile,
                             email,
                             deviceId,

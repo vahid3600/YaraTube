@@ -170,6 +170,18 @@ public class Repository implements
     }
 
     @Override
+    public void sendImage(
+            String authorization,
+            String path,
+            LoadDataCallback callback) {
+
+        remoteDataSource.sendImage(
+                authorization,
+                path,
+                callback);
+    }
+
+    @Override
     public void sendProfile(
             String nickname,
             Date dateOfBirth,

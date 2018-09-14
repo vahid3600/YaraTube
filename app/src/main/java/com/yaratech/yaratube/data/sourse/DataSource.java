@@ -70,6 +70,10 @@ public interface DataSource {
                          String commentText,
                          LoadDataCallback callback);
 
+        void sendImage(String authorization,
+                       String path,
+                       final LoadDataCallback callback);
+
         void sendProfile(String nickname,
                          Date dateOfBirth,
                          String gender,
@@ -81,11 +85,11 @@ public interface DataSource {
                          String deviceOs,
                          String password,
                          LoadDataCallback callback);
-            }
+    }
 
-    interface DatabaseSourse{
+    interface DatabaseSourse {
 
-        interface AddToDatabase{
+        interface AddToDatabase {
             void saveProfile(Profile profile);
 
             void updateProfile(Profile profile);
@@ -98,7 +102,7 @@ public interface DataSource {
         void deleteProfile();
     }
 
-    interface PreferencesSource{
+    interface PreferencesSource {
 
         void saveUserLoginState(int state);
 

@@ -13,4 +13,6 @@
     <color name="button_background_2">#DD4B39</color>
     <color name="comment_text_color">#000000</color>
     <color name="comment_title_text_color">#000000</color>
+    <color name="mdtp_accent_color">#3B89D2</color>
+    <color name="mdtp_accent_color_dark">#357DBE</color>
 </resources>

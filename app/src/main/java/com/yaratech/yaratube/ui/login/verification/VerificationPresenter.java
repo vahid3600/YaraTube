@@ -44,10 +44,10 @@ public class VerificationPresenter implements VerificationContract.Presenter {
                         profile.setNickName(loginResponse.getNickname());
                         profile.setUserToken(loginResponse.getToken());
                         profile.setMobile(mobile);
-                        Log.e("MOBILE",loginResponse.getToken());
                         repository.saveProfile(profile);
                         repository.saveUserAuthorization(loginResponse.getToken());
                         repository.saveUserLoginStatus(true);
+                        Log.e("MOBILE",loginResponse.getToken()+" "+repository.getUserAuthorization());
                         view.closeDialog();
                     }
 

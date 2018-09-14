@@ -48,37 +48,61 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
+    public String getUserAuthorization() {
+        return profileRepository.getUserAuthorization();
+    }
+
+
+    @Override
     public void fetchProfileCamera() {
         MenuActivity menuActivity = new MenuActivity();
     }
 
     @Override
-    public void sendProfileData(final String image,final String name,final String gender,final Date birthday) {
+    public void sendImage(String authorization, String path) {
         view.showLoading();
-        Log.e("Tag","1");
-        profileRepository.sendProfile(null, null, null, image, null, null, null, null, null, null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        profileRepository.sendImage(authorization, path, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
-                Log.e("Tag","2");
-                profileRepository.sendProfile(name, birthday, gender, null, null, null, Utils.getDeviceId(context), Utils.getDeviceModel(), Utils.getDeviceOS(), null, new DataSource.RemoteDataSourse.LoadDataCallback() {
-                    @Override
-                    public void onDataLoaded(Object result) {
-                        Log.e("Tag","1");
-                        view.hideLoading();
-                    }
+                view.hideLoading();
 
-                    @Override
-                    public void onMessage(String msg) {
-                        view.hideLoading();
-                        view.showMessage(msg);
-                    }
-                });
             }
 
             @Override
             public void onMessage(String msg) {
-                Log.e("Tag","4");
+                view.hideLoading();
+                view.showMessage(msg);
             }
         });
+    }
+
+    @Override
+    public void sendProfileData(final String name,final String gender,final Date birthday) {
+        view.showLoading();
+        Log.e("Tag","1");
+//        profileRepository.sendProfile(null, null, null,null, null, null, null, null, null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+//            @Override
+//            public void onDataLoaded(Object result) {
+//                Log.e("Tag","2");
+//                profileRepository.sendProfile(name, birthday, gender, null, null, null, Utils.getDeviceId(context), Utils.getDeviceModel(), Utils.getDeviceOS(), null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+//                    @Override
+//                    public void onDataLoaded(Object result) {
+//                        Log.e("Tag","1");
+//                        view.hideLoading();
+//                    }
+//
+//                    @Override
+//                    public void onMessage(String msg) {
+//                        view.hideLoading();
+//                        view.showMessage(msg);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onMessage(String msg) {
+//                Log.e("Tag","4");
+//            }
+//        });
     }
 }

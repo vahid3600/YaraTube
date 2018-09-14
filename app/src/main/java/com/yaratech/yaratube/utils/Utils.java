@@ -54,6 +54,7 @@ public class Utils {
         if (!fragment.isAdded()) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(container, fragment, tag);
+            fragmentTransaction.attach(fragment);
             if (addToBackStack)
                 fragmentTransaction.addToBackStack(tag);
             fragmentTransaction.commit();
@@ -63,6 +64,7 @@ public class Utils {
     public static void replaceFragment(int container, FragmentManager fragmentManager, Fragment fragment, String tag, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(container, fragment, tag);
+        fragmentTransaction.attach(fragment);
         if (addToBackStack)
             fragmentTransaction.addToBackStack(tag);
         fragmentTransaction.commit();

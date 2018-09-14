@@ -30,8 +30,11 @@ public interface ProfileContract {
 
         void fetchProfileCamera();
 
-        void sendProfileData(String image,
-                             String name,
+        String getUserAuthorization();
+
+        void sendImage(String authorization, String path);
+
+        void sendProfileData(String name,
                              String gender,
                              Date birthday);
     }
