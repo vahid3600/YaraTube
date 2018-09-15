@@ -8,6 +8,7 @@ import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.CommentResponse;
+import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
@@ -382,34 +383,62 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void sendImage(String authorization, String path, final LoadDataCallback callback) {
+    public void getProfile(String authorization, final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
-
-
-            File file = new File(path);
-
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            Log.e("Tag",authorization+" "+path+file.getName()+" "+reqFile.toString());
-            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
-
-            Call<okhttp3.ResponseBody> req = Utils.getServices().getStoreService().postImage(
-                    "Token " + authorization,
-                    body,
-                    name);
-            req.enqueue(new Callback<ResponseBody>() {
+            final Call<GetProfileResponse> sendProfileCall = Utils.getServices().getStoreService()
+                    .getProfile(
+                            "Token " + authorization);
+            sendProfileCall.enqueue(new Callback<GetProfileResponse>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()){
+                public void onResponse(@NonNull Call<GetProfileResponse> call,
+                                       @NonNull Response<GetProfileResponse> response) {
+
+                    if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
-                    }
-                    else{
-                    }
+
+                    } else {
+                        Log.e("tag", response.errorBody().toString());
                         callback.onMessage(context.getString(R.string.fail_progress));
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<GetProfileResponse> call, Throwable t) {
+                    callback.onMessage(context.getString(R.string.fail_progress));
+                }
+            });
+        } else
+            callback.onMessage(context.getString(R.string.no_internet));
+    }
+
+    @Override
+    public void sendImage(String authorization, String path, final LoadDataCallback callback) {
+        if (Utils.isOnline(context)) {
+
+            File file = new File(path);
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            Log.e("Tag",authorization+" "+path+file.getName()+" "+reqFile.toString());
+            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+
+
+            Call<ProfileResponse> req = Utils.getServices().getStoreService().postImage(
+                    "Token " + authorization,
+                    body);
+            req.enqueue(new Callback<ProfileResponse>() {
+                @Override
+                public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                    if (response.isSuccessful()){
+                        Log.e("tamaa",response.body().getMessage()+" "+response.body().getData().getAvatar());
+                        callback.onDataLoaded(response.body());
+                    }
+                    else{
+                        callback.onMessage(context.getString(R.string.fail_progress));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                    callback.onMessage(context.getString(R.string.fail_progress));
                     t.printStackTrace();
                 }
             });
@@ -419,29 +448,24 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     }
 
     @Override
-    public void sendProfile(String nickname,
-                            Date dateOfBirth,
+    public void sendProfile(String authorization,
+                            String nickname,
+                            String dateOfBirth,
                             String gender,
-                            String avatar,
-                            String mobile,
-                            String email,
                             String deviceId,
                             String deviceModel,
                             String deviceOs,
-                            String password,
                             final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
             final Call<ProfileResponse> sendProfileCall = Utils.getServices().getStoreService()
                     .sendProfile(
+                            "Token " + authorization,
                             nickname,
                             dateOfBirth,
                             gender,
-                            mobile,
-                            email,
                             deviceId,
                             deviceModel,
-                            deviceOs,
-                            password);
+                            deviceOs);
             sendProfileCall.enqueue(new Callback<ProfileResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<ProfileResponse> call,
@@ -449,6 +473,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
+                        Log.e("TAMaaa",response.body().getData().getNickname());
 
                     } else {
                         Log.e("tag", response.errorBody().toString());

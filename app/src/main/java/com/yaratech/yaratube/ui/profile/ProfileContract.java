@@ -2,6 +2,8 @@ package com.yaratech.yaratube.ui.profile;
 
 import android.net.Uri;
 
+import com.yaratech.yaratube.data.model.GetProfileResponse;
+import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.ui.MenuActivity;
 
@@ -13,9 +15,11 @@ import java.util.Date;
 
 public interface ProfileContract {
 
-    interface View{
+    interface View {
 
         void updateImage(Uri uri);
+
+        void onDataLoad(GetProfileResponse getProfileResponse);
 
         void showMessage(String msg);
 
@@ -24,18 +28,17 @@ public interface ProfileContract {
         void hideLoading();
     }
 
-    interface Presenter{
+    interface Presenter {
 
-        void fetchProfileGalery();
-
-        void fetchProfileCamera();
+        void getProfileData(String authorization);
 
         String getUserAuthorization();
 
         void sendImage(String authorization, String path);
 
-        void sendProfileData(String name,
-                             String gender,
-                             Date birthday);
+        void sendProfileData(String authorization,
+                             String name,
+                             int gender,
+                             String birthday);
     }
 }

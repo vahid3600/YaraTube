@@ -57,4 +57,5 @@
     <string name="sign_out">خروج از اکانت</string>
     <string name="login_success">ورود شما با موفقیت انجام شد</string>
     <string name="more">بیشتر</string>
+    <string name="name_family">نام و نام خانوادگی</string>
 </resources>

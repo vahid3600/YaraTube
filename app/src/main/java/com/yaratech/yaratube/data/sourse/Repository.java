@@ -170,6 +170,11 @@ public class Repository implements
     }
 
     @Override
+    public void getProfile(String authorization, LoadDataCallback callback) {
+        remoteDataSource.getProfile(authorization, callback);
+    }
+
+    @Override
     public void sendImage(
             String authorization,
             String path,
@@ -183,18 +188,22 @@ public class Repository implements
 
     @Override
     public void sendProfile(
+            String authorization,
             String nickname,
-            Date dateOfBirth,
+            String dateOfBirth,
             String gender,
-            String avatar,
-            String mobile,
-            String email,
             String deviceId,
             String deviceModel,
             String deviceOs,
-            String password,
             LoadDataCallback callback) {
-
+        remoteDataSource.sendProfile(authorization,
+                nickname,
+                dateOfBirth,
+                gender,
+                deviceId,
+                deviceModel,
+                deviceOs,
+                callback);
     }
 
     @Override

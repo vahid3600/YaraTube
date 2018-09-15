@@ -3,6 +3,7 @@ package com.yaratech.yaratube.data.sourse.remote;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Comment;
 import com.yaratech.yaratube.data.model.CommentResponse;
+import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.data.model.LoginResponse;
 import com.yaratech.yaratube.data.model.MobileLoginStep1;
@@ -91,28 +92,27 @@ public interface Service {
             @Field("comment_text") String commentText);
 
     @GET("profile")
-    Call<ProfileResponse> getProfile();
+    Call<GetProfileResponse> getProfile(
+            @Header("Authorization") String authorization
+    );
 
     @Multipart
     @POST("profile")
-    Call<ResponseBody> postImage(
+    Call<ProfileResponse> postImage(
             @Header("Authorization") String authorization,
-            @Part MultipartBody.Part image,
-            @Part("avatar") RequestBody name
+            @Part MultipartBody.Part image
     );
 
     @FormUrlEncoded
     @POST("profile")
     Call<ProfileResponse> sendProfile(
+            @Header("Authorization") String authorization,
             @Field("nickname") String nickname,
-            @Field("date_of_birth") Date dateOfBirth,
+            @Field("date_of_birth") String dateOfBirth,
             @Field("gender") String gender,
-            @Field("mobile") String mobile,
-            @Field("email") String email,
             @Field("device_id") String deviceId,
             @Field("device_model") String deviceModel,
-            @Field("device_os") String deviceOs,
-            @Field("password") String password
+            @Field("device_os") String deviceOs
     );
 
 }

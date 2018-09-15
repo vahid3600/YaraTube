@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 import com.yaratech.yaratube.utils.Utils;
 
@@ -27,6 +28,7 @@ import static com.yaratech.yaratube.ui.profile.ProfileFragment.PROFILE_FRAGMENT_
 public class MoreFragment extends Fragment {
     public static String MoreFragmentTag = "more_fragment";
     private onActionClickListener listener;
+    MoreContract.Presenter presenter;
     @BindView(R.id.list_item)
     ListView listView;
 
@@ -39,6 +41,7 @@ public class MoreFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new MorePresenter(getContext());
 
     }
 
@@ -97,7 +100,12 @@ public class MoreFragment extends Fragment {
                     public void onClick(View v) {
                         switch (position) {
                             case 0:
-                                listener.onFragmentClickListener(getActivity().getSupportFragmentManager(), ProfileFragment.newInstance(), PROFILE_FRAGMENT_TAG);
+                                boolean userLogin = presenter.getUserLoginStatus();
+                                if (userLogin) {
+                                    listener.onFragmentClickListener(getActivity().getSupportFragmentManager(), ProfileFragment.newInstance(), PROFILE_FRAGMENT_TAG);
+                                } else {
+                                    LoginDialogContainer.newInstance(getFragmentManager());
+                                }
                                 break;
                             case 1:
                                 break;

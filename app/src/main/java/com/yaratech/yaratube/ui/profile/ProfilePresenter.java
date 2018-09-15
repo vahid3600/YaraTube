@@ -3,6 +3,7 @@ package com.yaratech.yaratube.ui.profile;
 import android.content.Context;
 import android.util.Log;
 
+import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
@@ -29,43 +30,20 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 new RemoteDataSource(context),
                 new DatabaseSourse(context),
                 new PreferencesSourse(context));
+        this.context = context;
         this.view = view;
     }
 
-    @Override
-    public void fetchProfileGalery() {
-//        profileRepository.getImageFromGalery(context, new DataSource.LoadImageGaleryCallback() {
-//            @Override
-//            public void onImageLoaded(List<CategoryList> categoryList) {
-//
-//            }
-//
-//            @Override
-//            public void onError(String msg) {
-//
-//            }
-//        });
-    }
-
-    @Override
-    public String getUserAuthorization() {
-        return profileRepository.getUserAuthorization();
-    }
 
 
     @Override
-    public void fetchProfileCamera() {
-        MenuActivity menuActivity = new MenuActivity();
-    }
-
-    @Override
-    public void sendImage(String authorization, String path) {
+    public void getProfileData(String authorization) {
         view.showLoading();
-        profileRepository.sendImage(authorization, path, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        profileRepository.getProfile(authorization, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
-
+                view.onDataLoad((GetProfileResponse) result);
             }
 
             @Override
@@ -77,14 +55,62 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void sendProfileData(final String name,final String gender,final Date birthday) {
+    public String getUserAuthorization() {
+        return profileRepository.getUserAuthorization();
+    }
+
+
+    @Override
+    public void sendImage(String authorization, String path) {
         view.showLoading();
-        Log.e("Tag","1");
-//        profileRepository.sendProfile(null, null, null,null, null, null, null, null, null, new DataSource.RemoteDataSourse.LoadDataCallback() {
-//            @Override
-//            public void onDataLoaded(Object result) {
-//                Log.e("Tag","2");
-//                profileRepository.sendProfile(name, birthday, gender, null, null, null, Utils.getDeviceId(context), Utils.getDeviceModel(), Utils.getDeviceOS(), null, new DataSource.RemoteDataSourse.LoadDataCallback() {
+        Log.e("presenter",authorization+" "+path);
+        profileRepository.sendImage(authorization, path, new DataSource.RemoteDataSourse.LoadDataCallback() {
+            @Override
+            public void onDataLoaded(Object result) {
+                view.hideLoading();
+            }
+
+            @Override
+            public void onMessage(String msg) {
+                view.hideLoading();
+                view.showMessage(msg);
+            }
+        });
+    }
+
+    @Override
+    public void sendProfileData(String authorization, final String name,final int gender,final String birthday) {
+        view.showLoading();
+        String userGender = "";
+        switch (gender){
+            case 0:
+                userGender = "men";
+                break;
+            case 1:
+                userGender = "women";
+                break;
+        }
+        Log.e("Tag",userGender+" "+gender);
+                profileRepository.sendProfile(
+                        authorization,
+                        name,
+                        birthday,
+                        userGender,
+                        Utils.getDeviceId(context),
+                        Utils.getDeviceModel(),
+                        Utils.getDeviceOS(),
+                        new DataSource.RemoteDataSourse.LoadDataCallback() {
+                    @Override
+                    public void onDataLoaded(Object result) {
+                        view.hideLoading();
+                    }
+
+                    @Override
+                    public void onMessage(String msg) {
+                        view.hideLoading();
+                        view.showMessage(msg);
+                    }
+                });
 //                    @Override
 //                    public void onDataLoaded(Object result) {
 //                        Log.e("Tag","1");

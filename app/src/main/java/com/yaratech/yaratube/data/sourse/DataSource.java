@@ -70,20 +70,20 @@ public interface DataSource {
                          String commentText,
                          LoadDataCallback callback);
 
+        void getProfile(String authorization,
+                        LoadDataCallback callback);
+
         void sendImage(String authorization,
                        String path,
                        final LoadDataCallback callback);
 
-        void sendProfile(String nickname,
-                         Date dateOfBirth,
+        void sendProfile(String authorization,
+                         String nickname,
+                         String dateOfBirth,
                          String gender,
-                         String avatar,
-                         String mobile,
-                         String email,
                          String deviceId,
                          String deviceModel,
                          String deviceOs,
-                         String password,
                          LoadDataCallback callback);
     }
 
