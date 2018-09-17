@@ -18,7 +18,7 @@ public interface ProfileContract {
 
     interface View {
 
-        void updateImage(Uri uri);
+        void updateImage(ProfileResponse response);
 
         void onDataLoad(GetProfileResponse getProfileResponse);
 

@@ -9,6 +9,10 @@ public interface VerificationContract {
         void closeDialog();
 
         void showMessage(String msg);
+
+        void showProgressbar();
+
+        void hideProgressbar();
     }
 
     interface Presenter{

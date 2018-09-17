@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
+import com.yaratech.yaratube.ui.login.loginphone.LoginPhoneFragment;
 import com.yaratech.yaratube.ui.login.loginmethod.SelectLoginMethodFragment;
 import com.yaratech.yaratube.ui.login.verification.VerificationFragment;
 
-import static com.yaratech.yaratube.ui.login.loginphone.LoginPhone.ENTER_PHONE_DIALOG_TAG;
+import static com.yaratech.yaratube.ui.login.loginphone.LoginPhoneFragment.ENTER_PHONE_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.login.loginmethod.SelectLoginMethodFragment.LOGIN_DIALOG_TAG;
 import static com.yaratech.yaratube.ui.login.verification.VerificationFragment.VERIFICATION_DIALOG_TAG;
 
@@ -81,7 +81,7 @@ public class LoginDialogContainer extends DialogFragment implements
                 .beginTransaction()
                 .replace(
                         R.id.dialog_container,
-                        LoginPhone.newInstance(),
+                        LoginPhoneFragment.newInstance(),
                         ENTER_PHONE_DIALOG_TAG)
                 .commit();
         presenter.setUserStateLogin(2);
@@ -102,7 +102,7 @@ public class LoginDialogContainer extends DialogFragment implements
 
     @Override
     public void showDialog(Fragment fragment) {
-        if (fragment instanceof LoginPhone) {
+        if (fragment instanceof LoginPhoneFragment) {
             showLoginPhone();
         } else if (fragment instanceof VerificationFragment) {
             showVerification(fragment);

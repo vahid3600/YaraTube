@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
@@ -24,9 +25,11 @@ import butterknife.Unbinder;
  * Created by Vah on 8/12/2018.
  */
 
-public class LoginPhone extends Fragment implements
+public class LoginPhoneFragment extends Fragment implements
         LoginPhoneContract.View {
 
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
     @OnClick(R.id.save)
     public void sendPhoneNumberRequest() {
         presenter.loginByMobile(
@@ -49,7 +52,7 @@ public class LoginPhone extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_enter_phone_number, container, false);
+        return inflater.inflate(R.layout.fragment_enter_phone_number, container, false);
 
     }
 
@@ -63,6 +66,7 @@ public class LoginPhone extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressBar.setVisibility(View.GONE);
         dialogInteraction = (DialogInteraction) getParentFragment();
     }
 
@@ -72,11 +76,11 @@ public class LoginPhone extends Fragment implements
         super.onDetach();
     }
 
-    public static LoginPhone newInstance() {
+    public static LoginPhoneFragment newInstance() {
         
         Bundle args = new Bundle();
         
-        LoginPhone fragment = new LoginPhone();
+        LoginPhoneFragment fragment = new LoginPhoneFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,6 +94,16 @@ public class LoginPhone extends Fragment implements
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressbar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressbar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

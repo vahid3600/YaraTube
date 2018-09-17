@@ -19,23 +19,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 import com.google.android.gms.tasks.Task;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.LoginGoogle;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
-import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
+import com.yaratech.yaratube.ui.login.loginphone.LoginPhoneFragment;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.google.android.exoplayer2.ExoPlayerLibraryInfo.TAG;
 
 /**
  * Created by Vah on 8/12/2018.
@@ -157,7 +152,7 @@ public class SelectLoginMethodFragment extends Fragment implements
 
     @Override
     public void showLoginByPhoneDialog() {
-        dialogInteraction.showDialog(LoginPhone.newInstance());
+        dialogInteraction.showDialog(LoginPhoneFragment.newInstance());
     }
 
     @Override

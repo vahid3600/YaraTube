@@ -2,8 +2,6 @@ package com.yaratech.yaratube.ui.login.verification;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,19 +9,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.yaratech.yaratube.BuildConfig;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.ui.login.DialogInteraction;
-import com.yaratech.yaratube.ui.login.loginphone.LoginPhone;
+import com.yaratech.yaratube.ui.login.loginphone.LoginPhoneFragment;
 import com.yaratech.yaratube.utils.Permissions;
 import com.yaratech.yaratube.utils.Utils;
 
@@ -47,6 +43,8 @@ public class VerificationFragment extends Fragment implements
     private static final int SMS_PERMISSION_CODE = 0;
     public static final String VERIFICATION_DIALOG_TAG = "Verification";
 
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
     @BindView(R.id.verification_code)
     EditText verificationCode;
 
@@ -61,7 +59,7 @@ public class VerificationFragment extends Fragment implements
 
     @OnClick(R.id.return_back)
     public void showEnterNumberDialog() {
-        dialogInteraction.showDialog(LoginPhone.newInstance());
+        dialogInteraction.showDialog(LoginPhoneFragment.newInstance());
     }
 
     @Override
@@ -74,7 +72,7 @@ public class VerificationFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container
             , Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_verification, container, false);
+        return inflater.inflate(R.layout.fragment_verification, container, false);
 
     }
 
@@ -88,6 +86,7 @@ public class VerificationFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressBar.setVisibility(View.GONE);
         dialogInteraction = (DialogInteraction) getParentFragment();
         if (getArguments() != null)
             presenter.saveUserMobile(getArguments().getString(VERIFICATION_DIALOG_TAG));
@@ -127,6 +126,16 @@ public class VerificationFragment extends Fragment implements
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressbar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressbar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

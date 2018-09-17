@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.yaratech.yaratube.data.model.GetProfileResponse;
+import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
@@ -72,6 +73,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
+                view.updateImage((ProfileResponse)result);
             }
 
             @Override

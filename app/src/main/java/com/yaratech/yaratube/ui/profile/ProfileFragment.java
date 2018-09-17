@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment
             presenter.sendImage(
                     presenter.getUserAuthorization(),
                     destination.getPath());
-        else
+
             presenter.sendProfileData(
                     presenter.getUserAuthorization(),
                     name_family.getText().toString(),
@@ -254,7 +254,7 @@ public class ProfileFragment extends Fragment
     }
 
     @Override
-    public void updateImage(Uri uri) {
+    public void updateImage(ProfileResponse profileResponse) {
         presenter.sendProfileData(
                 presenter.getUserAuthorization(),
                 name_family.getText().toString(),

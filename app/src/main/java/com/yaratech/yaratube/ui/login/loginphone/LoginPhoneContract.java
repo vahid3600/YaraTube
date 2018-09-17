@@ -9,6 +9,10 @@ public interface LoginPhoneContract {
         void showVerificationDialog();
 
         void showMessage(String msg);
+
+        void showProgressbar();
+
+        void hideProgressbar();
     }
 
     interface Presenter{

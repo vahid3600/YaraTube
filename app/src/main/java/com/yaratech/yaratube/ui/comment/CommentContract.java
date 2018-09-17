@@ -10,6 +10,10 @@ public interface CommentContract {
         void closeDialog();
 
         void showMessage(String msg);
+
+        void showProgressbar();
+
+        void hideProgressbar();
     }
 
     interface Presenter{

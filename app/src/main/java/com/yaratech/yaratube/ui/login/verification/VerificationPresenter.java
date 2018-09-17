@@ -32,11 +32,12 @@ public class VerificationPresenter implements VerificationContract.Presenter {
     @Override
     public void sendVerificationCode(final String mobile, final String deviceId, final String verificationCode,
                                      final String nickname) {
-
+        view.showProgressbar();
         repository.sendMobileLoginStep2(mobile, deviceId, verificationCode, nickname,
                 new DataSource.RemoteDataSourse.LoadDataCallback() {
                     @Override
                     public void onDataLoaded(Object result) {
+                        view.hideProgressbar();
                         Profile profile = new Profile();
                         LoginResponse loginResponse = (LoginResponse) result;
                         profile.setUserId(loginResponse.getUserId());
@@ -47,12 +48,13 @@ public class VerificationPresenter implements VerificationContract.Presenter {
                         repository.saveProfile(profile);
                         repository.saveUserAuthorization(loginResponse.getToken());
                         repository.saveUserLoginStatus(true);
-                        Log.e("MOBILE",loginResponse.getToken()+" "+repository.getUserAuthorization());
+                        Log.e("MOBILE", loginResponse.getToken() + " " + repository.getUserAuthorization());
                         view.closeDialog();
                     }
 
                     @Override
                     public void onMessage(String msg) {
+                        view.hideProgressbar();
                         view.showMessage(msg);
                     }
                 },

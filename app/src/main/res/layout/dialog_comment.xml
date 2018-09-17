@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,47 +7,60 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <RatingBar
-        android:id="@+id/rate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/button_margin"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginTop="@dimen/button_margin"
-        android:stepSize="1"
-        android:rating="3.0"
-        android:pointerIcon="@drawable/ic_star"
-        android:numStars="5"/>
-
-    <EditText
-        android:id="@+id/comment_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_background"
-        android:padding="10dp"
-        android:layout_margin="@dimen/button_margin"
-        android:hint="@string/comment"/>
-
     <LinearLayout
-        android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
-        android:layout_marginBottom="@dimen/button_margin"
-        android:background="@drawable/button_sample2"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="@dimen/button_padding_top">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/send"
+        <RatingBar
+            android:id="@+id/rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/details_text_size"
-            android:textColor="@android:color/white"
-            android:text="@string/send"/>
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:layout_marginTop="@dimen/button_margin"
+            android:numStars="5"
+            android:pointerIcon="@drawable/ic_star"
+            android:rating="3.0"
+            android:stepSize="1" />
+
+        <EditText
+            android:id="@+id/comment_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/button_margin"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/comment"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/button_margin"
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:background="@drawable/button_sample2"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/button_padding_top">
+
+            <TextView
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/details_text_size" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

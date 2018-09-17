@@ -32,6 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.support.constraint.Constraints.TAG;
+
 /**
  * Created by Vah on 8/8/2018.
  */
@@ -395,6 +397,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
+                        Log.e(TAG, "onResponse: "+response.body().getAvatar()+response.body().getDateOfBirth()+response.body().getNickname() );
 
                     } else {
                         Log.e("tag", response.errorBody().toString());

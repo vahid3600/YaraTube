@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -28,9 +29,11 @@ public class CommentDialog extends DialogFragment implements CommentContract.Vie
     private CommentContract.Presenter presenter;
     public static final String COMMENT_DIALOG_TAG = "comment_dialog";
     private static String COMMENT_KEY = "product_id";
+
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
     @BindView(R.id.rate)
     RatingBar ratingBar;
-
     @BindView(R.id.comment_text)
     EditText editText;
 
@@ -61,6 +64,7 @@ public class CommentDialog extends DialogFragment implements CommentContract.Vie
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressBar.setVisibility(View.GONE);
         productId = getArguments().getInt(COMMENT_KEY);
         presenter = new CommentPresenter(getContext(), this);
     }
@@ -82,5 +86,15 @@ public class CommentDialog extends DialogFragment implements CommentContract.Vie
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressbar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressbar() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/button_margin"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginTop="@dimen/button_margin"
-        android:text="@string/dialog_phone_number_title"
-        android:textSize="@dimen/title_text_size"
-        android:textStyle="bold"/>
-
-    <EditText
-        android:id="@+id/phonenumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_background"
-        android:maxLength="11"
-        android:padding="@dimen/default_padding"
-        android:layout_margin="@dimen/button_margin"
-        android:inputType="phone"
-        android:hint="@string/enter_your_phone_number"/>
+    android:background="@android:color/white">
 
     <LinearLayout
-        android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
-        android:layout_marginBottom="@dimen/button_margin"
-        android:background="@drawable/button_sample2"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="@dimen/button_padding_top">
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/details_text_size"
-            android:textColor="@android:color/white"
-            android:text="@string/send"/>
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:layout_marginTop="@dimen/button_margin"
+            android:text="@string/dialog_phone_number_title"
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold" />
 
+        <EditText
+            android:id="@+id/phonenumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/button_margin"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/enter_your_phone_number"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:padding="@dimen/default_padding" />
+
+        <LinearLayout
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/button_margin"
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:background="@drawable/button_sample2"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/button_padding_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/details_text_size" />
+
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
