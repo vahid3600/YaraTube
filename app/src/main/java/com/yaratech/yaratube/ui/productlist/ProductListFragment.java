@@ -153,6 +153,8 @@ public class ProductListFragment extends Fragment implements ProductListContract
 
     @Override
     public void showMessage(String msg) {
+        if (isLoading)
+            productListRecyclerViewAdapter.removeLoadingFooter();
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
         isLoading = false;
     }
@@ -176,6 +178,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     public void onDestroyView() {
         unbind.unbind();
         productListPresenter.cancelProductListRequest();
+        productListPresenter.detachView();
         super.onDestroyView();
     }
 }

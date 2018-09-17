@@ -167,6 +167,7 @@ public class ProductDetailFragment extends Fragment implements
     public void onDestroyView() {
         presenter.cancelProductDetailRequest();
         presenter.cancelCommentRequest();
+        presenter.detachView();
         super.onDestroyView();
     }
 }

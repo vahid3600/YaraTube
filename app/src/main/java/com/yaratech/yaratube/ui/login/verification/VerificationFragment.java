@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class VerificationFragment extends Fragment implements
     VerificationContract.Presenter presenter;
     SMSBroadcastReceiver smsBroadcastReceiver;
     SMSBroadcastReceiver.SMSBroadcastListener smsBroadcastListener;
+    private static final int SMS_PERMISSION_CODE = 0;
     public static final String VERIFICATION_DIALOG_TAG = "Verification";
 
     @BindView(R.id.verification_code)
@@ -98,9 +100,11 @@ public class VerificationFragment extends Fragment implements
 
     private void getMessageFromBroadcast() {
         smsBroadcastReceiver = new SMSBroadcastReceiver();
-        getContext().registerReceiver(smsBroadcastReceiver,
-                new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
         smsBroadcastReceiver.bindListener(smsBroadcastListener);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+        Log.e("Tag", "register");
+        getContext().registerReceiver(smsBroadcastReceiver, filter);
     }
 
     public static VerificationFragment newInstance(String mobileNumber) {
@@ -133,28 +137,23 @@ public class VerificationFragment extends Fragment implements
         super.onDestroyView();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (smsBroadcastReceiver != null)
-            getContext().unregisterReceiver(smsBroadcastReceiver);
-    }
-
     private void requestReadAndSendSmsPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_SMS)) {
-    }
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 1);
+        }
+        this.requestPermissions(new String[]{Manifest.permission.READ_SMS
+                , Manifest.permission.RECEIVE_SMS}, SMS_PERMISSION_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
 
-            case 1: {
+            case SMS_PERMISSION_CODE: {
                 // If request is cancelled, the result arrays are empty.
+                Log.e("Permission", grantResults + " " + grantResults.length + " " + grantResults[0] + " " + PackageManager.PERMISSION_GRANTED);
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    smsBroadcastReceiver.bindListener(smsBroadcastListener);
+                    Log.e("Permission", " granted");
                     getMessageFromBroadcast();
 
                 } else {
@@ -174,5 +173,15 @@ public class VerificationFragment extends Fragment implements
             }
         };
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Tag", "destroy");
+        if (smsBroadcastReceiver != null) {
+            getContext().unregisterReceiver(smsBroadcastReceiver);
+            smsBroadcastReceiver.unbindListener();
+        }
     }
 }

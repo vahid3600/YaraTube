@@ -24,8 +24,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     private Repository profileRepository;
     Context context;
 
-    public
-    ProfilePresenter(Context context, ProfileContract.View view){
+    public ProfilePresenter(Context context, ProfileContract.View view) {
         this.profileRepository = Repository.getINSTANCE(
                 new RemoteDataSource(context),
                 new DatabaseSourse(context),
@@ -35,21 +34,25 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
 
-
     @Override
     public void getProfileData(String authorization) {
-        view.showLoading();
+        if (view != null)
+            view.showLoading();
         profileRepository.getProfile(authorization, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
-                view.hideLoading();
-                view.onDataLoad((GetProfileResponse) result);
+                if (view != null) {
+                    view.hideLoading();
+                    view.onDataLoad((GetProfileResponse) result);
+                }
             }
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
     }
@@ -62,8 +65,9 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void sendImage(String authorization, String path) {
-        view.showLoading();
-        Log.e("presenter",authorization+" "+path);
+        if (view != null)
+            view.showLoading();
+        Log.e("presenter", authorization + " " + path);
         profileRepository.sendImage(authorization, path, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
@@ -72,63 +76,51 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
     }
 
     @Override
-    public void sendProfileData(String authorization, final String name,final int gender,final String birthday) {
-        view.showLoading();
-        String userGender = "";
-        switch (gender){
-            case 0:
-                userGender = "men";
-                break;
-            case 1:
-                userGender = "women";
-                break;
-        }
-        Log.e("Tag",userGender+" "+gender);
-                profileRepository.sendProfile(
-                        authorization,
-                        name,
-                        birthday,
-                        userGender,
-                        Utils.getDeviceId(context),
-                        Utils.getDeviceModel(),
-                        Utils.getDeviceOS(),
-                        new DataSource.RemoteDataSourse.LoadDataCallback() {
+    public void sendProfileData(String authorization, final String name, final String gender, final String birthday) {
+        if (view != null)
+            view.showLoading();
+
+        profileRepository.sendProfile(
+                authorization,
+                name,
+                birthday,
+                gender,
+                Utils.getDeviceId(context),
+                Utils.getDeviceModel(),
+                Utils.getDeviceOS(),
+                new DataSource.RemoteDataSourse.LoadDataCallback() {
                     @Override
                     public void onDataLoaded(Object result) {
-                        view.hideLoading();
+                        if (view != null)
+                            view.hideLoading();
                     }
 
                     @Override
                     public void onMessage(String msg) {
-                        view.hideLoading();
-                        view.showMessage(msg);
+                        if (view != null) {
+                            view.hideLoading();
+                            view.showMessage(msg);
+                        }
                     }
                 });
-//                    @Override
-//                    public void onDataLoaded(Object result) {
-//                        Log.e("Tag","1");
-//                        view.hideLoading();
-//                    }
-//
-//                    @Override
-//                    public void onMessage(String msg) {
-//                        view.hideLoading();
-//                        view.showMessage(msg);
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onMessage(String msg) {
-//                Log.e("Tag","4");
-//            }
-//        });
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
+    }
+
+    @Override
+    public boolean isAttached() {
+        return view != null;
     }
 }

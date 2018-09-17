@@ -2,6 +2,7 @@ package com.yaratech.yaratube.ui.productlist;
 
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.ProductList;
+import com.yaratech.yaratube.utils.PresenterInteractions;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface ProductListContract {
         void hideLoading();
     }
 
-    interface Presenter {
+    interface Presenter extends PresenterInteractions {
 
         void fetchProductListFromRemote(int id, int offset);
 

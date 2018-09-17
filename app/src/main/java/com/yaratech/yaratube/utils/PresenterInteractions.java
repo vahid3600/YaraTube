@@ -8,5 +8,5 @@ public interface PresenterInteractions {
 
     void detachView();
 
-
+    boolean isAttached();
 }

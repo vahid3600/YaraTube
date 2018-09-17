@@ -36,14 +36,18 @@ public class ProductListPresenter implements ProductListContract.Presenter {
 
             @Override
             public void onDataLoaded(Object result) {
-                view.hideLoading();
-                view.showListProducts((List<Product>) result);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showListProducts((List<Product>) result);
+                }
             }
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
 
@@ -55,14 +59,18 @@ public class ProductListPresenter implements ProductListContract.Presenter {
 
             @Override
             public void onDataLoaded(Object result) {
-                view.hideLoading();
-                view.showNextListProducts((List<Product>) result);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showNextListProducts((List<Product>) result);
+                }
             }
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
     }
@@ -70,5 +78,15 @@ public class ProductListPresenter implements ProductListContract.Presenter {
     @Override
     public void cancelProductListRequest() {
         productListRepository.cancelGetProductListRequest();
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
+    }
+
+    @Override
+    public boolean isAttached() {
+        return view != null;
     }
 }

@@ -2,6 +2,7 @@ package com.yaratech.yaratube.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yaratech.yaratube.utils.Utils;
 
 import java.util.List;
 
@@ -110,7 +111,7 @@ public class GetProfileResponse {
     }
 
     public Object getAvatar() {
-        return avatar;
+        return Utils.BASE_URL + avatar;
     }
 
     public void setAvatar(Object avatar) {

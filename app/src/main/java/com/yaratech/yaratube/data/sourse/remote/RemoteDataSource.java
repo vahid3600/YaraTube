@@ -418,7 +418,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
             File file = new File(path);
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
             Log.e("Tag",authorization+" "+path+file.getName()+" "+reqFile.toString());
-            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName(), reqFile);
 
 
             Call<ProfileResponse> req = Utils.getServices().getStoreService().postImage(
@@ -428,7 +428,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                 @Override
                 public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                     if (response.isSuccessful()){
-                        Log.e("tamaa",response.body().getMessage()+" "+response.body().getData().getAvatar());
                         callback.onDataLoaded(response.body());
                     }
                     else{
@@ -473,7 +472,6 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
-                        Log.e("TAMaaa",response.body().getData().getNickname());
 
                     } else {
                         Log.e("tag", response.errorBody().toString());

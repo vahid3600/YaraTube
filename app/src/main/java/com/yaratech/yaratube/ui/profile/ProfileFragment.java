@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -60,6 +61,7 @@ public class ProfileFragment extends Fragment
         ProfileContract.View {
     public static String PROFILE_FRAGMENT_TAG = "profile_fragment";
     ProfileContract.Presenter presenter;
+    String birthDateString;
     File destination;
     Uri imagePath;
     final int CAMERA = 0;
@@ -85,9 +87,21 @@ public class ProfileFragment extends Fragment
             presenter.sendProfileData(
                     presenter.getUserAuthorization(),
                     name_family.getText().toString(),
-                    gender.getSelectedItemPosition(),
-                    birthDate.getText().toString());
+                    getGender(gender),
+                    birthDateString);
+    }
 
+    private String getGender(Spinner gender) {
+        switch (gender.getSelectedItemPosition()) {
+            case 0:
+                return "male";
+
+            case 1:
+                return "female";
+
+            default:
+                return "";
+        }
     }
 
     @OnClick(R.id.cancel)
@@ -198,7 +212,11 @@ public class ProfileFragment extends Fragment
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Glide.with(getContext()).load(destination).into(profilePicture);
+                Glide
+                        .with(getContext())
+                        .load(destination)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(profilePicture);
             }
         }
     }
@@ -240,16 +258,25 @@ public class ProfileFragment extends Fragment
         presenter.sendProfileData(
                 presenter.getUserAuthorization(),
                 name_family.getText().toString(),
-                gender.getSelectedItemPosition(),
+                getGender(gender),
                 birthDate.getText().toString());
-//                gender.setSelection();
     }
 
     @Override
     public void onDataLoad(GetProfileResponse getProfileResponse) {
         name_family.setText(getProfileResponse.getNickname());
-        birthDate.setText(getProfileResponse.getDateOfBirth());
-        Glide.with(getContext()).load(getProfileResponse.getAvatar()).into(profilePicture);
+        if (getProfileResponse.getDateOfBirth() != null) {
+            char[] birthDay = getProfileResponse.getDateOfBirth().toCharArray();
+            birthDay[4] = '/';
+            birthDay[7] = '/';
+            birthDate.setText(String.valueOf(birthDay));
+        }
+        gender.setVerticalScrollbarPosition(1);
+        Glide
+                .with(getContext())
+                .load(getProfileResponse.getAvatar())
+                .apply(RequestOptions.circleCropTransform())
+                .into(profilePicture);
     }
 
     @Override
@@ -276,6 +303,7 @@ public class ProfileFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.detachView();
         Log.e("Tag", "destroyView");
     }
 
@@ -306,6 +334,22 @@ public class ProfileFragment extends Fragment
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        birthDate.setText(year + "/" + monthOfYear + 1 + "/" + dayOfMonth);
+        String monthOfYearString;
+        String dayOfMonthString;
+
+        if (monthOfYear < 10)
+            monthOfYearString = "0" + monthOfYear;
+        else
+            monthOfYearString = "" + (monthOfYear + 1);
+
+        if (dayOfMonth < 10)
+            dayOfMonthString = "0" + dayOfMonth;
+        else
+            dayOfMonthString = "" + dayOfMonth
+                    ;
+        birthDateString = year + "-" + monthOfYearString + "-" + dayOfMonthString;
+        birthDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+        Log.e("tag", birthDateString);
     }
+
 }

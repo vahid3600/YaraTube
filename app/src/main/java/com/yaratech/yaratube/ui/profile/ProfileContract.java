@@ -6,6 +6,7 @@ import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.model.Store;
 import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.utils.PresenterInteractions;
 
 import java.util.Date;
 
@@ -28,7 +29,7 @@ public interface ProfileContract {
         void hideLoading();
     }
 
-    interface Presenter {
+    interface Presenter extends PresenterInteractions{
 
         void getProfileData(String authorization);
 
@@ -38,7 +39,7 @@ public interface ProfileContract {
 
         void sendProfileData(String authorization,
                              String name,
-                             int gender,
+                             String gender,
                              String birthday);
     }
 }

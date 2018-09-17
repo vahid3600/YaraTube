@@ -22,7 +22,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     private int offset = 0;
     private Repository repository;
 
-    public ProductDetailPresenter(Context context, ProductDetailContract.View view){
+    public ProductDetailPresenter(Context context, ProductDetailContract.View view) {
         this.repository = Repository.getINSTANCE(
                 new RemoteDataSource(context),
                 new DatabaseSourse(context),
@@ -32,20 +32,25 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     @Override
     public void fetchProductDetailFromRemote(int id) {
-        view.showLoading();
+        if (view != null)
+            view.showLoading();
 
         repository.getProductDetail(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
 
             @Override
             public void onDataLoaded(Object result) {
-                view.hideLoading();
-                view.showProductDetail((ProductDetail) result);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showProductDetail((ProductDetail) result);
+                }
             }
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
 
@@ -58,19 +63,24 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
 
     @Override
     public void fetchCommentFromRemote(int id) {
-        view.showLoading();
+        if (view != null)
+            view.showLoading();
 
         repository.getComment(id, new DataSource.RemoteDataSourse.LoadDataCallback() {
             @Override
             public void onDataLoaded(Object result) {
-                view.hideLoading();
-                view.showComment((List<Comment>) result);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showComment((List<Comment>) result);
+                }
             }
 
             @Override
             public void onMessage(String msg) {
-                view.hideLoading();
-                view.showMessage(msg);
+                if (view != null) {
+                    view.hideLoading();
+                    view.showMessage(msg);
+                }
             }
         });
     }
@@ -83,5 +93,15 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter {
     @Override
     public boolean getUserLoginStatus() {
         return repository.getUserLoginStatus();
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
+    }
+
+    @Override
+    public boolean isAttached() {
+        return view != null;
     }
 }

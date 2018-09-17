@@ -31,6 +31,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         View.OnClickListener {
 
     private StoreContract.Presenter presenter;
+    public static boolean firstLoad = false;
     Connects.OnProductItemClick onProductItemClick;
 
     @BindView(R.id.activity_main_swipe_refresh_layout)
@@ -82,7 +83,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                firstLoad = true;
                 presenter.fetchHomeFromRemote();
 
                 new Handler().postDelayed(new Runnable() {
@@ -140,7 +141,8 @@ public class StoreFragment extends Fragment implements StoreContract.View,
 
     @Override
     public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (!firstLoad)
+            progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

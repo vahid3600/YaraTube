@@ -29,6 +29,8 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         View.OnClickListener {
 
     CategoryPresenter presenter;
+    public static boolean firstLoad = false;
+
     @BindView(R.id.activity_main_swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.reload)
@@ -72,7 +74,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                firstLoad = true;
                 presenter.fetchCategoryFromRemote();
 
                 new Handler().postDelayed(new Runnable() {
@@ -119,7 +121,8 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
 
     @Override
     public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (!firstLoad)
+            progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
