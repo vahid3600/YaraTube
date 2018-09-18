@@ -114,6 +114,11 @@ public class HomeFragment extends Fragment {
                         .hide(categoryFragment)
                         .show(homeFragment)
                         .commit();
+            else
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .show(homeFragment)
+                        .commit();
         }
     }
 
