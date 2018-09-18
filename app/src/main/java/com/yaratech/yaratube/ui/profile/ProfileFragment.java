@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
@@ -316,10 +317,15 @@ public class ProfileFragment extends Fragment
                             presenter.getUserAuthorization(),
                             Crop.getOutput(data).getPath());
 
+                    RequestOptions requestOptions = new RequestOptions()
+                            .diskCacheStrategy(DiskCacheStrategy.NONE) // because file name is always same
+                            .skipMemoryCache(true);
+
                     Glide
                             .with(getContext())
                             .load(Crop.getOutput(data))
                             .apply(RequestOptions.circleCropTransform())
+                            .apply(requestOptions)
                             .into(profilePicture);
 
 //                    File photoFile = null;
