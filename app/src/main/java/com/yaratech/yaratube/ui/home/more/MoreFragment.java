@@ -32,7 +32,13 @@ public class MoreFragment extends Fragment {
     @BindView(R.id.list_item)
     ListView listView;
 
-    String[] strings = {"پروفایل", "درباره ما", "تماس با ما"};
+    String[] strings = {
+            "پروفایل",
+            "درباره ما",
+            "تماس با ما"};
+    public final int PROFILE_FRAGMENT = 0;
+    public final int ABOUT_US_FRAGMENT = 1;
+    public final int CONTACT_WITH_US_FRAGMENT = 2;
 
     public MoreFragment() {
         // Required empty public constructor
@@ -92,24 +98,27 @@ public class MoreFragment extends Fragment {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 LayoutInflater inflater = getLayoutInflater();
-                View view = inflater.inflate(R.layout.category_item, parent, false);
+                View view = inflater.inflate(R.layout.more_fragment_item, parent, false);
                 TextView textView = view.findViewById(R.id.category_title);
                 textView.setText(strings[position]);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (position) {
-                            case 0:
+                            case PROFILE_FRAGMENT:
                                 boolean userLogin = presenter.getUserLoginStatus();
                                 if (userLogin) {
-                                    listener.onFragmentClickListener(getActivity().getSupportFragmentManager(), ProfileFragment.newInstance(), PROFILE_FRAGMENT_TAG);
+                                    listener.onFragmentClickListener(
+                                            getActivity().getSupportFragmentManager(),
+                                            ProfileFragment.newInstance(),
+                                            PROFILE_FRAGMENT_TAG);
                                 } else {
                                     LoginDialogContainer.newInstance(getFragmentManager());
                                 }
                                 break;
-                            case 1:
+                            case ABOUT_US_FRAGMENT:
                                 break;
-                            case 2:
+                            case CONTACT_WITH_US_FRAGMENT:
                                 break;
                         }
                     }

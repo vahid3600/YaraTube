@@ -58,4 +58,7 @@
     <string name="login_success">ورود شما با موفقیت انجام شد</string>
     <string name="more">بیشتر</string>
     <string name="name_family">نام و نام خانوادگی</string>
+    <string name="profile">پروفایل</string>
+    <string name="about_us">درباره ما</string>
+    <string name="contact_with_us">تماس با ما</string>
 </resources>

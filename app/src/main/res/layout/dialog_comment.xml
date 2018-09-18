@@ -20,7 +20,6 @@
             android:layout_marginRight="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
             android:numStars="5"
-            android:pointerIcon="@drawable/ic_star"
             android:rating="3.0"
             android:stepSize="1" />
 

@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment {
 
     private void setHomeFragment() {
         if (moreFragment != null && moreFragment.isVisible())
-            Utils.removeFragment(getChildFragmentManager(),MoreFragmentTag);
+            Utils.removeFragment(getChildFragmentManager(), MoreFragmentTag);
 
         if (homeFragment == null) {
             if (categoryFragment != null && categoryFragment.isVisible()) {
@@ -108,17 +108,18 @@ public class HomeFragment extends Fragment {
                     false);
 
         } else if (!homeFragment.isVisible()) {
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .hide(categoryFragment)
-                    .show(homeFragment)
-                    .commit();
+            if (categoryFragment != null)
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .hide(categoryFragment)
+                        .show(homeFragment)
+                        .commit();
         }
     }
 
     private void setCategoryFragment() {
         if (moreFragment != null && moreFragment.isVisible())
-            Utils.removeFragment(getChildFragmentManager(),MoreFragmentTag);
+            Utils.removeFragment(getChildFragmentManager(), MoreFragmentTag);
 
         if (categoryFragment == null) {
             if (homeFragment != null && homeFragment.isVisible()) {
@@ -161,7 +162,7 @@ public class HomeFragment extends Fragment {
         if (moreFragment == null) {
             moreFragment = MoreFragment.newInstance();
         }
-        if (!moreFragment.isVisible()){
+        if (!moreFragment.isVisible()) {
             Utils.addFragment(
                     R.id.frameLayout,
                     getChildFragmentManager(),

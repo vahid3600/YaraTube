@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment
     File destination;
     Uri imagePath;
     String imageFilePath;
+    private Uri imageFileUri;
     final int CAMERA = 0;
     final int GALLERY = 1;
     private static final int CAMERA_PERMISSION = 2;
@@ -190,13 +191,23 @@ public class ProfileFragment extends Fragment
     }
 
     private void getImageFromCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-//                openCameraIntent(cameraIntent);
-//            else
-            startActivityForResult(cameraIntent, CAMERA);
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+
+                imageFileUri = Uri.fromFile(new File(photoFile.getAbsolutePath()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            Uri photoUri = FileProvider.getUriForFile(getContext(),
+                    getActivity().getPackageName() + ".provider",
+                    photoFile);
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(pictureIntent, CAMERA);
         }
     }
 
@@ -204,32 +215,8 @@ public class ProfileFragment extends Fragment
         Crop.pickImage(getContext(), this);
     }
 
-    private void openCameraIntent(Intent cameraIntent) {
-        Intent pictureIntent = new Intent(
-                MediaStore.ACTION_IMAGE_CAPTURE);
-        if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            //Create a file to store the image
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(
-                        getContext(),
-                        getContext().getPackageName() + ".provider",
-                        photoFile);
-                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        photoURI);
-                Log.d("TAG", "openCameraIntent: " + photoURI.getPath());
-                startActivityForResult(cameraIntent, CAMERA);
-            }
-        }
-    }
-
     private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("YYYYMMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -278,7 +265,7 @@ public class ProfileFragment extends Fragment
 
             if (requestCode == CAMERA) {
 
-                beginCrop(data.getData());
+                beginCrop(imageFileUri);
 
             } else if (requestCode == Crop.REQUEST_PICK) {
 
@@ -368,16 +355,17 @@ public class ProfileFragment extends Fragment
 //                }
                 }
 
-//            if (requestCode == GALLERY) {
-//
-//                Uri selectedImage = data.getData();
-//                beginCrop(selectedImage);
-//            } else if (requestCode == CAMERA) {
-//
-//                if (data != null && data.getExtras() != null) {
-//                    Uri selectedImage = data.getData();
-//                    beginCrop(selectedImage);
-//                }
+                if (requestCode == GALLERY) {
+
+                    Uri selectedImage = data.getData();
+                    beginCrop(selectedImage);
+                } else if (requestCode == CAMERA) {
+
+                    if (data != null && data.getExtras() != null) {
+                        Uri selectedImage = data.getData();
+                        beginCrop(selectedImage);
+                    }
+                }
             }
         }
     }
@@ -398,7 +386,7 @@ public class ProfileFragment extends Fragment
     private void beginCrop(Uri source) {
 
         Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(getContext(), this);
+        Crop.of(source, destination).withMaxSize(1024, 1024).asSquare().start(getContext(), this);
     }
 
     private void requestCameraPermission() {
@@ -431,7 +419,12 @@ public class ProfileFragment extends Fragment
             birthDay[7] = '/';
             birthDate.setText(String.valueOf(birthDay));
         }
-        gender.setVerticalScrollbarPosition(1);
+        if (getProfileResponse.getGender() != null){
+            if ((String) getProfileResponse.getGender() == "female")
+                gender.setSelection(1,true);
+            else
+                gender.setSelection(0,true);
+        }
         if (getProfileResponse.getAvatar() != null)
             Glide
                     .with(getContext())
