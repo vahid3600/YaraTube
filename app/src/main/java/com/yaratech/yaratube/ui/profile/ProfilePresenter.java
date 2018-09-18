@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.ProfileResponse;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.data.sourse.DataSource;
 import com.yaratech.yaratube.data.sourse.Repository;
 import com.yaratech.yaratube.data.sourse.local.DatabaseSourse;
@@ -59,6 +60,11 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
+    public Profile getProfileFromDB() {
+        return null;
+    }
+
+    @Override
     public String getUserAuthorization() {
         return profileRepository.getUserAuthorization();
     }
@@ -73,7 +79,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
             @Override
             public void onDataLoaded(Object result) {
                 view.hideLoading();
-                view.updateImage((ProfileResponse)result);
+                view.updateImage((ProfileResponse) result);
             }
 
             @Override
@@ -104,6 +110,14 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                     public void onDataLoaded(Object result) {
                         if (view != null)
                             view.hideLoading();
+
+                        Profile profile = new Profile();
+                        ProfileResponse profileResponse = (ProfileResponse) result;
+                        profile.setDateOfBirth((String) profileResponse.getData().getDateOfBirth());
+                        profile.setNickName(profileResponse.getData().getNickname());
+                        profile.setAvatar((String) profileResponse.getData().getAvatar());
+                        profile.setGender((String) profileResponse.getData().getGender());
+                        profileRepository.updateProfile(profile);
                     }
 
                     @Override
@@ -114,6 +128,13 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void signOut() {
+        profileRepository.saveUserLoginStatus(false);
+        profileRepository.deleteProfile();
+        profileRepository.saveUserLoginState(1);
     }
 
     @Override

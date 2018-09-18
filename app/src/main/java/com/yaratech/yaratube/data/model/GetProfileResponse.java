@@ -111,7 +111,7 @@ public class GetProfileResponse {
     }
 
     public Object getAvatar() {
-        return Utils.BASE_URL + avatar;
+        return avatar;
     }
 
     public void setAvatar(Object avatar) {

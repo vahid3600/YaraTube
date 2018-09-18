@@ -29,15 +29,18 @@ public class LoginPhonePresenter implements LoginPhoneContract.Presenter {
     @Override
     public void loginByMobile(String mobile, String deviceId, String deviceModel,
                               String deviceOs, String gcm) {
+        view.showProgressbar();
         phoneRepository.sendMobileLoginStep1(mobile, deviceId, deviceModel, deviceOs, gcm,
                 new DataSource.RemoteDataSourse.LoadDataCallback() {
                     @Override
                     public void onDataLoaded(Object result) {
+                        view.hideProgressbar();
                         view.showVerificationDialog();
                     }
 
                     @Override
                     public void onMessage(String msg) {
+                        view.hideProgressbar();
                         view.showMessage(msg);
                     }
                 }

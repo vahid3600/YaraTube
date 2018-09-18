@@ -58,7 +58,10 @@ public class LoginDialogContainer extends DialogFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         presenter = new LoginDialogContainerPresenter(getContext(), this);
+        //check if user is in state of verification code show verification dialog
         presenter.checkUserStateLogin();
+        //dialog dissmis if you just press back button
+        getDialog().setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class LoginDialogContainer extends DialogFragment implements
                         SelectLoginMethodFragment.newInstance(),
                         LOGIN_DIALOG_TAG)
                 .commit();
+        //save user login state in shared preferences
         presenter.setUserStateLogin(1);
     }
 

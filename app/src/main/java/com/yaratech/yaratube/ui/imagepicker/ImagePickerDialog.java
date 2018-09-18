@@ -27,7 +27,7 @@ public class ImagePickerDialog extends DialogFragment {
         dismiss();
     }
 
-    @OnClick(R.id.galery)
+    @OnClick(R.id.gallery)
     public void getImageFromGalery() {
         imagePicker.onGalery();
         dismiss();

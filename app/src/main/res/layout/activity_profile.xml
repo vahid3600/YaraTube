@@ -14,7 +14,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:src="@mipmap/ic_launcher_round"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -202,7 +201,7 @@
         <Button
             android:id="@+id/save"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
@@ -214,13 +213,25 @@
         <Button
             android:id="@+id/cancel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
             android:layout_weight="1"
             android:background="@drawable/button_sample1"
             android:text="@string/cancel"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/sign_out"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_sample1"
+            android:text="@string/sign_out"
             android:textColor="@color/colorPrimary" />
 
     </LinearLayout>

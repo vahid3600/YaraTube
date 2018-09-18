@@ -50,35 +50,45 @@
             android:layout_marginRight="@dimen/button_margin"
             android:orientation="horizontal">
 
-            <Button
+            <LinearLayout
                 android:id="@+id/return_back"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_sample1"
-                android:gravity="center"
                 android:maxLines="1"
                 android:orientation="horizontal"
-                android:padding="@dimen/button_padding_top"
-                android:text="@string/re_enter"
-                android:textColor="@color/button_background_1"
-                android:textSize="@dimen/details_text_size"></Button>
+                android:padding="@dimen/button_padding_top">
 
-            <Button
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/re_enter"
+                    android:textColor="@color/button_background_1"
+                    android:textSize="@dimen/details_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/enter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_sample2"
-                android:gravity="center"
                 android:maxLines="1"
                 android:orientation="horizontal"
-                android:padding="@dimen/button_padding_top"
-                android:text="@string/send"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/details_text_size"></Button>
+                android:padding="@dimen/button_padding_top">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/details_text_size" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -86,8 +96,8 @@
 
     <ProgressBar
         android:id="@+id/progressbar"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

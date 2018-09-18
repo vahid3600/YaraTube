@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.ProfileResponse;
 import com.yaratech.yaratube.data.model.Store;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.ui.MenuActivity;
 import com.yaratech.yaratube.utils.PresenterInteractions;
 
@@ -33,6 +34,8 @@ public interface ProfileContract {
 
         void getProfileData(String authorization);
 
+        Profile getProfileFromDB();
+
         String getUserAuthorization();
 
         void sendImage(String authorization, String path);
@@ -41,5 +44,7 @@ public interface ProfileContract {
                              String name,
                              String gender,
                              String birthday);
+
+        void signOut();
     }
 }
