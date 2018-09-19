@@ -30,6 +30,7 @@
             android:layout_marginLeft="@dimen/button_margin"
             android:layout_marginRight="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
+            android:gravity="right"
             android:background="@drawable/edittext_background"
             android:hint="@string/verification_code"
             android:inputType="phone"

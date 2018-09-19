@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/button_margin"
+            android:gravity="right"
             android:background="@drawable/edittext_background"
             android:hint="@string/enter_your_phone_number"
             android:inputType="phone"

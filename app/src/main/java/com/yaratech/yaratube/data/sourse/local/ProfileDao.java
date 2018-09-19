@@ -28,4 +28,8 @@ public interface ProfileDao {
             "from profile " +
             "where id=0")
     void deleteProfile();
+
+    @Query("select * " +
+            "from profile")
+    Profile getProfileData();
 }

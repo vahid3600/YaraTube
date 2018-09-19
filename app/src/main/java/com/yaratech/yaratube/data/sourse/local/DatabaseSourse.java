@@ -27,6 +27,11 @@ public class DatabaseSourse implements DataSource.DatabaseSourse {
     }
 
     @Override
+    public Profile getProfile() {
+        return appDatabase.profileDao().getProfileData();
+    }
+
+    @Override
     public void deleteProfile() {
         appDatabase.profileDao().deleteProfile();
     }

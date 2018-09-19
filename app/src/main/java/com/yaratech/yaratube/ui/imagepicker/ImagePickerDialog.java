@@ -28,8 +28,8 @@ public class ImagePickerDialog extends DialogFragment {
     }
 
     @OnClick(R.id.gallery)
-    public void getImageFromGalery() {
-        imagePicker.onGalery();
+    public void getImageFromGallery() {
+        imagePicker.onGallery();
         dismiss();
     }
 
@@ -58,6 +58,6 @@ public class ImagePickerDialog extends DialogFragment {
 
     public interface ImagePickerListener{
         void onCamera();
-        void onGalery();
+        void onGallery();
     }
 }

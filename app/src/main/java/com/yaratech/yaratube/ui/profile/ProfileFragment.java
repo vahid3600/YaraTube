@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
@@ -35,6 +36,7 @@ import com.soundcloud.android.crop.Crop;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.ProfileResponse;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog;
 import com.yaratech.yaratube.utils.Permissions;
 import com.yaratech.yaratube.utils.Utils;
@@ -63,13 +65,11 @@ public class ProfileFragment extends Fragment
     ProfileContract.Presenter presenter;
     String birthDateString;
     File destination;
-    Uri imagePath;
     String imageFilePath;
     private Uri imageFileUri;
-    final int CAMERA = 0;
-    final int GALLERY = 1;
+    private final int CAMERA = 1;
     private static final int CAMERA_PERMISSION = 2;
-    private static final int GALERY_PERMISSION = 3;
+    private static final int GALLERY_PERMISSION = 3;
 
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
@@ -81,15 +81,15 @@ public class ProfileFragment extends Fragment
     ImageView profilePicture;
     @BindView(R.id.birth_date)
     TextView birthDate;
-
+    private String TAG = "ProfileFragment";
 
     @OnClick(R.id.save)
     public void saveProfile() {
-        if (imagePath != null)
+        if (destination != null) {
             presenter.sendImage(
                     presenter.getUserAuthorization(),
                     destination.getPath());
-        else
+        } else
             presenter.sendProfileData(
                     presenter.getUserAuthorization(),
                     name_family.getText().toString(),
@@ -108,7 +108,6 @@ public class ProfileFragment extends Fragment
         getFragmentManager().popBackStack();
     }
 
-
     @OnClick(R.id.profile_picture)
     public void onImageClick() {
         ImagePickerDialog imagePickerDialog = ImagePickerDialog.newInstance(this);
@@ -119,7 +118,6 @@ public class ProfileFragment extends Fragment
     public static ProfileFragment newInstance() {
 
         Bundle args = new Bundle();
-
         ProfileFragment fragment = new ProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -138,25 +136,26 @@ public class ProfileFragment extends Fragment
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         presenter = new ProfilePresenter(getContext(), this);
+        Log.e(TAG, "onViewCreated: "+presenter.getProfileFromDB().getNickName() );
+        presenter.getProfileData(presenter.getUserAuthorization());
         birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setDate();
             }
         });
-        presenter.getProfileData(presenter.getUserAuthorization());
     }
 
     public void setDate() {
         PersianCalendar now = new PersianCalendar();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
                 this,
                 now.getPersianYear(),
                 now.getPersianMonth(),
                 now.getPersianDay()
         );
-        dpd.setThemeDark(false);
-        dpd.show(getActivity().getFragmentManager(), "tag");
+        datePickerDialog.setThemeDark(false);
+        datePickerDialog.show(getActivity().getFragmentManager(), "tag");
     }
 
     private String getGender(Spinner gender) {
@@ -182,11 +181,11 @@ public class ProfileFragment extends Fragment
     }
 
     @Override
-    public void onGalery() {
-        if (!Permissions.checkGaleryPermissions(getContext())) {
-            requestGaleryPermission();
+    public void onGallery() {
+        if (!Permissions.checkGalleryPermissions(getContext())) {
+            requestGalleryPermission();
         } else {
-            getImageFromGalery();
+            getImageFromGallery();
         }
     }
 
@@ -211,7 +210,7 @@ public class ProfileFragment extends Fragment
         }
     }
 
-    private void getImageFromGalery() {
+    private void getImageFromGallery() {
         Crop.pickImage(getContext(), this);
     }
 
@@ -244,7 +243,7 @@ public class ProfileFragment extends Fragment
                     Log.e("permission", " denied");
                 }
                 return;
-            case GALERY_PERMISSION:
+            case GALLERY_PERMISSION:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.e("Permission", " granted");
@@ -267,120 +266,53 @@ public class ProfileFragment extends Fragment
 
                 beginCrop(imageFileUri);
 
-            } else if (requestCode == Crop.REQUEST_PICK) {
+            }
+            //response of user select image from gallery
+            else if (requestCode == Crop.REQUEST_PICK) {
 
                 beginCrop(data.getData());
 
-            } else if (requestCode == Crop.REQUEST_CROP) {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-                    imagePath = Crop.getOutput(data);
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imagePath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    destination = new File(Environment.getExternalStorageDirectory(),
-                            System.currentTimeMillis() + ".jpg");
-                    FileOutputStream fileOutputStream = null;
+            }
+            //response of user croped an image
+            else if (requestCode == Crop.REQUEST_CROP) {
+                String cropedImageFilePath = Crop.getOutput(data).getPath();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                            getContext().getContentResolver(),
+                            Uri.fromFile(new File(cropedImageFilePath)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream);
+                destination = new File(Environment.getExternalStorageDirectory(),
+                        System.currentTimeMillis() + ".jpg");
+                FileOutputStream fileOutputStream = null;
 
-                    try {
-                        destination.createNewFile();
-                        fileOutputStream = new FileOutputStream(destination);
-                        fileOutputStream.write(byteArrayOutputStream.toByteArray());
-                        fileOutputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Glide
-                            .with(getContext())
-                            .load(destination)
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(profilePicture);
-                } else {
-                    presenter.sendImage(
-                            presenter.getUserAuthorization(),
-                            Crop.getOutput(data).getPath());
-
-                    RequestOptions requestOptions = new RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE) // because file name is always same
-                            .skipMemoryCache(true);
-
-                    Glide
-                            .with(getContext())
-                            .load(Crop.getOutput(data))
-                            .apply(RequestOptions.circleCropTransform())
-                            .apply(requestOptions)
-                            .into(profilePicture);
-
-//                    File photoFile = null;
-//                    try {
-//                        photoFile = createImageFile();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if (photoFile != null) {
-//                        Uri photoURI = FileProvider.getUriForFile(
-//                                getContext(),
-//                                getContext().getPackageName() + ".provider",
-//                                photoFile);
-//
-//                        Bitmap bitmap = null;
-//                        try {
-//                            bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Crop.getOutput(data));
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//
-//                        FileOutputStream fileOutputStream = null;
-//                        try {
-//                            photoFile.createNewFile();
-//                            fileOutputStream = new FileOutputStream(photoFile);
-//                            fileOutputStream.write(byteArrayOutputStream.toByteArray());
-//                            fileOutputStream.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        Glide
-//                                .with(getContext())
-//                                .load(destination)
-//                                .apply(RequestOptions.circleCropTransform())
-//                                .into(profilePicture);;
-//                    Log.e("Taginegi", Crop.getOutput(data).getPath()+" "+photoURI.getPath()+" "+photoFile.getPath());
-////                    presenter.sendImage(presenter.getUserAuthorization(), createFilePath(Crop.getOutput(data)));
-//                }
+                try {
+                    destination.createNewFile();
+                    fileOutputStream = new FileOutputStream(destination);
+                    fileOutputStream.write(byteArrayOutputStream.toByteArray());
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                if (requestCode == GALLERY) {
+                Log.e("Tag", "resss" + destination.getPath());
 
-                    Uri selectedImage = data.getData();
-                    beginCrop(selectedImage);
-                } else if (requestCode == CAMERA) {
-
-                    if (data != null && data.getExtras() != null) {
-                        Uri selectedImage = data.getData();
-                        beginCrop(selectedImage);
-                    }
-                }
+                // because file name is always same
+                RequestOptions requestOptions = new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true);
+                Glide
+                        .with(getContext())
+                        .load(destination)
+                        .apply(requestOptions)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(profilePicture);
             }
         }
-    }
-
-
-    private String createFilePath(Uri selectedImage) {
-
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-        android.database.Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        return filePath;
     }
 
     private void beginCrop(Uri source) {
@@ -396,9 +328,9 @@ public class ProfileFragment extends Fragment
                 CAMERA_PERMISSION);
     }
 
-    private void requestGaleryPermission() {
+    private void requestGalleryPermission() {
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                GALERY_PERMISSION);
+                GALLERY_PERMISSION);
     }
 
     @Override
@@ -419,11 +351,12 @@ public class ProfileFragment extends Fragment
             birthDay[7] = '/';
             birthDate.setText(String.valueOf(birthDay));
         }
-        if (getProfileResponse.getGender() != null){
-            if ((String) getProfileResponse.getGender() == "female")
-                gender.setSelection(1,true);
+        Log.e(TAG, "onDataLoad: " + getProfileResponse.getGender());
+        if (getProfileResponse.getGender() != null) {
+            if (getProfileResponse.getGender().equals("Female"))
+                gender.setSelection(1, true);
             else
-                gender.setSelection(0,true);
+                gender.setSelection(0, true);
         }
         if (getProfileResponse.getAvatar() != null)
             Glide
@@ -457,39 +390,39 @@ public class ProfileFragment extends Fragment
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.e("Tag", "detach");
+        Log.e(TAG, "onDetach: ");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         presenter.detachView();
-        Log.e("Tag", "destroyView");
+        Log.e(TAG, "onDestroyView: ");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("Tag", "destroy");
+        Log.e(TAG, "onDestroy: ");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.e("Tag", "pause");
+        Log.e(TAG, "onPause: ");
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("Tag", "start");
+        Log.e(TAG, "onStart: ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.e("Tag", "stop");
+        Log.e(TAG, "onStop: ");
     }
 
     @Override
@@ -498,7 +431,7 @@ public class ProfileFragment extends Fragment
         String dayOfMonthString;
 
         if (monthOfYear < 10)
-            monthOfYearString = "0" + monthOfYear;
+            monthOfYearString = "0" + (monthOfYear + 1);
         else
             monthOfYearString = "" + (monthOfYear + 1);
 

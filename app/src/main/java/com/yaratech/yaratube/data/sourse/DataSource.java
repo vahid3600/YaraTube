@@ -99,6 +99,8 @@ public interface DataSource {
 
         void updateProfile(Profile profile);
 
+        Profile getProfile();
+
         void deleteProfile();
     }
 

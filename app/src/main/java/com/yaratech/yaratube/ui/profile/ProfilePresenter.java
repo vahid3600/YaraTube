@@ -61,7 +61,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public Profile getProfileFromDB() {
-        return null;
+        return profileRepository.getProfile();
     }
 
     @Override

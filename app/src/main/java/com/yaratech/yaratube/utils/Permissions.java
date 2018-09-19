@@ -21,7 +21,7 @@ public class Permissions {
                 && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static boolean checkGaleryPermissions(Context context) {
+    public static boolean checkGalleryPermissions(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }

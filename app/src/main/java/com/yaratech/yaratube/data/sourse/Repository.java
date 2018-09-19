@@ -217,6 +217,11 @@ public class Repository implements
     }
 
     @Override
+    public Profile getProfile() {
+        return databaseSourse.getProfile();
+    }
+
+    @Override
     public void deleteProfile() {
         databaseSourse.deleteProfile();
     }

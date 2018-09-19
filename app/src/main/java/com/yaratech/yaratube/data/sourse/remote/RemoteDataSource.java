@@ -417,10 +417,10 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
     @Override
     public void sendImage(String authorization, String path, final LoadDataCallback callback) {
         if (Utils.isOnline(context)) {
-
             File file = new File(path);
+            Log.e("Tagsara"," "+file.length());
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            Log.e("Tag",authorization+" "+path+file.getName()+" "+reqFile.toString());
+            Log.e("Taginegi",authorization+" "+path+" "+reqFile.toString());
             MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName(), reqFile);
 
 
@@ -435,6 +435,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
                     }
                     else{
                         callback.onMessage(context.getString(R.string.fail_progress));
+                        Log.e(TAG, "onResponse: "+" error" );
                     }
                 }
 
@@ -475,7 +476,7 @@ public class RemoteDataSource implements DataSource.RemoteDataSourse {
 
                     if (response.isSuccessful()) {
                         callback.onDataLoaded(response.body());
-
+                        callback.onMessage(context.getString(R.string.send_successful));
                     } else {
                         Log.e("tag", response.errorBody().toString());
                         callback.onMessage(context.getString(R.string.fail_progress));
