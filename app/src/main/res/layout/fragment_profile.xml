@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
+    android:focusable="true"
     android:background="@android:color/white"
-    tools:context="com.yaratech.yaratube.ui.profile.ProfileFragment"
-    android:focusable="true">
+    tools:context="com.yaratech.yaratube.ui.profile.ProfileFragment">
 
     <ImageView
         android:id="@+id/profile_picture"

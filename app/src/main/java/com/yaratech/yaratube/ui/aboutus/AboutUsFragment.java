@@ -43,14 +43,14 @@ public class AboutUsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().setTitle(R.string.profile);
+        getActivity().setTitle(R.string.about_us);
         Log.e(TAG, "onStart: ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().setTitle(R.string.app_name);
+        getActivity().setTitle(R.string.about_us);
         Log.e(TAG, "onStop: ");
     }
 }
