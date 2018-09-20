@@ -16,23 +16,23 @@ import java.util.List;
 
 public class HeaderItemAdapter extends FragmentPagerAdapter {
 
-    List<Product> headeritems = new ArrayList<>();
-    public HeaderItemAdapter(FragmentManager fm) {
+    private List<Product> headerItems = new ArrayList<>();
+    HeaderItemAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void setData(List<Product> headeritems) {
-        this.headeritems = headeritems;
+    public void setData(List<Product> headerItems) {
+        this.headerItems = headerItems;
         notifyDataSetChanged();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return HeaderViewHolderFragment.newInstance(headeritems.get(position));
+        return HeaderViewHolderFragment.newInstance(headerItems.get(position));
     }
 
     @Override
     public int getCount() {
-        return headeritems.size();
+        return headerItems.size();
     }
 }

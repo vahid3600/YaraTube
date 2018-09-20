@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
 public class HeaderViewHolderFragment extends Fragment implements View.OnClickListener {
 
     Product headeritem;
+    Connects.OnProductItemClick onProductItemClick;
     @BindView(R.id.section_label)
     ImageView headerImageView;
-    Connects.OnProductItemClick onProductItemClick;
 
     public HeaderViewHolderFragment() {
     }
@@ -72,7 +72,7 @@ public class HeaderViewHolderFragment extends Fragment implements View.OnClickLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MenuActivity)
+        if (context instanceof Connects.OnProductItemClick)
             onProductItemClick = (Connects.OnProductItemClick) context;
     }
 

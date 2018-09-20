@@ -62,4 +62,6 @@
     <string name="about_us">درباره ما</string>
     <string name="contact_with_us">تماس با ما</string>
     <string name="send_successful">عملیات ذخیره سازی با موفقیت انجام شد</string>
+    <string name="developer">وحید طلایی</string>
+    <string name="about_us_text">دوره کارآموزی تابستان 97</string>
 </resources>

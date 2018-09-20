@@ -1,12 +1,15 @@
 
 package com.yaratech.yaratube.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.yaratech.yaratube.utils.Utils;
 
-public class CategoryList {
+public class CategoryList implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -35,6 +38,28 @@ public class CategoryList {
     @SerializedName("childs")
     @Expose
     private List<Object> childs = null;
+
+    protected CategoryList(Parcel in) {
+        id = in.readInt();
+        isDefault = in.readByte() != 0;
+        title = in.readString();
+        position = in.readInt();
+        isEnable = in.readByte() != 0;
+        isVisible = in.readByte() != 0;
+        parent = in.readInt();
+    }
+
+    public static final Creator<CategoryList> CREATOR = new Creator<CategoryList>() {
+        @Override
+        public CategoryList createFromParcel(Parcel in) {
+            return new CategoryList(in);
+        }
+
+        @Override
+        public CategoryList[] newArray(int size) {
+            return new CategoryList[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -108,4 +133,19 @@ public class CategoryList {
         this.childs = childs;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeByte((byte) (isDefault ? 1 : 0));
+        dest.writeString(title);
+        dest.writeInt(position);
+        dest.writeByte((byte) (isEnable ? 1 : 0));
+        dest.writeByte((byte) (isVisible ? 1 : 0));
+        dest.writeInt(parent);
+    }
 }

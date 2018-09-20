@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment {
     private StoreFragment homeFragment;
     private CategoryFragment categoryFragment;
     private MoreFragment moreFragment;
+    private FragmentManager fragmentManager;
 
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fragmentManager = getActivity().getSupportFragmentManager();
         setHomeFragment();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,11 +91,11 @@ public class HomeFragment extends Fragment {
 
     private void setHomeFragment() {
         if (moreFragment != null && moreFragment.isVisible())
-            Utils.removeFragment(getChildFragmentManager(), MoreFragmentTag);
+            Utils.removeFragment(fragmentManager, MoreFragmentTag);
 
         if (homeFragment == null) {
             if (categoryFragment != null && categoryFragment.isVisible()) {
-                getChildFragmentManager()
+                fragmentManager
                         .beginTransaction()
                         .hide(categoryFragment)
                         .commit();
@@ -102,20 +104,20 @@ public class HomeFragment extends Fragment {
             homeFragment = StoreFragment.newInstance();
             Utils.addFragment(
                     R.id.frameLayout,
-                    getChildFragmentManager(),
+                    fragmentManager,
                     homeFragment,
                     null,
                     false);
 
         } else if (!homeFragment.isVisible()) {
             if (categoryFragment != null)
-                getChildFragmentManager()
+                fragmentManager
                         .beginTransaction()
                         .hide(categoryFragment)
                         .show(homeFragment)
                         .commit();
             else
-                getChildFragmentManager()
+                fragmentManager
                         .beginTransaction()
                         .show(homeFragment)
                         .commit();
@@ -124,11 +126,11 @@ public class HomeFragment extends Fragment {
 
     private void setCategoryFragment() {
         if (moreFragment != null && moreFragment.isVisible())
-            Utils.removeFragment(getChildFragmentManager(), MoreFragmentTag);
+            Utils.removeFragment(fragmentManager, MoreFragmentTag);
 
         if (categoryFragment == null) {
             if (homeFragment != null && homeFragment.isVisible()) {
-                getChildFragmentManager()
+                fragmentManager
                         .beginTransaction()
                         .hide(homeFragment)
                         .commit();
@@ -136,12 +138,12 @@ public class HomeFragment extends Fragment {
             categoryFragment = CategoryFragment.newInstance();
             Utils.addFragment(
                     R.id.frameLayout,
-                    getChildFragmentManager(),
+                    fragmentManager,
                     categoryFragment,
                     null,
                     false);
         } else if (!categoryFragment.isVisible()) {
-            getChildFragmentManager().beginTransaction()
+            fragmentManager.beginTransaction()
                     .hide(homeFragment)
                     .show(categoryFragment)
                     .commit();
@@ -151,14 +153,14 @@ public class HomeFragment extends Fragment {
     private void setMoreFragment() {
 
         if (categoryFragment != null && categoryFragment.isVisible()) {
-            getChildFragmentManager()
+            fragmentManager
                     .beginTransaction()
                     .hide(categoryFragment)
                     .commit();
         }
 
         if (homeFragment != null && homeFragment.isVisible()) {
-            getChildFragmentManager()
+            fragmentManager
                     .beginTransaction()
                     .hide(homeFragment)
                     .commit();
@@ -170,7 +172,7 @@ public class HomeFragment extends Fragment {
         if (!moreFragment.isVisible()) {
             Utils.addFragment(
                     R.id.frameLayout,
-                    getChildFragmentManager(),
+                    fragmentManager,
                     moreFragment,
                     MoreFragmentTag,
                     false

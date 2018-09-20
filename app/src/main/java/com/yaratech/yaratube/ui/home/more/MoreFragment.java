@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.ui.aboutus.AboutUsFragment;
 import com.yaratech.yaratube.ui.login.LoginDialogContainer;
 import com.yaratech.yaratube.ui.profile.ProfileFragment;
 import com.yaratech.yaratube.utils.Utils;
@@ -109,7 +110,6 @@ public class MoreFragment extends Fragment {
                                 boolean userLogin = presenter.getUserLoginStatus();
                                 if (userLogin) {
                                     listener.onFragmentClickListener(
-                                            getActivity().getSupportFragmentManager(),
                                             ProfileFragment.newInstance(),
                                             PROFILE_FRAGMENT_TAG);
                                 } else {
@@ -117,6 +117,9 @@ public class MoreFragment extends Fragment {
                                 }
                                 break;
                             case ABOUT_US_FRAGMENT:
+                                listener.onFragmentClickListener(
+                                        AboutUsFragment.newInstance(),
+                                        PROFILE_FRAGMENT_TAG);
                                 break;
                             case CONTACT_WITH_US_FRAGMENT:
                                 break;
@@ -128,9 +131,21 @@ public class MoreFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle(R.string.more);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().setTitle(R.string.app_name);
+    }
+
     public interface onActionClickListener {
 
-        void onFragmentClickListener(FragmentManager fragmentManager, Fragment fragment, String tag);
+        void onFragmentClickListener(Fragment fragment, String tag);
     }
 
     @Override

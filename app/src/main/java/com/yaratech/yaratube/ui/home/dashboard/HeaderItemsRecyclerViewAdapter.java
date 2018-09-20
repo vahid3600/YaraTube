@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Headeritem;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,17 +19,17 @@ import butterknife.ButterKnife;
 
 public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderItemsRecyclerViewAdapter.ViewHolder> {
 
-    HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;
-    private List<Headeritem> headeritems;
+    private HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener;
+    private List<Headeritem> headerItems;
     private Context context;
 
-    // data is passed into the constructor
     HeaderItemsRecyclerViewAdapter(
             Context context,
-            List<Headeritem> headeritems,
+            List<Headeritem> headerItems,
             HeaderItemsRecyclerViewAdapter.OnHeaderItemClickListener onHeaderItemClickListener) {
+
         this.context = context;
-        this.headeritems = headeritems;
+        this.headerItems = headerItems;
         this.onHeaderItemClickListener = onHeaderItemClickListener;
     }
 
@@ -46,13 +43,13 @@ public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderI
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.onBind(headeritems.get(position));
+        holder.onBind(headerItems.get(position));
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return headeritems.size();
+        return headerItems.size();
     }
 
 
@@ -75,7 +72,7 @@ public class HeaderItemsRecyclerViewAdapter extends RecyclerView.Adapter<HeaderI
 
         @Override
         public void onClick(View v) {
-            onHeaderItemClickListener.getHeaderProductItem(headeritems.get(getAdapterPosition()).getId());
+            onHeaderItemClickListener.getHeaderProductItem(headerItems.get(getAdapterPosition()).getId());
         }
     }
 

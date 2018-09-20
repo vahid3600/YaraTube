@@ -77,7 +77,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public void onCategorylistItemClicked(CategoryList category) {
         productListFragment = ProductListFragment.newInstance(
-                category.getId());
+                category);
         Utils.addFragment(
                 R.id.fragment_container,
                 getSupportFragmentManager(),
@@ -98,10 +98,10 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentClickListener(FragmentManager fragmentManager, Fragment fragment, String tag) {
+    public void onFragmentClickListener(Fragment fragment, String tag) {
         Utils.addFragment(
                 R.id.fragment_container,
-                fragmentManager,
+                getSupportFragmentManager(),
                 fragment,
                 tag,
                 true);

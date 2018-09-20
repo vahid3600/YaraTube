@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
+import com.yaratech.yaratube.data.model.Category;
+import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.ui.Connects;
 import com.yaratech.yaratube.ui.MenuActivity;
@@ -29,6 +31,14 @@ import butterknife.Unbinder;
 public class ProductListFragment extends Fragment implements ProductListContract.View,
         ProductListRecyclerViewAdapter.OnItemClickListener {
 
+    GridLayoutManager gridLayoutManager;
+    CategoryList categoryList;
+    private int offset = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    public static final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
+    public static final String KEY_ID = "category_id";
+    private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
     ProductListPresenter productListPresenter;
     Connects.OnProductItemClick onProductItemClick;
     Unbinder unbind;
@@ -36,22 +46,15 @@ public class ProductListFragment extends Fragment implements ProductListContract
     ProgressBar progressBar;
     @BindView(R.id.product_list_recycleview)
     RecyclerView recyclerView;
-    GridLayoutManager gridLayoutManager;
-    private int offset = 0;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    public static final String PRODUCT_LIST_FRAGMENT_TAG = "ProductList";
-    public static final String KEY_ID = "category_id";
-    private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
 
     public ProductListFragment() {
         // Required empty public constructor
     }
 
-    public static ProductListFragment newInstance(int id) {
+    public static ProductListFragment newInstance(CategoryList categoryList) {
 
         Bundle args = new Bundle();
-        args.putInt(KEY_ID, id);
+        args.putParcelable(KEY_ID, categoryList);
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -82,6 +85,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
         super.onViewCreated(view, savedInstanceState);
         unbind = ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
+        categoryList = getArguments().getParcelable(KEY_ID);
         productListPresenter = new ProductListPresenter(getContext(), this);
         initRecycleView();
     }
@@ -114,7 +118,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
                 isLoading = true;
                 productListRecyclerViewAdapter.addLoadingFooter();
                 productListPresenter.fetchNextProductListPageFromRemote(
-                        getArguments().getInt(KEY_ID),
+                        categoryList.getId(),
                         offset);
             }
 
@@ -133,7 +137,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        productListPresenter.fetchProductListFromRemote(getArguments().getInt(KEY_ID), offset);
+        productListPresenter.fetchProductListFromRemote(categoryList.getId(), offset);
     }
 
     @Override
@@ -180,5 +184,17 @@ public class ProductListFragment extends Fragment implements ProductListContract
         productListPresenter.cancelProductListRequest();
         productListPresenter.detachView();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle(categoryList.getTitle());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().setTitle(R.string.app_name);
     }
 }
