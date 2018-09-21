@@ -33,7 +33,7 @@
                         android:id="@+id/product_image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="@dimen/imageview_height" />
+                        android:minHeight="@dimen/product_image_height" />
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"

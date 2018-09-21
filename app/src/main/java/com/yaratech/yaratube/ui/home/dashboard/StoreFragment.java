@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -20,7 +19,7 @@ import android.widget.Toast;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.Product;
 import com.yaratech.yaratube.data.model.Store;
-import com.yaratech.yaratube.ui.Connects;
+import com.yaratech.yaratube.utils.OnItemClick;
 import com.yaratech.yaratube.ui.MenuActivity;
 
 import butterknife.BindView;
@@ -32,7 +31,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
 
     private StoreContract.Presenter presenter;
     public static boolean firstLoad = false;
-    Connects.OnProductItemClick onProductItemClick;
+    OnItemClick.OnProductItemClick onProductItemClick;
 
     @BindView(R.id.activity_main_swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -117,7 +116,7 @@ public class StoreFragment extends Fragment implements StoreContract.View,
     @Override
     public void onAttach(Context context) {
         if (context instanceof MenuActivity)
-            onProductItemClick = (Connects.OnProductItemClick) context;
+            onProductItemClick = (OnItemClick.OnProductItemClick) context;
         super.onAttach(context);
     }
 

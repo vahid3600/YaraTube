@@ -46,6 +46,12 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 if (view != null) {
                     view.hideLoading();
                     view.onDataLoad((GetProfileResponse) result);
+                    Profile profile =profileRepository.getProfile();
+                    profile.setGender(((GetProfileResponse) result).getGender().toString());
+                    profile.setAvatar(((GetProfileResponse) result).getAvatar().toString());
+                    profile.setNickName(((GetProfileResponse) result).getNickname());
+                    profile.setDateOfBirth(((GetProfileResponse) result).getDateOfBirth());
+                    profileRepository.updateProfile(profile);
                 }
             }
 
@@ -111,13 +117,13 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                         if (view != null)
                             view.hideLoading();
 
-                        Profile profile = new Profile();
-                        ProfileResponse profileResponse = (ProfileResponse) result;
-                        profile.setDateOfBirth((String) profileResponse.getData().getDateOfBirth());
-                        profile.setNickName(profileResponse.getData().getNickname());
-                        profile.setAvatar((String) profileResponse.getData().getAvatar());
-                        profile.setGender((String) profileResponse.getData().getGender());
-                        profileRepository.updateProfile(profile);
+//                        Profile profile = new Profile();
+//                        ProfileResponse profileResponse = (ProfileResponse) result;
+//                        profile.setDateOfBirth((String) profileResponse.getData().getDateOfBirth());
+//                        profile.setNickName(profileResponse.getData().getNickname());
+//                        profile.setAvatar((String) profileResponse.getData().getAvatar());
+//                        profile.setGender((String) profileResponse.getData().getGender());
+//                        profileRepository.updateProfile(profile);
                     }
 
                     @Override

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yaratech.yaratube.R;
-import com.yaratech.yaratube.data.model.Category;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.Connects;
+import com.yaratech.yaratube.utils.OnItemClick;
 import com.yaratech.yaratube.ui.MenuActivity;
 
 import java.util.List;
@@ -40,7 +38,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     public static final String KEY_ID = "category_id";
     private ProductListRecyclerViewAdapter productListRecyclerViewAdapter;
     ProductListPresenter productListPresenter;
-    Connects.OnProductItemClick onProductItemClick;
+    OnItemClick.OnProductItemClick onProductItemClick;
     Unbinder unbind;
     @BindView(R.id.loading)
     ProgressBar progressBar;
@@ -63,7 +61,7 @@ public class ProductListFragment extends Fragment implements ProductListContract
     @Override
     public void onAttach(Context context) {
         if (context instanceof MenuActivity)
-            onProductItemClick = (Connects.OnProductItemClick) context;
+            onProductItemClick = (OnItemClick.OnProductItemClick) context;
         super.onAttach(context);
     }
 

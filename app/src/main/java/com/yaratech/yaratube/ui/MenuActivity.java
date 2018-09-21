@@ -1,20 +1,12 @@
 package com.yaratech.yaratube.ui;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.bumptech.glide.Glide;
-import com.soundcloud.android.crop.Crop;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.CategoryList;
 import com.yaratech.yaratube.data.model.Product;
@@ -23,7 +15,7 @@ import com.yaratech.yaratube.ui.home.category.CategoryFragment;
 import com.yaratech.yaratube.ui.home.more.MoreFragment;
 import com.yaratech.yaratube.ui.productdetail.ProductDetailFragment;
 import com.yaratech.yaratube.ui.productlist.ProductListFragment;
-import com.yaratech.yaratube.ui.profile.ProfileFragment;
+import com.yaratech.yaratube.utils.OnItemClick;
 import com.yaratech.yaratube.utils.Utils;
 
 import butterknife.ButterKnife;
@@ -34,7 +26,7 @@ import static com.yaratech.yaratube.ui.productlist.ProductListFragment.PRODUCT_L
 public class MenuActivity extends AppCompatActivity
         implements
         CategoryFragment.OnCategoryFragmentActionListener,
-        Connects.OnProductItemClick,
+        OnItemClick.OnProductItemClick,
         MoreFragment.onActionClickListener{
 
     public HomeFragment homeFragment;

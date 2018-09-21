@@ -12,8 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,30 +57,10 @@ public class ProductDetailFragment extends Fragment implements
     ImageView productImage;
     @BindView(R.id.product_comments)
     RecyclerView recyclerView;
-
-    @OnClick(R.id.play)
-    public void playVideo() {
-        boolean userLogin = presenter.getUserLoginStatus();
-        if (userLogin) {
-            Intent intent = new Intent(getActivity(), PlayerActivity.class);
-            intent.putExtra(PLAYER_ACTIVITY_KEY, productDetail.getFiles().get(0).getFile());
-            startActivity(intent);
-        } else {
-            LoginDialogContainer.newInstance(getFragmentManager());
-        }
-    }
-
-    @OnClick(R.id.send_comment)
-    public void sendComment() {
-        boolean userLogin = presenter.getUserLoginStatus();
-        if (userLogin) {
-            CommentDialog commentDialog = CommentDialog.newInstance(product.getId());
-            FragmentManager fragmentManager = getFragmentManager();
-            commentDialog.show(fragmentManager, COMMENT_DIALOG_TAG);
-        } else {
-            LoginDialogContainer.newInstance(getFragmentManager());
-        }
-    }
+    @BindView(R.id.play)
+    ImageView play;
+    @BindView(R.id.send_comment)
+    Button commentButton;
 
     public ProductDetailFragment() {
         // Required empty public constructor
@@ -123,6 +105,18 @@ public class ProductDetailFragment extends Fragment implements
                 playVideo();
             }
         });
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playVideo();
+            }
+        });
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendComment();
+            }
+        });
     }
 
     private void initRecycleview() {
@@ -134,6 +128,31 @@ public class ProductDetailFragment extends Fragment implements
         commentRecyclerViewAdapter = new CommentRecyclerViewAdapter();
         commentRecyclerViewAdapter.setHasStableIds(true);
         recyclerView.setAdapter(commentRecyclerViewAdapter);
+    }
+
+    public void playVideo() {
+        boolean userLogin = presenter.getUserLoginStatus();
+        if (userLogin) {
+            if (productDetail != null) {
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                intent.putExtra(PLAYER_ACTIVITY_KEY, productDetail.getFiles().get(0).getFile());
+                startActivity(intent);
+            }else
+                showMessage(getString(R.string.no_internet));
+        } else {
+            LoginDialogContainer.newInstance(getFragmentManager());
+        }
+    }
+
+    public void sendComment() {
+        boolean userLogin = presenter.getUserLoginStatus();
+        if (userLogin) {
+            CommentDialog commentDialog = CommentDialog.newInstance(product.getId());
+            FragmentManager fragmentManager = getFragmentManager();
+            commentDialog.show(fragmentManager, COMMENT_DIALOG_TAG);
+        } else {
+            LoginDialogContainer.newInstance(getFragmentManager());
+        }
     }
 
     @Override
@@ -156,11 +175,17 @@ public class ProductDetailFragment extends Fragment implements
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
+        play.setClickable(false);
+        productImage.setClickable(false);
+        commentButton.setClickable(false);
     }
 
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+        play.setClickable(true);
+        productImage.setClickable(true);
+        commentButton.setClickable(true);
     }
 
     @Override

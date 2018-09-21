@@ -12,10 +12,8 @@ import android.widget.ImageView;
 
 import com.yaratech.yaratube.R;
 import com.bumptech.glide.Glide;
-import com.yaratech.yaratube.data.model.Headeritem;
 import com.yaratech.yaratube.data.model.Product;
-import com.yaratech.yaratube.ui.Connects;
-import com.yaratech.yaratube.ui.MenuActivity;
+import com.yaratech.yaratube.utils.OnItemClick;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +25,7 @@ import butterknife.ButterKnife;
 public class HeaderViewHolderFragment extends Fragment implements View.OnClickListener {
 
     Product headeritem;
-    Connects.OnProductItemClick onProductItemClick;
+    OnItemClick.OnProductItemClick onProductItemClick;
     @BindView(R.id.section_label)
     ImageView headerImageView;
 
@@ -72,8 +70,8 @@ public class HeaderViewHolderFragment extends Fragment implements View.OnClickLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Connects.OnProductItemClick)
-            onProductItemClick = (Connects.OnProductItemClick) context;
+        if (context instanceof OnItemClick.OnProductItemClick)
+            onProductItemClick = (OnItemClick.OnProductItemClick) context;
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.soundcloud.android.crop.Crop;
 import com.yaratech.yaratube.R;
 import com.yaratech.yaratube.data.model.GetProfileResponse;
 import com.yaratech.yaratube.data.model.ProfileResponse;
+import com.yaratech.yaratube.data.model.dbmodel.Profile;
 import com.yaratech.yaratube.ui.imagepicker.ImagePickerDialog;
 import com.yaratech.yaratube.utils.Permissions;
 import com.yaratech.yaratube.utils.Utils;
@@ -133,7 +134,7 @@ public class ProfileFragment extends Fragment
         ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
         presenter = new ProfilePresenter(getContext(), this);
-        Log.e(TAG, "onViewCreated: "+presenter.getProfileFromDB().getNickName() );
+        loadDataFromDB();
         presenter.getProfileData(presenter.getUserAuthorization());
         birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +142,18 @@ public class ProfileFragment extends Fragment
                 setDate();
             }
         });
+    }
+
+    private void loadDataFromDB() {
+        Profile profile = presenter.getProfileFromDB();
+        Log.e(TAG, "onViewCreated: " + profile.getDateOfBirth());
+        Log.e(TAG, "onViewCreated: " + profile.getNickName());
+        Log.e(TAG, "onViewCreated: " + profile.getAvatar());
+        Log.e(TAG, "onViewCreated: " + profile.getGender());
+        loadDataInUI(profile.getNickName(),
+                profile.getDateOfBirth(),
+                profile.getGender(),
+                profile.getAvatar());
     }
 
     public void setDate() {
@@ -341,24 +354,30 @@ public class ProfileFragment extends Fragment
 
     @Override
     public void onDataLoad(GetProfileResponse getProfileResponse) {
-        name_family.setText(getProfileResponse.getNickname());
-        if (getProfileResponse.getDateOfBirth() != null) {
-            char[] birthDay = getProfileResponse.getDateOfBirth().toCharArray();
+        loadDataInUI(getProfileResponse.getNickname(),
+                getProfileResponse.getDateOfBirth(),
+                getProfileResponse.getGender(),
+                getProfileResponse.getAvatar());
+    }
+
+    private void loadDataInUI(String nickname, String dateOfBirth, Object gender, Object avatar) {
+        name_family.setText(nickname);
+        if (dateOfBirth != null) {
+            char[] birthDay = dateOfBirth.toCharArray();
             birthDay[4] = '/';
             birthDay[7] = '/';
             birthDate.setText(String.valueOf(birthDay));
         }
-        Log.e(TAG, "onDataLoad: " + getProfileResponse.getGender());
-        if (getProfileResponse.getGender() != null) {
-            if (getProfileResponse.getGender().equals("Female"))
-                gender.setSelection(1, true);
+        if (gender != null) {
+            if (gender.equals("Female"))
+                this.gender.setSelection(1, true);
             else
-                gender.setSelection(0, true);
+                this.gender.setSelection(0, true);
         }
-        if (getProfileResponse.getAvatar() != null)
+        if (avatar != null)
             Glide
                     .with(getContext())
-                    .load(Utils.BASE_URL + getProfileResponse.getAvatar())
+                    .load(Utils.BASE_URL + avatar)
                     .apply(RequestOptions.circleCropTransform())
                     .into(profilePicture);
         else

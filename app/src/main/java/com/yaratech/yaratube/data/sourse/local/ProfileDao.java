@@ -15,7 +15,7 @@ import com.yaratech.yaratube.data.model.dbmodel.Profile;
 public interface ProfileDao {
 
     @Insert
-    void insertProfile(Profile... profile);
+    void insertProfile(Profile profile);
 
     @Update
     void updateProfile(Profile profile);
@@ -25,8 +25,7 @@ public interface ProfileDao {
     int getProfile();
 
     @Query("delete " +
-            "from profile " +
-            "where id=0")
+            "from profile")
     void deleteProfile();
 
     @Query("select * " +

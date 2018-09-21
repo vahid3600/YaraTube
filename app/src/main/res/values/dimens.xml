@@ -33,10 +33,12 @@
     <dimen name="corner_radius_edittext">10dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
-    <dimen name="imageview_height">208dp</dimen>
+    <dimen name="product_image_height">225dp</dimen>
 
     <dimen name="comment_margin">7dp</dimen>
     <dimen name="comment_title_text_size">15sp</dimen>
     <dimen name="comment_text_size">13sp</dimen>
+    <dimen name="description_product_text_size">12sp</dimen>
+    <dimen name="titile_product_text_size">14sp</dimen>
 
 </resources>

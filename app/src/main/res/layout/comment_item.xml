@@ -36,6 +36,7 @@
             android:id="@+id/product_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_margin="@dimen/comment_margin"
             android:textColor="@color/comment_title_text_color"
             android:textSize="@dimen/comment_text_size"
