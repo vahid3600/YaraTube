@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -37,6 +39,8 @@ public class PlayerActivity extends AppCompatActivity {
     PlayerView playerView;
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+    private String PLAYER_TAG = "player_activity";
+    private String TAG = "player";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,19 +120,6 @@ public class PlayerActivity extends AppCompatActivity {
         });
         player.setPlayWhenReady(true);
         playerView.setPlayer(player);
-
-//        ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(Uri.parse(videoUri));
-//        player.prepare(mediaSource);
-//        player.setPlayWhenReady(true);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        playerView.setPlayer(null);
-        player.release();
-        player = null;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -138,5 +129,59 @@ public class PlayerActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        Bundle bundle = new Bundle();
+//        bundle.putLong(PLAYER_TAG, player.getCurrentPosition());
+//        player.stop();
+//        player.release();
+//        player = null;
+//    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e("hmmmm",player.getCurrentPosition()+"");
+        outState.putLong(PLAYER_TAG, player.getCurrentPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.e("hmmm",player.getCurrentPosition()+"");
+        if (savedInstanceState != null){
+            player.seekTo(savedInstanceState.getLong(PLAYER_TAG));
+            savedInstanceState.getLong(PLAYER_TAG);
+            Log.e("hmmm",player.getCurrentPosition()+"");}
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart: " );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause: " );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop: " );
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        playerView.setPlayer(null);
+        player.stop();
+        player.release();
+        player = null;
     }
 }

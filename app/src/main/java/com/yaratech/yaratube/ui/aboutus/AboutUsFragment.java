@@ -50,7 +50,7 @@ public class AboutUsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().setTitle(R.string.about_us);
+        getActivity().setTitle(R.string.app_name);
         Log.e(TAG, "onStop: ");
     }
 }
