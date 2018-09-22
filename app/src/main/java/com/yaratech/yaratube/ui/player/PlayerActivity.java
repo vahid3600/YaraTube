@@ -58,7 +58,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         HlsMediaSource mediaSource = new HlsMediaSource
                 .Factory(new CacheDataSourceFactory(
-                        getApplicationContext(),
+                getApplicationContext(),
                 100 * 1024 * 1024,
                 5 * 1024 * 1024))
                 .createMediaSource(Uri.parse(videoUri));
@@ -81,7 +81,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playbackState == ExoPlayer.STATE_BUFFERING){
+                if (playbackState == ExoPlayer.STATE_BUFFERING) {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -144,44 +144,45 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.e("hmmmm",player.getCurrentPosition()+"");
-        outState.putLong(PLAYER_TAG, player.getCurrentPosition());
+        Log.e("hmmmm", player.getCurrentPosition() + "");
+        if (player != null) {
+            outState.putLong(PLAYER_TAG, player.getCurrentPosition());
+//            player.setPlayWhenReady(false);
+        }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.e("hmmm",player.getCurrentPosition()+"");
-        if (savedInstanceState != null){
+        Log.e(TAG, "onRestoreInstanceState: "+savedInstanceState+" "+savedInstanceState.getLong(PLAYER_TAG) );
+        if (savedInstanceState != null) {
             player.seekTo(savedInstanceState.getLong(PLAYER_TAG));
             savedInstanceState.getLong(PLAYER_TAG);
-            Log.e("hmmm",player.getCurrentPosition()+"");}
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(TAG, "onStart: " );
+        player.setPlayWhenReady(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        player.setPlayWhenReady(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG, "onPause: " );
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop: " );
+        player.setPlayWhenReady(false);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         playerView.setPlayer(null);
-        player.stop();
         player.release();
-        player = null;
     }
 }
